@@ -1,20 +1,19 @@
 """
-PII 검출 성능 평가 스크립트
+PII 검출 성능 평가 스크립트 (API 클라이언트)
 
-vLLM offline inference + structured output으로 LLM 기반 PII 검출 성능을 테스트합니다.
-서버 기동 없이 터미널에서 바로 실행 가능합니다.
+별도로 띄워놓은 vLLM 서버에 요청을 보내 PII 검출 성능을 평가합니다.
 
 사용법:
-    # 기본 실행
+    # 1. 서버 띄우기 (터미널 1)
+    vllm serve Qwen/Qwen2.5-7B-Instruct --guided-decoding-backend outlines
+
+    # 2. 벤치마크 실행 (터미널 2)
     python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct
 
-    # GPU 지정
-    CUDA_VISIBLE_DEVICES=0 python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct
+    # 다른 서버 주소
+    python run_pii_evaluation.py --model ... --api-url http://gpu-server:8000/v1
 
-    # 멀티 GPU (tensor parallel)
-    python run_pii_evaluation.py --model Qwen/Qwen2.5-72B-Instruct-AWQ --tp 2
-
-    # 특정 카테고리/난이도만
+    # 필터링
     python run_pii_evaluation.py --model ... --category 이름
     python run_pii_evaluation.py --model ... --difficulty HARD
 
@@ -26,8 +25,11 @@ import argparse
 import json
 import time
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
+
+from openai import OpenAI
 
 # ============================================================================
 # 1. PII 카테고리 정규화 매핑
@@ -60,11 +62,11 @@ PII_CATEGORIES = [
 
 
 # ============================================================================
-# 2. JSON Schema (vLLM GuidedDecodingParams용)
+# 2. JSON Schema (structured output용)
 # ============================================================================
 
 def build_json_schema() -> dict:
-    """vLLM GuidedDecodingParams에 전달할 JSON Schema"""
+    """vLLM guided_json에 전달할 JSON Schema"""
     properties = {}
     for cat in PII_CATEGORIES:
         properties[cat] = {
@@ -289,21 +291,65 @@ def print_report(all_results: list[dict]) -> dict:
 
 
 # ============================================================================
-# 7. 메인
+# 7. API 요청
+# ============================================================================
+
+def call_api(
+    client: OpenAI,
+    model: str,
+    tc: dict,
+    json_schema: dict,
+    temperature: float,
+    max_tokens: int,
+) -> dict:
+    """단일 테스트 케이스에 대해 API 요청을 보내고 결과를 반환"""
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": USER_PROMPT_TEMPLATE.format(document_text=tc["document_text"])},
+    ]
+
+    response = client.chat.completions.create(
+        model=model,
+        messages=messages,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        extra_body={"guided_json": json_schema},
+    )
+
+    raw_text = response.choices[0].message.content.strip()
+    try:
+        predicted = json.loads(raw_text)
+    except json.JSONDecodeError:
+        predicted: dict[str, list[str] | None] = {cat: None for cat in PII_CATEGORIES}
+
+    expected = normalize_expected(tc["expected_pii"])
+    metrics = compute_metrics(expected, predicted)
+
+    return {
+        "id": tc["id"],
+        "category": tc["category"],
+        "difficulty": tc["difficulty"],
+        "intent": tc["intent"],
+        "expected": expected,
+        "predicted": predicted,
+        "metrics": metrics,
+    }
+
+
+# ============================================================================
+# 8. 메인
 # ============================================================================
 
 def main():
-    parser = argparse.ArgumentParser(description="PII 검출 성능 평가 (vLLM offline inference)")
+    parser = argparse.ArgumentParser(description="PII 검출 성능 평가 (vLLM API 클라이언트)")
     parser.add_argument("--model", type=str, required=True,
-                        help="HuggingFace 모델 이름 (예: Qwen/Qwen2.5-7B-Instruct)")
-    parser.add_argument("--tp", type=int, default=1,
-                        help="Tensor parallel size (default: 1)")
-    parser.add_argument("--gpu-memory-utilization", type=float, default=0.9,
-                        help="GPU 메모리 사용률 (default: 0.9)")
-    parser.add_argument("--max-model-len", type=int, default=None,
-                        help="최대 시퀀스 길이 (미지정 시 모델 기본값)")
-    parser.add_argument("--quantization", type=str, default=None,
-                        help="양자화 방식 (예: awq, gptq)")
+                        help="모델 이름 (서버에 로드된 모델과 일치해야 함)")
+    parser.add_argument("--api-url", type=str, default="http://localhost:8000/v1",
+                        help="vLLM 서버 API URL (default: http://localhost:8000/v1)")
+    parser.add_argument("--api-key", type=str, default="dummy",
+                        help="API key (vLLM 기본값: dummy)")
+    parser.add_argument("--concurrency", type=int, default=10,
+                        help="동시 요청 수 (default: 10)")
     parser.add_argument("--test-cases", type=str, default=None,
                         help="테스트 케이스 JSON 파일 경로")
     parser.add_argument("--category", type=str, default=None,
@@ -340,78 +386,55 @@ def main():
 
     print(f"대상 테스트 케이스: {len(test_cases)}개")
     print(f"모델: {args.model}")
-    print(f"Tensor Parallel: {args.tp}")
-    if args.quantization:
-        print(f"양자화: {args.quantization}")
+    print(f"API URL: {args.api_url}")
+    print(f"동시 요청 수: {args.concurrency}")
 
-    # ── vLLM 모델 로드 (오프라인) ──
-    print("\n모델 로딩 중...")
-    from vllm import LLM, SamplingParams
-    from vllm.sampling_params import GuidedDecodingParams
-
-    llm_kwargs: dict[str, Any] = {
-        "model": args.model,
-        "tensor_parallel_size": args.tp,
-        "gpu_memory_utilization": args.gpu_memory_utilization,
-        "trust_remote_code": True,
-    }
-    if args.max_model_len:
-        llm_kwargs["max_model_len"] = args.max_model_len
-    if args.quantization:
-        llm_kwargs["quantization"] = args.quantization
-
-    llm = LLM(**llm_kwargs)
-    tokenizer = llm.get_tokenizer()
-
+    # ── OpenAI 클라이언트 ──
+    client = OpenAI(base_url=args.api_url, api_key=args.api_key)
     json_schema = build_json_schema()
-    guided_params = GuidedDecodingParams(json=json_schema)
-    sampling_params = SamplingParams(
-        temperature=args.temperature,
-        max_tokens=args.max_tokens,
-        guided_decoding=guided_params,
-    )
 
-    print("모델 로드 완료!\n")
-
-    # ── 프롬프트 구성 ──
-    prompts = []
-    for tc in test_cases:
-        messages = [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": USER_PROMPT_TEMPLATE.format(document_text=tc["document_text"])},
-        ]
-        prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-        prompts.append(prompt)
-
-    # ── 배치 추론 ──
-    print(f"추론 시작 ({len(prompts)}개 배치)...")
+    # ── 병렬 요청 ──
+    print(f"\n추론 시작 ({len(test_cases)}개)...")
     start_time = time.time()
-    outputs = llm.generate(prompts, sampling_params)
+    all_results: list[dict] = []
+    completed = 0
+
+    with ThreadPoolExecutor(max_workers=args.concurrency) as executor:
+        futures = {
+            executor.submit(
+                call_api, client, args.model, tc, json_schema,
+                args.temperature, args.max_tokens,
+            ): tc["id"]
+            for tc in test_cases
+        }
+
+        for future in as_completed(futures):
+            tc_id = futures[future]
+            try:
+                result = future.result()
+                all_results.append(result)
+            except Exception as e:
+                print(f"  [{tc_id}] 요청 실패: {e}")
+                # 실패한 케이스는 빈 예측으로 처리
+                tc = next(t for t in test_cases if t["id"] == tc_id)
+                predicted: dict[str, list[str] | None] = {cat: None for cat in PII_CATEGORIES}
+                expected = normalize_expected(tc["expected_pii"])
+                all_results.append({
+                    "id": tc_id,
+                    "category": tc["category"],
+                    "difficulty": tc["difficulty"],
+                    "intent": tc["intent"],
+                    "expected": expected,
+                    "predicted": predicted,
+                    "metrics": compute_metrics(expected, predicted),
+                })
+            completed += 1
+            print(f"\r  진행: {completed}/{len(test_cases)}", end="", flush=True)
+
     elapsed = time.time() - start_time
-    print(f"추론 완료! ({elapsed:.1f}초, 평균 {elapsed/len(prompts):.2f}초/케이스)\n")
-
-    # ── 결과 평가 ──
-    all_results = []
-    for tc, output in zip(test_cases, outputs):
-        raw_text = output.outputs[0].text.strip()
-        try:
-            predicted = json.loads(raw_text)
-        except json.JSONDecodeError:
-            print(f"  JSON 파싱 실패: {tc['id']} → {raw_text[:100]}...")
-            predicted: dict[str, list[str] | None] = {cat: None for cat in PII_CATEGORIES}
-
-        expected = normalize_expected(tc["expected_pii"])
-        metrics = compute_metrics(expected, predicted)
-
-        all_results.append({
-            "id": tc["id"],
-            "category": tc["category"],
-            "difficulty": tc["difficulty"],
-            "intent": tc["intent"],
-            "expected": expected,
-            "predicted": predicted,
-            "metrics": metrics,
-        })
+    # ID 순 정렬
+    all_results.sort(key=lambda x: x["id"])
+    print(f"\n추론 완료! ({elapsed:.1f}초, 평균 {elapsed/len(test_cases):.2f}초/케이스)\n")
 
     # ── 리포트 ──
     summary = print_report(all_results)
@@ -419,8 +442,8 @@ def main():
     if args.output:
         output_data = {
             "model": args.model,
-            "tensor_parallel": args.tp,
-            "quantization": args.quantization,
+            "api_url": args.api_url,
+            "concurrency": args.concurrency,
             "inference_time_sec": round(elapsed, 2),
             "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
             "summary": summary,

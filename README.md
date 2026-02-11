@@ -2,43 +2,107 @@
 
 LLM 기반 개인정보(PII) 검출 성능 평가 - 테스트 케이스 100개 + vLLM structured output 평가 스크립트
 
-서버 기동 없이 **터미널 하나에서 바로 실행** 가능합니다.
-
 ## Quick Start
 
 ```bash
 # 1. 클론 + 의존성
 git clone https://github.com/gkswns0531/pii-detection-test.git
 cd pii-detection-test
-pip install vllm
+pip install vllm openai
+```
 
-# 2. 바로 실행 (서버 불필요, 오프라인 배치 추론)
+### Step 1: 서버 띄우기 (터미널 1)
+
+```bash
+vllm serve Qwen/Qwen2.5-7B-Instruct --guided-decoding-backend outlines
+```
+
+서버가 `INFO: Started server process` 로그를 출력하면 준비 완료입니다.
+
+### Step 2: 벤치마크 실행 (터미널 2)
+
+```bash
 python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct
 ```
 
-끝입니다. 모델 다운로드 → 로드 → 100개 배치 추론 → 평가 리포트까지 한 번에 나옵니다.
+---
+
+## 서버 옵션
+
+### 기본 실행
+
+```bash
+# 기본 (포트 8000)
+vllm serve Qwen/Qwen2.5-7B-Instruct --guided-decoding-backend outlines
+
+# 포트 변경
+vllm serve Qwen/Qwen2.5-7B-Instruct --port 8080 --guided-decoding-backend outlines
+
+# 특정 GPU 지정
+CUDA_VISIBLE_DEVICES=0 vllm serve Qwen/Qwen2.5-7B-Instruct --guided-decoding-backend outlines
+
+# 멀티 GPU (tensor parallel)
+vllm serve Qwen/Qwen2.5-72B-Instruct-AWQ --tensor-parallel-size 2 --guided-decoding-backend outlines
+```
+
+### 큰 모델
+
+```bash
+# 양자화 모델
+vllm serve Qwen/Qwen2.5-72B-Instruct-AWQ \
+  --quantization awq \
+  --tensor-parallel-size 2 \
+  --guided-decoding-backend outlines
+
+# GPU 메모리 제한
+vllm serve Qwen/Qwen2.5-7B-Instruct \
+  --gpu-memory-utilization 0.8 \
+  --guided-decoding-backend outlines
+
+# max model length 지정 (OOM 방지)
+vllm serve Qwen/Qwen2.5-7B-Instruct \
+  --max-model-len 8192 \
+  --guided-decoding-backend outlines
+```
+
+### 서버 상태 확인
+
+```bash
+# 헬스체크
+curl http://localhost:8000/health
+
+# 로드된 모델 확인
+curl http://localhost:8000/v1/models
+```
 
 ---
 
-## 실행 옵션
+## 벤치마크 옵션
 
-### GPU 설정
+### 기본
 
 ```bash
-# 특정 GPU 지정
-CUDA_VISIBLE_DEVICES=0 python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct
+# 기본 실행 (localhost:8000 서버 사용)
+python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct
 
-# 멀티 GPU (tensor parallel)
-python run_pii_evaluation.py --model Qwen/Qwen2.5-72B-Instruct-AWQ --tp 2
+# 다른 서버 주소
+python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct --api-url http://gpu-server:8000/v1
 
-# 큰 모델 (양자화)
-python run_pii_evaluation.py --model Qwen/Qwen2.5-72B-Instruct-AWQ --quantization awq
+# 포트가 다른 경우
+python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct --api-url http://localhost:8080/v1
+```
 
-# GPU 메모리 제한
-python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct --gpu-memory-utilization 0.8
+### 동시 요청 수 조절
 
-# max model length 지정 (OOM 방지)
-python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct --max-model-len 8192
+```bash
+# 동시 10개 (기본값)
+python run_pii_evaluation.py --model ... --concurrency 10
+
+# 순차 실행
+python run_pii_evaluation.py --model ... --concurrency 1
+
+# 고속 실행
+python run_pii_evaluation.py --model ... --concurrency 30
 ```
 
 ### 필터링
@@ -70,13 +134,26 @@ python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct --output results.j
 
 ## 전체 인자 목록
 
+### 서버 (`vllm serve`)
+
 | 인자 | 기본값 | 설명 |
 |---|---|---|
-| `--model` | (필수) | HuggingFace 모델 이름 |
-| `--tp` | 1 | Tensor parallel size |
+| `모델 이름` | (필수, 위치 인자) | HuggingFace 모델 이름 |
+| `--port` | 8000 | 서버 포트 |
+| `--tensor-parallel-size` | 1 | Tensor parallel size |
 | `--gpu-memory-utilization` | 0.9 | GPU 메모리 사용률 |
 | `--max-model-len` | 모델 기본값 | 최대 시퀀스 길이 |
 | `--quantization` | None | 양자화 (awq, gptq 등) |
+| `--guided-decoding-backend` | (권장: outlines) | Structured output 백엔드 |
+
+### 벤치마크 (`run_pii_evaluation.py`)
+
+| 인자 | 기본값 | 설명 |
+|---|---|---|
+| `--model` | (필수) | 모델 이름 (서버에 로드된 모델과 일치) |
+| `--api-url` | `http://localhost:8000/v1` | vLLM 서버 API URL |
+| `--api-key` | dummy | API key |
+| `--concurrency` | 10 | 동시 요청 수 |
 | `--category` | None | 특정 카테고리 필터 |
 | `--difficulty` | None | EASY / MEDIUM / HARD |
 | `--ids` | None | 특정 TC ID 필터 |
@@ -111,7 +188,7 @@ python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct --output results.j
 
 ## JSON Schema (LLM 출력 형태)
 
-vLLM `GuidedDecodingParams`로 아래 12개 카테고리를 `List[str] | null`로 강제합니다:
+vLLM `guided_json`으로 아래 12개 카테고리를 `List[str] | null`로 강제합니다:
 
 ```json
 {
@@ -135,10 +212,13 @@ vLLM `GuidedDecodingParams`로 아래 12개 카테고리를 `List[str] | null`�
 ## 평가 리포트 예시
 
 ```
-모델 로딩 중...
-모델 로드 완료!
+대상 테스트 케이스: 100개
+모델: Qwen/Qwen2.5-7B-Instruct
+API URL: http://localhost:8000/v1
+동시 요청 수: 10
 
-추론 시작 (100개 배치)...
+추론 시작 (100개)...
+  진행: 100/100
 추론 완료! (45.3초, 평균 0.45초/케이스)
 
 ================================================================================
@@ -172,7 +252,7 @@ HARD          42     72.40%     65.80%     68.95%
 .
 ├── README.md
 ├── all_test_cases.json          # 통합 테스트 케이스 100개
-├── run_pii_evaluation.py        # 평가 스크립트 (이 두 파일만 있으면 됨)
+├── run_pii_evaluation.py        # 벤치마크 클라이언트 (서버에 요청)
 ├── __init__.py                  # Python 패키지 (로컬 개발용)
 ├── pii_test_cases.py            # Part1 소스
 ├── pii_test_cases_part2.py      # Part2 소스
