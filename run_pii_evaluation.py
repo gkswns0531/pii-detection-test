@@ -374,7 +374,8 @@ def print_report(all_results: list[dict]) -> dict:
         cp = c["tp"] / (c["tp"] + c["fp"]) if (c["tp"] + c["fp"]) > 0 else 1.0
         cr = c["tp"] / (c["tp"] + c["fn"]) if (c["tp"] + c["fn"]) > 0 else 1.0
         cf1 = 2 * cp * cr / (cp + cr) if (cp + cr) > 0 else 0.0
-        ca = (c["tp"] + c["tn"]) / (c["tp"] + c["tn"] + c["fp"] + c["fn"])
+        c_total = c["tp"] + c["tn"] + c["fp"] + c["fn"]
+        ca = (c["tp"] + c["tn"]) / c_total if c_total > 0 else 0.0
         cls_cat_metrics[cat] = {"precision": round(cp, 4), "recall": round(cr, 4), "f1": round(cf1, 4), "accuracy": round(ca, 4)}
         print(f"{cat:<20s} {c['tp']:>5d} {c['tn']:>5d} {c['fp']:>5d} {c['fn']:>5d} {cp:>8.2%} {cr:>8.2%} {cf1:>8.2%} {ca:>8.2%}")
 
@@ -382,7 +383,8 @@ def print_report(all_results: list[dict]) -> dict:
     ct_p = ct["tp"] / (ct["tp"] + ct["fp"]) if (ct["tp"] + ct["fp"]) > 0 else 0.0
     ct_r = ct["tp"] / (ct["tp"] + ct["fn"]) if (ct["tp"] + ct["fn"]) > 0 else 0.0
     ct_f1 = 2 * ct_p * ct_r / (ct_p + ct_r) if (ct_p + ct_r) > 0 else 0.0
-    ct_acc = (ct["tp"] + ct["tn"]) / (ct["tp"] + ct["tn"] + ct["fp"] + ct["fn"])
+    ct_total = ct["tp"] + ct["tn"] + ct["fp"] + ct["fn"]
+    ct_acc = (ct["tp"] + ct["tn"]) / ct_total if ct_total > 0 else 0.0
     print("-" * 80)
     print(f"{'전체':<20s} {ct['tp']:>5d} {ct['tn']:>5d} {ct['fp']:>5d} {ct['fn']:>5d} {ct_p:>8.2%} {ct_r:>8.2%} {ct_f1:>8.2%} {ct_acc:>8.2%}")
     print("=" * 80)
@@ -417,7 +419,8 @@ def print_report(all_results: list[dict]) -> dict:
         dp = c["tp"] / (c["tp"] + c["fp"]) if (c["tp"] + c["fp"]) > 0 else 1.0
         dr = c["tp"] / (c["tp"] + c["fn"]) if (c["tp"] + c["fn"]) > 0 else 1.0
         df1 = 2 * dp * dr / (dp + dr) if (dp + dr) > 0 else 0.0
-        da = (c["tp"] + c["tn"]) / (c["tp"] + c["tn"] + c["fp"] + c["fn"])
+        d_total = c["tp"] + c["tn"] + c["fp"] + c["fn"]
+        da = (c["tp"] + c["tn"]) / d_total if d_total > 0 else 0.0
         cls_diff_metrics[diff] = {"precision": round(dp, 4), "recall": round(dr, 4), "f1": round(df1, 4), "accuracy": round(da, 4)}
         print(f"{diff:<10s} {c['count']:>6d} {c['tp']:>5d} {c['tn']:>5d} {c['fp']:>5d} {c['fn']:>5d} {dp:>8.2%} {dr:>8.2%} {df1:>8.2%} {da:>8.2%}")
     print("=" * 80)
