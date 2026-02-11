@@ -377,8 +377,8 @@ def main():
                         choices=["EASY", "MEDIUM", "HARD"])
     parser.add_argument("--ids", type=str, nargs="+", default=None,
                         help="특정 ID만 실행 (예: TC001 TC074)")
-    parser.add_argument("--output", type=str, default=None,
-                        help="결과 저장 경로 (JSON)")
+    parser.add_argument("--output", type=str, default="results.json",
+                        help="결과 저장 경로 (default: results.json)")
     parser.add_argument("--max-tokens", type=int, default=4096)
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--verbose", action="store_true",
@@ -483,19 +483,30 @@ def main():
     # ── 리포트 ──
     summary = print_report(all_results)
 
-    if args.output:
-        output_data = {
-            "model": args.model,
-            "api_url": args.api_url,
-            "concurrency": args.concurrency,
-            "inference_time_sec": round(elapsed, 2),
-            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "summary": summary,
-            "results": all_results,
-        }
-        with open(args.output, "w", encoding="utf-8") as f:
-            json.dump(output_data, f, ensure_ascii=False, indent=2)
-        print(f"\n결과 저장: {args.output}")
+    # ── 결과 저장 (기본: results.json) ──
+    output_data = {
+        "model": args.model,
+        "api_url": args.api_url,
+        "concurrency": args.concurrency,
+        "inference_time_sec": round(elapsed, 2),
+        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+        "summary": summary,
+        "results": [
+            {
+                "id": r["id"],
+                "category": r["category"],
+                "difficulty": r["difficulty"],
+                "intent": r["intent"],
+                "f1": r["metrics"]["micro_f1"],
+                "expected": {k: v for k, v in r["expected"].items() if v is not None},
+                "predicted": {k: v for k, v in r["predicted"].items() if v is not None},
+            }
+            for r in all_results
+        ],
+    }
+    with open(args.output, "w", encoding="utf-8") as f:
+        json.dump(output_data, f, ensure_ascii=False, indent=2)
+    print(f"\n결과 저장: {args.output}")
 
 
 if __name__ == "__main__":
