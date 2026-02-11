@@ -112,13 +112,30 @@ SYSTEM_PROMPT = """당신은 문서에서 개인정보(PII)를 검출하는 전�
 
 ## 규칙
 - 검출된 PII는 문서에 나타난 **원문 그대로** 추출하세요.
+- 각 PII 항목은 **완전한 문자열 하나**로 추출해야 합니다. 절대 글자 단위로 쪼개지 마세요.
+  - 올바른 예: ["김철수"] / ["서울특별시 강남구 테헤란로 152"] / ["850315-1234567"]
+  - 잘못된 예: ["김", "철", "수"] / ["서", "울", "특", ...] / ["8", "5", "0", ...]
 - 해당 카테고리에 PII가 없으면 null로 표시하세요.
 - 회사명, 부서명, 지명(관광지/건물 이름)은 PII가 아닙니다.
 - 기업 대표번호(1588, 080 등), 소프트웨어 버전번호, 제품코드 등은 PII가 아닙니다.
 - 통계 목적의 지역명(서울 강남구: 45명)은 특정 개인을 식별하지 않으므로 PII가 아닙니다.
+
+## 출력 예시
+
+문서: "담당자 김철수(010-1234-5678, chulsoo@company.com)에게 서울특별시 강남구 테헤란로 152로 서류를 보내주세요."
+
+```json
+{"이름": ["김철수"], "주소": ["서울특별시 강남구 테헤란로 152"], "주민등록번호": null, "여권번호": null, "운전면허번호": null, "이메일": ["chulsoo@company.com"], "IP주소": null, "전화번호": ["010-1234-5678"], "계좌번호": null, "카드번호": null, "생년월일": null, "기타_고유식별정보": null}
+```
+
+문서: "계약자: 이영희, 주민등록번호 900101-2345678, 국민은행 계좌 123-456-789012로 입금 바랍니다."
+
+```json
+{"이름": ["이영희"], "주소": null, "주민등록번호": ["900101-2345678"], "여권번호": null, "운전면허번호": null, "이메일": null, "IP주소": null, "전화번호": null, "계좌번호": ["123-456-789012"], "카드번호": null, "생년월일": null, "기타_고유식별정보": null}
+```
 """
 
-USER_PROMPT_TEMPLATE = """아래 문서에서 개인정보(PII)를 검출해 주세요.
+USER_PROMPT_TEMPLATE = """아래 문서에서 개인정보(PII)를 검출하여 JSON으로 응답하세요. 각 PII 항목은 반드시 완전한 문자열로 추출하세요.
 
 ---
 {document_text}
@@ -267,12 +284,15 @@ def print_report(all_results: list[dict]) -> dict:
             m = r["metrics"]
             print(f"  [{r['id']}] {r['category']} ({r['difficulty']}) "
                   f"F1={m['micro_f1']:.2%}  FP={m['total_fp']}  FN={m['total_fn']}")
-            for cat, cm in m["per_category"].items():
-                if cm["missing"] or cm["extra"]:
-                    if cm["missing"]:
-                        print(f"    {cat} 미검출: {cm['missing'][:3]}{'...' if len(cm['missing']) > 3 else ''}")
-                    if cm["extra"]:
-                        print(f"    {cat} 오탐: {cm['extra'][:3]}{'...' if len(cm['extra']) > 3 else ''}")
+            for cat in PII_CATEGORIES:
+                exp = r["expected"].get(cat)
+                pred = r["predicted"].get(cat)
+                if exp is None and pred is None:
+                    continue
+                status = "OK" if exp == pred else "MISS"
+                print(f"    [{status}] {cat}:")
+                print(f"      정답: {exp}")
+                print(f"      예측: {pred}")
 
     return {
         "total_cases": len(all_results),
@@ -362,6 +382,8 @@ def main():
                         help="결과 저장 경로 (JSON)")
     parser.add_argument("--max-tokens", type=int, default=4096)
     parser.add_argument("--temperature", type=float, default=0.0)
+    parser.add_argument("--verbose", action="store_true",
+                        help="케이스별 expected/predicted 상세 출력")
     args = parser.parse_args()
 
     # ── 테스트 케이스 로드 ──
@@ -435,6 +457,27 @@ def main():
     # ID 순 정렬
     all_results.sort(key=lambda x: x["id"])
     print(f"\n추론 완료! ({elapsed:.1f}초, 평균 {elapsed/len(test_cases):.2f}초/케이스)\n")
+
+    # ── verbose: 케이스별 상세 ──
+    if args.verbose:
+        print("=" * 80)
+        print("케이스별 상세 결과")
+        print("=" * 80)
+        for r in all_results:
+            m = r["metrics"]
+            f1 = m["micro_f1"]
+            status = "PASS" if f1 == 1.0 else "FAIL"
+            print(f"\n[{r['id']}] {r['category']} ({r['difficulty']}) - {status} (F1={f1:.2%})")
+            for cat in PII_CATEGORIES:
+                exp = r["expected"].get(cat)
+                pred = r["predicted"].get(cat)
+                if exp is None and pred is None:
+                    continue
+                match = "==" if exp == pred else "!="
+                print(f"  {cat}:")
+                print(f"    정답: {exp}")
+                print(f"    예측: {pred}  {match}")
+        print()
 
     # ── 리포트 ──
     summary = print_report(all_results)
