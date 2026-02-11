@@ -1091,6 +1091,10 @@
       {
         "type": "이름",
         "value": "남궁재현"
+      },
+      {
+        "type": "주소",
+        "value": "서울시 종로구 종로3가 사거리"
       }
     ],
     "false_positive_note": null
