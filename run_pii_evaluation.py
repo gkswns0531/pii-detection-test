@@ -480,6 +480,7 @@ def call_api(
     temperature: float,
     max_tokens: int,
     no_think: bool = False,
+    eval_categories: list[str] | None = None,
 ) -> dict:
     """단일 테스트 케이스에 대해 API 요청을 보내고 결과를 반환"""
     messages = [
@@ -504,6 +505,12 @@ def call_api(
         predicted = json.loads(raw_text)
     except json.JSONDecodeError:
         predicted: dict[str, list[str] | None] = {cat: None for cat in PII_CATEGORIES}
+
+    # eval_categories가 지정된 경우, 해당 카테고리 외의 예측은 무시 (None 처리)
+    if eval_categories:
+        for cat in PII_CATEGORIES:
+            if cat not in eval_categories:
+                predicted[cat] = None
 
     expected = normalize_expected(tc["expected_pii"])
     metrics = compute_metrics(expected, predicted)
@@ -549,6 +556,8 @@ def main():
                         help="케이스별 expected/predicted 상세 출력")
     parser.add_argument("--no-think", action="store_true",
                         help="Qwen3 thinking 모드 비활성화 (guided_json 충돌 방지)")
+    parser.add_argument("--eval-categories", type=str, nargs="+", default=None,
+                        help="평가 대상 카테고리만 지정 (예: --eval-categories 이름 주소). 나머지 카테고리의 예측은 무시")
     args = parser.parse_args()
 
     # ── 테스트 케이스 로드 ──
@@ -575,6 +584,8 @@ def main():
     print(f"모델: {args.model}")
     print(f"API URL: {args.api_url}")
     print(f"동시 요청 수: {args.concurrency}")
+    if args.eval_categories:
+        print(f"평가 카테고리: {', '.join(args.eval_categories)} (나머지 무시)")
 
     # ── OpenAI 클라이언트 ──
     client = OpenAI(base_url=args.api_url, api_key=args.api_key)
@@ -586,11 +597,13 @@ def main():
     all_results: list[dict] = []
     completed = 0
 
+    eval_cats = args.eval_categories
+
     with ThreadPoolExecutor(max_workers=args.concurrency) as executor:
         futures = {
             executor.submit(
                 call_api, client, args.model, tc, json_schema,
-                args.temperature, args.max_tokens, args.no_think,
+                args.temperature, args.max_tokens, args.no_think, eval_cats,
             ): tc["id"]
             for tc in test_cases
         }
@@ -604,7 +617,7 @@ def main():
                 print(f"  [{tc_id}] 요청 실패: {e}")
                 # 실패한 케이스는 빈 예측으로 처리
                 tc = next(t for t in test_cases if t["id"] == tc_id)
-                predicted: dict[str, list[str] | None] = {cat: None for cat in PII_CATEGORIES}
+                predicted_err: dict[str, list[str] | None] = {cat: None for cat in PII_CATEGORIES}
                 expected = normalize_expected(tc["expected_pii"])
                 all_results.append({
                     "id": tc_id,
@@ -612,8 +625,8 @@ def main():
                     "difficulty": tc["difficulty"],
                     "intent": tc["intent"],
                     "expected": expected,
-                    "predicted": predicted,
-                    "metrics": compute_metrics(expected, predicted),
+                    "predicted": predicted_err,
+                    "metrics": compute_metrics(expected, predicted_err),
                 })
             completed += 1
             print(f"\r  진행: {completed}/{len(test_cases)}", end="", flush=True)
