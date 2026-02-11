@@ -272,13 +272,16 @@ def compute_metrics(
 
 def print_report(all_results: list[dict]) -> dict:
     cat_agg: dict[str, dict] = {cat: {"tp": 0, "fp": 0, "fn": 0} for cat in PII_CATEGORIES}
-    diff_agg: dict[str, dict] = {d: {"tp": 0, "fp": 0, "fn": 0, "count": 0} for d in ["EASY", "MEDIUM", "HARD"]}
+    diff_agg: dict[str, dict] = {d: {"tp": 0, "fp": 0, "fn": 0, "count": 0, "perfect": 0} for d in ["EASY", "MEDIUM", "HARD"]}
     failed_cases: list[dict] = []
 
     for r in all_results:
         metrics = r["metrics"]
         diff = r["difficulty"]
         diff_agg[diff]["count"] += 1
+        is_perfect = metrics["micro_f1"] == 1.0
+        if is_perfect:
+            diff_agg[diff]["perfect"] += 1
         for cat in PII_CATEGORIES:
             cm = metrics["per_category"][cat]
             cat_agg[cat]["tp"] += cm["tp"]
@@ -287,7 +290,7 @@ def print_report(all_results: list[dict]) -> dict:
             diff_agg[diff]["tp"] += cm["tp"]
             diff_agg[diff]["fp"] += cm["fp"]
             diff_agg[diff]["fn"] += cm["fn"]
-        if metrics["micro_f1"] < 1.0:
+        if not is_perfect:
             failed_cases.append(r)
 
     print("\n" + "=" * 80)
@@ -305,14 +308,15 @@ def print_report(all_results: list[dict]) -> dict:
     print("\n" + "=" * 80)
     print("난이도별 성능")
     print("=" * 80)
-    print(f"{'난이도':<10s} {'케이스수':>8s} {'Precision':>10s} {'Recall':>10s} {'F1':>10s}")
+    print(f"{'난이도':<10s} {'케이스수':>8s} {'Acc':>8s} {'Precision':>10s} {'Recall':>10s} {'F1':>10s}")
     print("-" * 80)
     for diff in ["EASY", "MEDIUM", "HARD"]:
         a = diff_agg[diff]
+        acc = a["perfect"] / a["count"] if a["count"] > 0 else 0.0
         p = a["tp"] / (a["tp"] + a["fp"]) if (a["tp"] + a["fp"]) > 0 else 0.0
         rc = a["tp"] / (a["tp"] + a["fn"]) if (a["tp"] + a["fn"]) > 0 else 0.0
         f1 = 2 * p * rc / (p + rc) if (p + rc) > 0 else 0.0
-        print(f"{diff:<10s} {a['count']:>8d} {p:>10.2%} {rc:>10.2%} {f1:>10.2%}")
+        print(f"{diff:<10s} {a['count']:>8d} {acc:>8.2%} {p:>10.2%} {rc:>10.2%} {f1:>10.2%}")
 
     total_tp = sum(a["tp"] for a in cat_agg.values())
     total_fp = sum(a["fp"] for a in cat_agg.values())
@@ -321,10 +325,13 @@ def print_report(all_results: list[dict]) -> dict:
     overall_r = total_tp / (total_tp + total_fn) if (total_tp + total_fn) > 0 else 0.0
     overall_f1 = 2 * overall_p * overall_r / (overall_p + overall_r) if (overall_p + overall_r) > 0 else 0.0
 
+    perfect_count = len(all_results) - len(failed_cases)
+    overall_acc = perfect_count / len(all_results) if all_results else 0.0
+
     print("\n" + "=" * 80)
-    print(f"전체 Micro-Average: P={overall_p:.2%}  R={overall_r:.2%}  F1={overall_f1:.2%}")
+    print(f"전체 Micro-Average: P={overall_p:.2%}  R={overall_r:.2%}  F1={overall_f1:.2%}  Acc={overall_acc:.2%}")
     print(f"  총 TP={total_tp}  FP={total_fp}  FN={total_fn}")
-    print(f"  테스트 케이스: {len(all_results)}개 중 {len(all_results) - len(failed_cases)}개 완벽 통과")
+    print(f"  테스트 케이스: {len(all_results)}개 중 {perfect_count}개 완벽 통과 (Acc={overall_acc:.2%})")
     print("=" * 80)
 
     if failed_cases:
@@ -346,7 +353,8 @@ def print_report(all_results: list[dict]) -> dict:
 
     return {
         "total_cases": len(all_results),
-        "perfect_cases": len(all_results) - len(failed_cases),
+        "perfect_cases": perfect_count,
+        "overall_accuracy": round(overall_acc, 4),
         "overall_precision": round(overall_p, 4),
         "overall_recall": round(overall_r, 4),
         "overall_f1": round(overall_f1, 4),
