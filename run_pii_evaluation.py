@@ -123,16 +123,10 @@ SYSTEM_PROMPT = """당신은 문서에서 개인정보(PII)를 검출하는 전�
 ## 출력 예시
 
 문서: "담당자 김철수(010-1234-5678, chulsoo@company.com)에게 서울특별시 강남구 테헤란로 152로 서류를 보내주세요."
-
-```json
-{"이름": ["김철수"], "주소": ["서울특별시 강남구 테헤란로 152"], "주민등록번호": null, "여권번호": null, "운전면허번호": null, "이메일": ["chulsoo@company.com"], "IP주소": null, "전화번호": ["010-1234-5678"], "계좌번호": null, "카드번호": null, "생년월일": null, "기타_고유식별정보": null}
-```
+→ {"이름": ["김철수"], "주소": ["서울특별시 강남구 테헤란로 152"], "주민등록번호": null, "여권번호": null, "운전면허번호": null, "이메일": ["chulsoo@company.com"], "IP주소": null, "전화번호": ["010-1234-5678"], "계좌번호": null, "카드번호": null, "생년월일": null, "기타_고유식별정보": null}
 
 문서: "계약자: 이영희, 주민등록번호 900101-2345678, 국민은행 계좌 123-456-789012로 입금 바랍니다."
-
-```json
-{"이름": ["이영희"], "주소": null, "주민등록번호": ["900101-2345678"], "여권번호": null, "운전면허번호": null, "이메일": null, "IP주소": null, "전화번호": null, "계좌번호": ["123-456-789012"], "카드번호": null, "생년월일": null, "기타_고유식별정보": null}
-```
+→ {"이름": ["이영희"], "주소": null, "주민등록번호": ["900101-2345678"], "여권번호": null, "운전면허번호": null, "이메일": null, "IP주소": null, "전화번호": null, "계좌번호": ["123-456-789012"], "카드번호": null, "생년월일": null, "기타_고유식별정보": null}
 """
 
 USER_PROMPT_TEMPLATE = """아래 문서에서 개인정보(PII)를 검출하여 JSON으로 응답하세요. 각 PII 항목은 반드시 완전한 문자열로 추출하세요.
@@ -321,6 +315,7 @@ def call_api(
     json_schema: dict,
     temperature: float,
     max_tokens: int,
+    no_think: bool = False,
 ) -> dict:
     """단일 테스트 케이스에 대해 API 요청을 보내고 결과를 반환"""
     messages = [
@@ -328,12 +323,16 @@ def call_api(
         {"role": "user", "content": USER_PROMPT_TEMPLATE.format(document_text=tc["document_text"])},
     ]
 
+    extra_body: dict[str, Any] = {"guided_json": json_schema}
+    if no_think:
+        extra_body["chat_template_kwargs"] = {"enable_thinking": False}
+
     response = client.chat.completions.create(
         model=model,
         messages=messages,
         temperature=temperature,
         max_tokens=max_tokens,
-        extra_body={"guided_json": json_schema},
+        extra_body=extra_body,
     )
 
     raw_text = response.choices[0].message.content.strip()
@@ -384,6 +383,8 @@ def main():
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--verbose", action="store_true",
                         help="케이스별 expected/predicted 상세 출력")
+    parser.add_argument("--no-think", action="store_true",
+                        help="Qwen3 thinking 모드 비활성화 (guided_json 충돌 방지)")
     args = parser.parse_args()
 
     # ── 테스트 케이스 로드 ──
@@ -425,7 +426,7 @@ def main():
         futures = {
             executor.submit(
                 call_api, client, args.model, tc, json_schema,
-                args.temperature, args.max_tokens,
+                args.temperature, args.max_tokens, args.no_think,
             ): tc["id"]
             for tc in test_cases
         }
