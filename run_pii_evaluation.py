@@ -387,6 +387,41 @@ def print_report(all_results: list[dict]) -> dict:
     print(f"{'전체':<20s} {ct['tp']:>5d} {ct['tn']:>5d} {ct['fp']:>5d} {ct['fn']:>5d} {ct_p:>8.2%} {ct_r:>8.2%} {ct_f1:>8.2%} {ct_acc:>8.2%}")
     print("=" * 80)
 
+    # ── 난이도별 Classification Confusion Matrix ──
+    cls_diff_agg: dict[str, dict] = {d: {"tp": 0, "tn": 0, "fp": 0, "fn": 0, "count": 0} for d in ["EASY", "MEDIUM", "HARD"]}
+    for r in all_results:
+        diff = r["difficulty"]
+        for cat in PII_CATEGORIES:
+            exp = r["expected"].get(cat)
+            pred = r["predicted"].get(cat)
+            has_exp = exp is not None and len(exp) > 0
+            has_pred = pred is not None and len(pred) > 0
+            if has_exp and has_pred:
+                cls_diff_agg[diff]["tp"] += 1
+            elif not has_exp and not has_pred:
+                cls_diff_agg[diff]["tn"] += 1
+            elif not has_exp and has_pred:
+                cls_diff_agg[diff]["fp"] += 1
+            else:
+                cls_diff_agg[diff]["fn"] += 1
+        cls_diff_agg[diff]["count"] += 1
+
+    print("\n" + "=" * 80)
+    print("난이도별 Classification Confusion Matrix")
+    print("=" * 80)
+    print(f"{'난이도':<10s} {'케이스':>6s} {'TP':>5s} {'TN':>5s} {'FP':>5s} {'FN':>5s} {'P':>8s} {'R':>8s} {'F1':>8s} {'Acc':>8s}")
+    print("-" * 80)
+    cls_diff_metrics = {}
+    for diff in ["EASY", "MEDIUM", "HARD"]:
+        c = cls_diff_agg[diff]
+        dp = c["tp"] / (c["tp"] + c["fp"]) if (c["tp"] + c["fp"]) > 0 else 1.0
+        dr = c["tp"] / (c["tp"] + c["fn"]) if (c["tp"] + c["fn"]) > 0 else 1.0
+        df1 = 2 * dp * dr / (dp + dr) if (dp + dr) > 0 else 0.0
+        da = (c["tp"] + c["tn"]) / (c["tp"] + c["tn"] + c["fp"] + c["fn"])
+        cls_diff_metrics[diff] = {"precision": round(dp, 4), "recall": round(dr, 4), "f1": round(df1, 4), "accuracy": round(da, 4)}
+        print(f"{diff:<10s} {c['count']:>6d} {c['tp']:>5d} {c['tn']:>5d} {c['fp']:>5d} {c['fn']:>5d} {dp:>8.2%} {dr:>8.2%} {df1:>8.2%} {da:>8.2%}")
+    print("=" * 80)
+
     if failed_cases:
         print("\n주요 실패 케이스 (F1 낮은 순):")
         failed_cases.sort(key=lambda x: x["metrics"]["micro_f1"])
@@ -420,6 +455,7 @@ def print_report(all_results: list[dict]) -> dict:
         },
         "classification_confusion_matrix": {
             "per_category": cls_cat_metrics,
+            "per_difficulty": cls_diff_metrics,
             "total": {
                 "tp": ct["tp"], "tn": ct["tn"], "fp": ct["fp"], "fn": ct["fn"],
                 "precision": round(ct_p, 4), "recall": round(ct_r, 4),
