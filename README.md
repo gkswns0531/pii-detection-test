@@ -1,66 +1,47 @@
 # PII Detection Test Suite
 
-LLM 기반 개인정보(PII) 검출 성능을 평가하기 위한 테스트 케이스 100개 + vLLM structured output 평가 스크립트
+LLM 기반 개인정보(PII) 검출 성능 평가 - 테스트 케이스 100개 + vLLM structured output 평가 스크립트
+
+서버 기동 없이 **터미널 하나에서 바로 실행** 가능합니다.
 
 ## Quick Start
 
-### 1. 환경 설치
-
 ```bash
+# 1. 클론 + 의존성
 git clone https://github.com/gkswns0531/pii-detection-test.git
 cd pii-detection-test
+pip install vllm
 
-pip install vllm openai
+# 2. 바로 실행 (서버 불필요, 오프라인 배치 추론)
+python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct
 ```
 
-### 2. vLLM 서버 기동
+끝입니다. 모델 다운로드 → 로드 → 100개 배치 추론 → 평가 리포트까지 한 번에 나옵니다.
+
+---
+
+## 실행 옵션
+
+### GPU 설정
 
 ```bash
-# 기본 실행 (GPU 자동 감지)
-vllm serve Qwen/Qwen2.5-7B-Instruct
+# 특정 GPU 지정
+CUDA_VISIBLE_DEVICES=0 python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct
 
-# GPU 지정 (멀티 GPU 중 특정 GPU 사용)
-CUDA_VISIBLE_DEVICES=0 vllm serve Qwen/Qwen2.5-7B-Instruct
-
-# 포트 변경
-vllm serve Qwen/Qwen2.5-7B-Instruct --port 8080
-
-# Tensor Parallel (멀티 GPU)
-vllm serve Qwen/Qwen2.5-7B-Instruct --tensor-parallel-size 2
+# 멀티 GPU (tensor parallel)
+python run_pii_evaluation.py --model Qwen/Qwen2.5-72B-Instruct-AWQ --tp 2
 
 # 큰 모델 (양자화)
-vllm serve Qwen/Qwen2.5-72B-Instruct-AWQ --quantization awq
+python run_pii_evaluation.py --model Qwen/Qwen2.5-72B-Instruct-AWQ --quantization awq
 
 # GPU 메모리 제한
-vllm serve Qwen/Qwen2.5-7B-Instruct --gpu-memory-utilization 0.8
+python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct --gpu-memory-utilization 0.8
 
-# guided decoding backend 지정 (structured output 성능 향상)
-vllm serve Qwen/Qwen2.5-7B-Instruct --guided-decoding-backend outlines
+# max model length 지정 (OOM 방지)
+python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct --max-model-len 8192
 ```
 
-서버가 뜨면 `http://localhost:8000/v1` 에서 OpenAI 호환 API를 제공합니다.
-
-헬스체크:
-```bash
-curl http://localhost:8000/health
-# 또는
-curl http://localhost:8000/v1/models
-```
-
-### 3. 평가 실행
-
-```bash
-# 전체 100개 테스트
-python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct
-
-# 포트를 변경한 경우
-python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct --base-url http://localhost:8080/v1
-
-# 결과 JSON 저장
-python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct --output results.json
-```
-
-### 4. 필터링 실행
+### 필터링
 
 ```bash
 # 카테고리별
@@ -76,6 +57,32 @@ python run_pii_evaluation.py --model ... --difficulty HARD
 # 특정 케이스만
 python run_pii_evaluation.py --model ... --ids TC001 TC074 TC098
 ```
+
+### 결과 저장
+
+```bash
+python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct --output results.json
+```
+
+`results.json`에 전체 메트릭 + 케이스별 expected/predicted 비교가 저장됩니다.
+
+---
+
+## 전체 인자 목록
+
+| 인자 | 기본값 | 설명 |
+|---|---|---|
+| `--model` | (필수) | HuggingFace 모델 이름 |
+| `--tp` | 1 | Tensor parallel size |
+| `--gpu-memory-utilization` | 0.9 | GPU 메모리 사용률 |
+| `--max-model-len` | 모델 기본값 | 최대 시퀀스 길이 |
+| `--quantization` | None | 양자화 (awq, gptq 등) |
+| `--category` | None | 특정 카테고리 필터 |
+| `--difficulty` | None | EASY / MEDIUM / HARD |
+| `--ids` | None | 특정 TC ID 필터 |
+| `--output` | None | 결과 JSON 저장 경로 |
+| `--max-tokens` | 4096 | 생성 최대 토큰 |
+| `--temperature` | 0.0 | 샘플링 온도 |
 
 ---
 
@@ -104,7 +111,7 @@ python run_pii_evaluation.py --model ... --ids TC001 TC074 TC098
 
 ## JSON Schema (LLM 출력 형태)
 
-vLLM structured output으로 아래 12개 카테고리를 `List[str] | null`로 출력합니다:
+vLLM `GuidedDecodingParams`로 아래 12개 카테고리를 `List[str] | null`로 강제합니다:
 
 ```json
 {
@@ -128,6 +135,12 @@ vLLM structured output으로 아래 12개 카테고리를 `List[str] | null`로 
 ## 평가 리포트 예시
 
 ```
+모델 로딩 중...
+모델 로드 완료!
+
+추론 시작 (100개 배치)...
+추론 완료! (45.3초, 평균 0.45초/케이스)
+
 ================================================================================
 카테고리별 성능
 ================================================================================
@@ -158,8 +171,8 @@ HARD          42     72.40%     65.80%     68.95%
 ```
 .
 ├── README.md
-├── all_test_cases.json          # 통합 테스트 케이스 100개 (이것만 있으면 됨)
-├── run_pii_evaluation.py        # 평가 스크립트
+├── all_test_cases.json          # 통합 테스트 케이스 100개
+├── run_pii_evaluation.py        # 평가 스크립트 (이 두 파일만 있으면 됨)
 ├── __init__.py                  # Python 패키지 (로컬 개발용)
 ├── pii_test_cases.py            # Part1 소스
 ├── pii_test_cases_part2.py      # Part2 소스
@@ -167,5 +180,3 @@ HARD          42     72.40%     65.80%     68.95%
 ├── pii_test_cases_part4.py      # Part4 소스
 └── pii_test_cases_part5.py      # Part5 소스
 ```
-
-GPU 장비에서는 `all_test_cases.json` + `run_pii_evaluation.py` 두 파일만 있으면 평가 가능합니다.

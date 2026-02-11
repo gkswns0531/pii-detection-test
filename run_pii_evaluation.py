@@ -1,20 +1,25 @@
 """
 PII 검출 성능 평가 스크립트
 
-vLLM structured output을 사용하여 LLM 기반 PII 검출 성능을 테스트합니다.
+vLLM offline inference + structured output으로 LLM 기반 PII 검출 성능을 테스트합니다.
+서버 기동 없이 터미널에서 바로 실행 가능합니다.
 
 사용법:
-    # vLLM 서버 기동 후:
-    python run_pii_evaluation.py --base-url http://localhost:8000 --model "모델명"
+    # 기본 실행
+    python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct
 
-    # 특정 카테고리만 테스트:
-    python run_pii_evaluation.py --category 이름
+    # GPU 지정
+    CUDA_VISIBLE_DEVICES=0 python run_pii_evaluation.py --model Qwen/Qwen2.5-7B-Instruct
 
-    # 특정 난이도만 테스트:
-    python run_pii_evaluation.py --difficulty HARD
+    # 멀티 GPU (tensor parallel)
+    python run_pii_evaluation.py --model Qwen/Qwen2.5-72B-Instruct-AWQ --tp 2
 
-    # 결과를 JSON으로 저장:
-    python run_pii_evaluation.py --output results.json
+    # 특정 카테고리/난이도만
+    python run_pii_evaluation.py --model ... --category 이름
+    python run_pii_evaluation.py --model ... --difficulty HARD
+
+    # 결과 저장
+    python run_pii_evaluation.py --model ... --output results.json
 """
 
 import argparse
@@ -24,93 +29,42 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
-from openai import OpenAI
-
 # ============================================================================
 # 1. PII 카테고리 정규화 매핑
 # ============================================================================
 
-# expected_pii의 세부 type → 메인 카테고리로 매핑
 TYPE_NORMALIZATION: dict[str, str] = {
-    # 이름
-    "이름": "이름",
-    "이름(부분마스킹)": "이름",
-    # 주소
-    "주소": "주소",
-    "주소(부분)": "주소",
-    # 주민등록번호
-    "주민등록번호": "주민등록번호",
-    "주민등록번호(마스킹)": "주민등록번호",
-    "주민등록번호(앞자리)": "주민등록번호",
-    "주민등록번호(OCR오류)": "주민등록번호",
+    "이름": "이름", "이름(부분마스킹)": "이름",
+    "주소": "주소", "주소(부분)": "주소",
+    "주민등록번호": "주민등록번호", "주민등록번호(마스킹)": "주민등록번호",
+    "주민등록번호(앞자리)": "주민등록번호", "주민등록번호(OCR오류)": "주민등록번호",
     "외국인등록번호": "주민등록번호",
-    # 여권번호
     "여권번호": "여권번호",
-    # 운전면허번호
     "운전면허번호": "운전면허번호",
-    # 이메일
-    "이메일": "이메일",
-    "이메일(난독화)": "이메일",
-    "이메일(마스킹)": "이메일",
-    # IP주소
-    "IP주소": "IP주소",
-    "IP주소(IPv6)": "IP주소",
-    "IP주소(사설)": "IP주소",
-    "IP주소(공인)": "IP주소",
-    "IP주소:포트": "IP주소",
-    "IP주소(CIDR)": "IP주소",
-    # 전화번호
-    "전화번호": "전화번호",
-    "전화번호(부분마스킹)": "전화번호",
-    # 금융정보
-    "계좌번호": "계좌번호",
-    "계좌번호(부분마스킹)": "계좌번호",
-    "가상계좌번호": "계좌번호",
-    "IBAN": "계좌번호",
-    "카드번호": "카드번호",
-    "카드번호(부분마스킹)": "카드번호",
-    "카드번호(부분)": "카드번호",
-    "암호화폐지갑주소(BTC)": "카드번호",
-    "암호화폐지갑주소(ETH)": "카드번호",
-    # 기타
+    "이메일": "이메일", "이메일(난독화)": "이메일", "이메일(마스킹)": "이메일",
+    "IP주소": "IP주소", "IP주소(IPv6)": "IP주소", "IP주소(사설)": "IP주소",
+    "IP주소(공인)": "IP주소", "IP주소:포트": "IP주소", "IP주소(CIDR)": "IP주소",
+    "전화번호": "전화번호", "전화번호(부분마스킹)": "전화번호",
+    "계좌번호": "계좌번호", "계좌번호(부분마스킹)": "계좌번호",
+    "가상계좌번호": "계좌번호", "IBAN": "계좌번호",
+    "카드번호": "카드번호", "카드번호(부분마스킹)": "카드번호", "카드번호(부분)": "카드번호",
+    "암호화폐지갑주소(BTC)": "카드번호", "암호화폐지갑주소(ETH)": "카드번호",
     "생년월일": "생년월일",
-    "학번": "기타_고유식별정보",
-    "차량번호": "기타_고유식별정보",
+    "학번": "기타_고유식별정보", "차량번호": "기타_고유식별정보",
 }
 
-# 메인 PII 카테고리 목록 (JSON 스키마의 key로 사용)
 PII_CATEGORIES = [
-    "이름",
-    "주소",
-    "주민등록번호",
-    "여권번호",
-    "운전면허번호",
-    "이메일",
-    "IP주소",
-    "전화번호",
-    "계좌번호",
-    "카드번호",
-    "생년월일",
-    "기타_고유식별정보",
+    "이름", "주소", "주민등록번호", "여권번호", "운전면허번호", "이메일",
+    "IP주소", "전화번호", "계좌번호", "카드번호", "생년월일", "기타_고유식별정보",
 ]
 
 
 # ============================================================================
-# 2. JSON Schema 정의 (vLLM structured output용)
+# 2. JSON Schema (vLLM GuidedDecodingParams용)
 # ============================================================================
 
 def build_json_schema() -> dict:
-    """vLLM structured output에 사용할 JSON Schema를 생성합니다.
-
-    출력 형태 예시:
-    {
-        "이름": ["김철수", "이영희"],
-        "주소": null,
-        "주민등록번호": null,
-        "이메일": ["test@example.com"],
-        ...
-    }
-    """
+    """vLLM GuidedDecodingParams에 전달할 JSON Schema"""
     properties = {}
     for cat in PII_CATEGORIES:
         properties[cat] = {
@@ -119,32 +73,21 @@ def build_json_schema() -> dict:
                     "type": "array",
                     "items": {"type": "string"},
                     "minItems": 1,
-                    "description": f"검출된 {cat} 목록",
                 },
-                {
-                    "type": "null",
-                    "description": f"{cat}이(가) 검출되지 않은 경우",
-                },
+                {"type": "null"},
             ],
         }
 
     return {
-        "type": "json_schema",
-        "json_schema": {
-            "name": "pii_detection_result",
-            "strict": True,
-            "schema": {
-                "type": "object",
-                "properties": properties,
-                "required": PII_CATEGORIES,
-                "additionalProperties": False,
-            },
-        },
+        "type": "object",
+        "properties": properties,
+        "required": PII_CATEGORIES,
+        "additionalProperties": False,
     }
 
 
 # ============================================================================
-# 3. 시스템 프롬프트
+# 3. 프롬프트
 # ============================================================================
 
 SYSTEM_PROMPT = """당신은 문서에서 개인정보(PII)를 검출하는 전문가입니다.
@@ -185,33 +128,25 @@ USER_PROMPT_TEMPLATE = """아래 문서에서 개인정보(PII)를 검출해 주
 # ============================================================================
 
 def normalize_expected(expected_pii: list[dict]) -> dict[str, list[str] | None]:
-    """expected_pii 리스트를 카테고리별 {key: [values] | None} 형태로 변환"""
     result: dict[str, list[str]] = defaultdict(list)
     for item in expected_pii:
-        raw_type = item["type"]
-        normalized = TYPE_NORMALIZATION.get(raw_type, "기타_고유식별정보")
+        normalized = TYPE_NORMALIZATION.get(item["type"], "기타_고유식별정보")
         result[normalized].append(item["value"])
 
     output: dict[str, list[str] | None] = {}
     for cat in PII_CATEGORIES:
-        if cat in result:
-            # 중복 제거 (동명이인 등은 unique만)
-            output[cat] = sorted(set(result[cat]))
-        else:
-            output[cat] = None
+        output[cat] = sorted(set(result[cat])) if cat in result else None
     return output
 
 
 # ============================================================================
-# 5. 평가 메트릭 계산
+# 5. 평가 메트릭
 # ============================================================================
 
 def compute_metrics(
     expected: dict[str, list[str] | None],
     predicted: dict[str, list[str] | None],
 ) -> dict[str, Any]:
-    """카테고리별 Precision, Recall, F1 계산"""
-
     per_category: dict[str, dict] = {}
     total_tp, total_fp, total_fn = 0, 0, 0
 
@@ -229,10 +164,8 @@ def compute_metrics(
         recall = tp / (tp + fn) if (tp + fn) > 0 else (1.0 if len(pred_set) == 0 else 0.0)
         f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
 
-        # 카테고리 존재 여부 정확도 (검출 있음/없음 이진 판단)
         exp_exists = exp_vals is not None and len(exp_vals) > 0
         pred_exists = pred_vals is not None and len(pred_vals) > 0
-        category_correct = exp_exists == pred_exists
 
         per_category[cat] = {
             "tp": tp, "fp": fp, "fn": fn,
@@ -241,16 +174,14 @@ def compute_metrics(
             "f1": round(f1, 4),
             "expected_count": len(exp_set),
             "predicted_count": len(pred_set),
-            "category_detection_correct": category_correct,
+            "category_detection_correct": exp_exists == pred_exists,
             "missing": sorted(exp_set - pred_set) if exp_set - pred_set else [],
             "extra": sorted(pred_set - exp_set) if pred_set - exp_set else [],
         }
-
         total_tp += tp
         total_fp += fp
         total_fn += fn
 
-    # 전체 micro-average
     micro_p = total_tp / (total_tp + total_fp) if (total_tp + total_fp) > 0 else 0.0
     micro_r = total_tp / (total_tp + total_fn) if (total_tp + total_fn) > 0 else 0.0
     micro_f1 = 2 * micro_p * micro_r / (micro_p + micro_r) if (micro_p + micro_r) > 0 else 0.0
@@ -267,52 +198,18 @@ def compute_metrics(
 
 
 # ============================================================================
-# 6. vLLM 호출
-# ============================================================================
-
-def call_vllm(
-    client: OpenAI,
-    model: str,
-    document_text: str,
-    schema: dict,
-    max_tokens: int = 4096,
-    temperature: float = 0.0,
-) -> dict[str, list[str] | None]:
-    """vLLM의 structured output을 사용하여 PII 검출"""
-
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": USER_PROMPT_TEMPLATE.format(document_text=document_text)},
-        ],
-        response_format=schema,
-        max_tokens=max_tokens,
-        temperature=temperature,
-    )
-
-    content = response.choices[0].message.content
-    return json.loads(content)
-
-
-# ============================================================================
-# 7. 리포트 출력
+# 6. 리포트 출력
 # ============================================================================
 
 def print_report(all_results: list[dict]) -> dict:
-    """전체 평가 결과를 보기 좋게 출력하고 summary를 반환"""
-
-    # 카테고리별 집계
     cat_agg: dict[str, dict] = {cat: {"tp": 0, "fp": 0, "fn": 0} for cat in PII_CATEGORIES}
     diff_agg: dict[str, dict] = {d: {"tp": 0, "fp": 0, "fn": 0, "count": 0} for d in ["EASY", "MEDIUM", "HARD"]}
-
     failed_cases: list[dict] = []
 
     for r in all_results:
         metrics = r["metrics"]
         diff = r["difficulty"]
         diff_agg[diff]["count"] += 1
-
         for cat in PII_CATEGORIES:
             cm = metrics["per_category"][cat]
             cat_agg[cat]["tp"] += cm["tp"]
@@ -321,18 +218,14 @@ def print_report(all_results: list[dict]) -> dict:
             diff_agg[diff]["tp"] += cm["tp"]
             diff_agg[diff]["fp"] += cm["fp"]
             diff_agg[diff]["fn"] += cm["fn"]
-
-        # F1 < 1.0 인 케이스 수집
         if metrics["micro_f1"] < 1.0:
             failed_cases.append(r)
 
-    # ── 카테고리별 성능 ──
     print("\n" + "=" * 80)
     print("카테고리별 성능")
     print("=" * 80)
     print(f"{'카테고리':<20s} {'Precision':>10s} {'Recall':>10s} {'F1':>10s} {'TP':>6s} {'FP':>6s} {'FN':>6s}")
     print("-" * 80)
-
     for cat in PII_CATEGORIES:
         a = cat_agg[cat]
         p = a["tp"] / (a["tp"] + a["fp"]) if (a["tp"] + a["fp"]) > 0 else 0.0
@@ -340,13 +233,11 @@ def print_report(all_results: list[dict]) -> dict:
         f1 = 2 * p * rc / (p + rc) if (p + rc) > 0 else 0.0
         print(f"{cat:<20s} {p:>10.2%} {rc:>10.2%} {f1:>10.2%} {a['tp']:>6d} {a['fp']:>6d} {a['fn']:>6d}")
 
-    # ── 난이도별 성능 ──
     print("\n" + "=" * 80)
     print("난이도별 성능")
     print("=" * 80)
     print(f"{'난이도':<10s} {'케이스수':>8s} {'Precision':>10s} {'Recall':>10s} {'F1':>10s}")
     print("-" * 80)
-
     for diff in ["EASY", "MEDIUM", "HARD"]:
         a = diff_agg[diff]
         p = a["tp"] / (a["tp"] + a["fp"]) if (a["tp"] + a["fp"]) > 0 else 0.0
@@ -354,7 +245,6 @@ def print_report(all_results: list[dict]) -> dict:
         f1 = 2 * p * rc / (p + rc) if (p + rc) > 0 else 0.0
         print(f"{diff:<10s} {a['count']:>8d} {p:>10.2%} {rc:>10.2%} {f1:>10.2%}")
 
-    # ── 전체 micro-average ──
     total_tp = sum(a["tp"] for a in cat_agg.values())
     total_fp = sum(a["fp"] for a in cat_agg.values())
     total_fn = sum(a["fn"] for a in cat_agg.values())
@@ -368,7 +258,6 @@ def print_report(all_results: list[dict]) -> dict:
     print(f"  테스트 케이스: {len(all_results)}개 중 {len(all_results) - len(failed_cases)}개 완벽 통과")
     print("=" * 80)
 
-    # ── 실패한 케이스 상위 10개 ──
     if failed_cases:
         print("\n주요 실패 케이스 (F1 낮은 순):")
         failed_cases.sort(key=lambda x: x["metrics"]["micro_f1"])
@@ -400,41 +289,43 @@ def print_report(all_results: list[dict]) -> dict:
 
 
 # ============================================================================
-# 8. 메인 실행
+# 7. 메인
 # ============================================================================
 
 def main():
-    parser = argparse.ArgumentParser(description="PII 검출 성능 평가 (vLLM structured output)")
-    parser.add_argument("--base-url", type=str, default="http://localhost:8000/v1",
-                        help="vLLM 서버 URL (default: http://localhost:8000/v1)")
+    parser = argparse.ArgumentParser(description="PII 검출 성능 평가 (vLLM offline inference)")
     parser.add_argument("--model", type=str, required=True,
-                        help="모델 이름 (예: Qwen/Qwen2.5-7B-Instruct)")
+                        help="HuggingFace 모델 이름 (예: Qwen/Qwen2.5-7B-Instruct)")
+    parser.add_argument("--tp", type=int, default=1,
+                        help="Tensor parallel size (default: 1)")
+    parser.add_argument("--gpu-memory-utilization", type=float, default=0.9,
+                        help="GPU 메모리 사용률 (default: 0.9)")
+    parser.add_argument("--max-model-len", type=int, default=None,
+                        help="최대 시퀀스 길이 (미지정 시 모델 기본값)")
+    parser.add_argument("--quantization", type=str, default=None,
+                        help="양자화 방식 (예: awq, gptq)")
     parser.add_argument("--test-cases", type=str, default=None,
-                        help="테스트 케이스 JSON 파일 경로 (미지정 시 패키지 기본값 사용)")
+                        help="테스트 케이스 JSON 파일 경로")
     parser.add_argument("--category", type=str, default=None,
                         help="특정 카테고리만 테스트 (예: 이름, 주소)")
-    parser.add_argument("--difficulty", type=str, default=None, choices=["EASY", "MEDIUM", "HARD"],
-                        help="특정 난이도만 테스트")
+    parser.add_argument("--difficulty", type=str, default=None,
+                        choices=["EASY", "MEDIUM", "HARD"])
     parser.add_argument("--ids", type=str, nargs="+", default=None,
-                        help="특정 테스트 케이스 ID만 실행 (예: TC001 TC005 TC073)")
+                        help="특정 ID만 실행 (예: TC001 TC074)")
     parser.add_argument("--output", type=str, default=None,
-                        help="결과 저장 파일 경로 (JSON)")
+                        help="결과 저장 경로 (JSON)")
     parser.add_argument("--max-tokens", type=int, default=4096)
     parser.add_argument("--temperature", type=float, default=0.0)
-    parser.add_argument("--api-key", type=str, default="EMPTY",
-                        help="API Key (vLLM 기본값: EMPTY)")
     args = parser.parse_args()
 
-    # 테스트 케이스 로드
+    # ── 테스트 케이스 로드 ──
     if args.test_cases:
-        with open(args.test_cases, encoding="utf-8") as f:
-            test_cases = json.load(f)
+        tc_path = Path(args.test_cases)
     else:
         tc_path = Path(__file__).parent / "all_test_cases.json"
-        with open(tc_path, encoding="utf-8") as f:
-            test_cases = json.load(f)
+    with open(tc_path, encoding="utf-8") as f:
+        test_cases = json.load(f)
 
-    # 필터링
     if args.category:
         test_cases = [tc for tc in test_cases if args.category in tc["category"]]
     if args.difficulty:
@@ -449,38 +340,71 @@ def main():
 
     print(f"대상 테스트 케이스: {len(test_cases)}개")
     print(f"모델: {args.model}")
-    print(f"서버: {args.base_url}")
+    print(f"Tensor Parallel: {args.tp}")
+    if args.quantization:
+        print(f"양자화: {args.quantization}")
 
-    # vLLM 클라이언트 초기화
-    client = OpenAI(base_url=args.base_url, api_key=args.api_key)
-    schema = build_json_schema()
+    # ── vLLM 모델 로드 (오프라인) ──
+    print("\n모델 로딩 중...")
+    from vllm import LLM, SamplingParams
+    from vllm.sampling_params import GuidedDecodingParams
 
-    # 실행
-    all_results = []
+    llm_kwargs: dict[str, Any] = {
+        "model": args.model,
+        "tensor_parallel_size": args.tp,
+        "gpu_memory_utilization": args.gpu_memory_utilization,
+        "trust_remote_code": True,
+    }
+    if args.max_model_len:
+        llm_kwargs["max_model_len"] = args.max_model_len
+    if args.quantization:
+        llm_kwargs["quantization"] = args.quantization
+
+    llm = LLM(**llm_kwargs)
+    tokenizer = llm.get_tokenizer()
+
+    json_schema = build_json_schema()
+    guided_params = GuidedDecodingParams(json=json_schema)
+    sampling_params = SamplingParams(
+        temperature=args.temperature,
+        max_tokens=args.max_tokens,
+        guided_decoding=guided_params,
+    )
+
+    print("모델 로드 완료!\n")
+
+    # ── 프롬프트 구성 ──
+    prompts = []
+    for tc in test_cases:
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": USER_PROMPT_TEMPLATE.format(document_text=tc["document_text"])},
+        ]
+        prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        prompts.append(prompt)
+
+    # ── 배치 추론 ──
+    print(f"추론 시작 ({len(prompts)}개 배치)...")
     start_time = time.time()
+    outputs = llm.generate(prompts, sampling_params)
+    elapsed = time.time() - start_time
+    print(f"추론 완료! ({elapsed:.1f}초, 평균 {elapsed/len(prompts):.2f}초/케이스)\n")
 
-    for i, tc in enumerate(test_cases):
-        tc_id = tc["id"]
-        print(f"\r[{i+1}/{len(test_cases)}] {tc_id} ({tc['category']}, {tc['difficulty']})...", end="", flush=True)
-
+    # ── 결과 평가 ──
+    all_results = []
+    for tc, output in zip(test_cases, outputs):
+        raw_text = output.outputs[0].text.strip()
         try:
-            predicted = call_vllm(
-                client=client,
-                model=args.model,
-                document_text=tc["document_text"],
-                schema=schema,
-                max_tokens=args.max_tokens,
-                temperature=args.temperature,
-            )
-        except Exception as e:
-            print(f"\n  ERROR: {tc_id} - {e}")
+            predicted = json.loads(raw_text)
+        except json.JSONDecodeError:
+            print(f"  JSON 파싱 실패: {tc['id']} → {raw_text[:100]}...")
             predicted: dict[str, list[str] | None] = {cat: None for cat in PII_CATEGORIES}
 
         expected = normalize_expected(tc["expected_pii"])
         metrics = compute_metrics(expected, predicted)
 
         all_results.append({
-            "id": tc_id,
+            "id": tc["id"],
             "category": tc["category"],
             "difficulty": tc["difficulty"],
             "intent": tc["intent"],
@@ -489,16 +413,15 @@ def main():
             "metrics": metrics,
         })
 
-    elapsed = time.time() - start_time
-    print(f"\n\n완료! ({elapsed:.1f}초, 평균 {elapsed/len(test_cases):.1f}초/케이스)")
-
-    # 리포트 출력
+    # ── 리포트 ──
     summary = print_report(all_results)
 
-    # 결과 저장
     if args.output:
         output_data = {
             "model": args.model,
+            "tensor_parallel": args.tp,
+            "quantization": args.quantization,
+            "inference_time_sec": round(elapsed, 2),
             "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
             "summary": summary,
             "results": all_results,
