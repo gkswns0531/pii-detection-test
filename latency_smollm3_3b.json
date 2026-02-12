@@ -1,0 +1,99 @@
+{
+  "model": "HuggingFaceTB/SmolLM3-3B",
+  "mode": "latency",
+  "timestamp": "2026-02-12 05:49:43",
+  "config": {
+    "batch_size": 1,
+    "target_doc_tokens": 2000,
+    "target_doc_chars": 1000,
+    "num_warmup": 3,
+    "num_measure": 10,
+    "temperature": 0.0,
+    "max_tokens": 2048,
+    "no_think": false
+  },
+  "statistics": {
+    "mean_sec": 0.4236,
+    "median_sec": 0.414,
+    "stdev_sec": 0.0716,
+    "min_sec": 0.3398,
+    "max_sec": 0.573,
+    "p90_sec": 0.5145,
+    "p95_sec": 0.5438,
+    "p99_sec": 0.5671,
+    "avg_prompt_tokens": 3740.3,
+    "avg_completion_tokens": 115.4
+  },
+  "measurements": [
+    {
+      "run": 1,
+      "latency_sec": 0.573,
+      "prompt_tokens": 3613,
+      "completion_tokens": 159,
+      "total_tokens": 3772
+    },
+    {
+      "run": 2,
+      "latency_sec": 0.3759,
+      "prompt_tokens": 3726,
+      "completion_tokens": 102,
+      "total_tokens": 3828
+    },
+    {
+      "run": 3,
+      "latency_sec": 0.508,
+      "prompt_tokens": 3910,
+      "completion_tokens": 139,
+      "total_tokens": 4049
+    },
+    {
+      "run": 4,
+      "latency_sec": 0.3601,
+      "prompt_tokens": 3778,
+      "completion_tokens": 97,
+      "total_tokens": 3875
+    },
+    {
+      "run": 5,
+      "latency_sec": 0.3746,
+      "prompt_tokens": 3819,
+      "completion_tokens": 101,
+      "total_tokens": 3920
+    },
+    {
+      "run": 6,
+      "latency_sec": 0.4016,
+      "prompt_tokens": 3749,
+      "completion_tokens": 108,
+      "total_tokens": 3857
+    },
+    {
+      "run": 7,
+      "latency_sec": 0.4264,
+      "prompt_tokens": 3648,
+      "completion_tokens": 116,
+      "total_tokens": 3764
+    },
+    {
+      "run": 8,
+      "latency_sec": 0.3398,
+      "prompt_tokens": 3714,
+      "completion_tokens": 92,
+      "total_tokens": 3806
+    },
+    {
+      "run": 9,
+      "latency_sec": 0.4336,
+      "prompt_tokens": 3765,
+      "completion_tokens": 119,
+      "total_tokens": 3884
+    },
+    {
+      "run": 10,
+      "latency_sec": 0.4431,
+      "prompt_tokens": 3681,
+      "completion_tokens": 121,
+      "total_tokens": 3802
+    }
+  ]
+}

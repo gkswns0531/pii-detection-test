@@ -23,6 +23,8 @@ PII 검출 성능 평가 스크립트 (API 클라이언트)
 
 import argparse
 import json
+import random
+import statistics
 import time
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -540,7 +542,179 @@ def call_api(
 
 
 # ============================================================================
-# 8. 메인
+# 8. 레이턴시 측정
+# ============================================================================
+
+def run_latency_test(args):
+    """레이턴시 측정 모드: 3회 워밍업 + 10회 측정, batch_size=1, ~2K token document input"""
+
+    NUM_WARMUP = 3
+    NUM_MEASURE = 10
+    TOTAL = NUM_WARMUP + NUM_MEASURE
+    TARGET_DOC_CHARS = 1000  # ~2K tokens (한국어 평균 ~2 tok/char)
+
+    # ── 테스트 케이스 로드 ──
+    if args.test_cases:
+        tc_path = Path(args.test_cases)
+    else:
+        tc_path = Path(__file__).parent / "combined_test_cases.json"
+    with open(tc_path, encoding="utf-8") as f:
+        test_cases = json.load(f)
+
+    random.seed(42)
+    random.shuffle(test_cases)
+
+    # ── 13개 서로 다른 ~2K token 입력 생성 ──
+    inputs: list[str] = []
+    idx = 0
+    for _ in range(TOTAL):
+        combined: list[str] = []
+        chars = 0
+        while idx < len(test_cases):
+            doc = test_cases[idx]["document_text"]
+            combined.append(doc)
+            chars += len(doc)
+            idx += 1
+            if chars >= TARGET_DOC_CHARS:
+                break
+        if not combined:
+            print(f"Error: 테스트 케이스 부족 ({len(inputs)}개만 생성)")
+            return
+        inputs.append("\n\n---\n\n".join(combined))
+
+    print(f"모델: {args.model}")
+    print(f"레이턴시 측정 모드 (batch_size=1, ~2K token document input)")
+    print(f"워밍업: {NUM_WARMUP}회, 측정: {NUM_MEASURE}회")
+    print(f"생성된 입력: {TOTAL}개 (각 ~{TARGET_DOC_CHARS}자, 모두 서로 다른 입력)")
+
+    client = OpenAI(base_url=args.api_url, api_key=args.api_key)
+    json_schema = build_json_schema()
+
+    def send_request(doc_text: str):
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": USER_PROMPT_TEMPLATE.format(document_text=doc_text)},
+        ]
+        extra_body: dict[str, Any] = {}
+        if args.no_think:
+            extra_body["chat_template_kwargs"] = {"enable_thinking": False}
+        return client.chat.completions.create(
+            model=args.model,
+            messages=messages,
+            temperature=0.0,
+            max_tokens=2048,
+            response_format=json_schema,
+            **({"extra_body": extra_body} if extra_body else {}),
+        )
+
+    # ── 워밍업 ──
+    print(f"\n워밍업 ({NUM_WARMUP}회)...")
+    for i in range(NUM_WARMUP):
+        start = time.time()
+        resp = send_request(inputs[i])
+        elapsed = time.time() - start
+        u = resp.usage
+        print(f"  워밍업 {i+1}: {elapsed:.3f}s "
+              f"(prompt: {u.prompt_tokens} tok, completion: {u.completion_tokens} tok)")
+
+    # ── 측정 ──
+    print(f"\n레이턴시 측정 ({NUM_MEASURE}회)...")
+    measurements: list[dict] = []
+
+    for i in range(NUM_MEASURE):
+        start = time.time()
+        resp = send_request(inputs[NUM_WARMUP + i])
+        elapsed = time.time() - start
+        u = resp.usage
+
+        m = {
+            "run": i + 1,
+            "latency_sec": round(elapsed, 4),
+            "prompt_tokens": u.prompt_tokens,
+            "completion_tokens": u.completion_tokens,
+            "total_tokens": u.total_tokens,
+        }
+        measurements.append(m)
+        print(f"  측정 {i+1:>2d}: {elapsed:.3f}s "
+              f"(prompt: {u.prompt_tokens} tok, completion: {u.completion_tokens} tok)")
+
+    # ── 통계 ──
+    lats = [m["latency_sec"] for m in measurements]
+    sorted_lats = sorted(lats)
+
+    def percentile(vals: list[float], p: float) -> float:
+        k = (len(vals) - 1) * p / 100.0
+        f = int(k)
+        c = min(f + 1, len(vals) - 1)
+        return vals[f] + (k - f) * (vals[c] - vals[f])
+
+    mean_lat = statistics.mean(lats)
+    median_lat = statistics.median(lats)
+    stdev_lat = statistics.stdev(lats) if len(lats) > 1 else 0.0
+    min_lat = min(lats)
+    max_lat = max(lats)
+    p90 = percentile(sorted_lats, 90)
+    p95 = percentile(sorted_lats, 95)
+    p99 = percentile(sorted_lats, 99)
+
+    avg_prompt = statistics.mean([m["prompt_tokens"] for m in measurements])
+    avg_completion = statistics.mean([m["completion_tokens"] for m in measurements])
+
+    print(f"\n{'='*60}")
+    print(f"레이턴시 통계 (batch_size=1, ~2K token document input)")
+    print(f"{'='*60}")
+    print(f"  모델:       {args.model}")
+    print(f"  측정 횟수:  {NUM_MEASURE}")
+    print(f"  평균 입력:  {avg_prompt:.0f} tokens (system+user+document)")
+    print(f"  평균 출력:  {avg_completion:.0f} tokens")
+    print(f"{'─'*60}")
+    print(f"  Mean:   {mean_lat:.4f}s")
+    print(f"  Median: {median_lat:.4f}s")
+    print(f"  StdDev: {stdev_lat:.4f}s")
+    print(f"  Min:    {min_lat:.4f}s")
+    print(f"  Max:    {max_lat:.4f}s")
+    print(f"  P90:    {p90:.4f}s")
+    print(f"  P95:    {p95:.4f}s")
+    print(f"  P99:    {p99:.4f}s")
+    print(f"{'='*60}")
+
+    # ── 결과 저장 ──
+    if args.output:
+        output_data = {
+            "model": args.model,
+            "mode": "latency",
+            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "config": {
+                "batch_size": 1,
+                "target_doc_tokens": 2000,
+                "target_doc_chars": TARGET_DOC_CHARS,
+                "num_warmup": NUM_WARMUP,
+                "num_measure": NUM_MEASURE,
+                "temperature": 0.0,
+                "max_tokens": 2048,
+                "no_think": args.no_think,
+            },
+            "statistics": {
+                "mean_sec": round(mean_lat, 4),
+                "median_sec": round(median_lat, 4),
+                "stdev_sec": round(stdev_lat, 4),
+                "min_sec": round(min_lat, 4),
+                "max_sec": round(max_lat, 4),
+                "p90_sec": round(p90, 4),
+                "p95_sec": round(p95, 4),
+                "p99_sec": round(p99, 4),
+                "avg_prompt_tokens": round(avg_prompt, 1),
+                "avg_completion_tokens": round(avg_completion, 1),
+            },
+            "measurements": measurements,
+        }
+        with open(args.output, "w", encoding="utf-8") as f:
+            json.dump(output_data, f, ensure_ascii=False, indent=2)
+        print(f"\n결과 저장: {args.output}")
+
+
+# ============================================================================
+# 9. 메인
 # ============================================================================
 
 def main():
@@ -571,7 +745,14 @@ def main():
                         help="Qwen3 thinking 모드 비활성화")
     parser.add_argument("--eval-categories", type=str, nargs="+", default=None,
                         help="평가 대상 카테고리만 지정 (예: --eval-categories 이름 주소). 나머지 카테고리의 예측은 무시")
+    parser.add_argument("--latency", action="store_true",
+                        help="레이턴시 측정 모드 (3회 워밍업 + 10회 측정, batch_size=1, ~2K token input)")
     args = parser.parse_args()
+
+    # ── 레이턴시 모드 ──
+    if args.latency:
+        run_latency_test(args)
+        return
 
     # ── 테스트 케이스 로드 ──
     if args.test_cases:
