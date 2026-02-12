@@ -456,9 +456,9 @@ table.main tr.best {{ background: #eff6ff; }}
   <div class="section-title">Score Comparison</div>
   <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
     <div class="tab-row" id="bar-metric-tabs">
-      <button class="tab-btn active" onclick="switchBarMetric('f1',this)">F1</button>
-      <button class="tab-btn" onclick="switchBarMetric('r',this)">Recall</button>
+      <button class="tab-btn active" onclick="switchBarMetric('r',this)">Recall</button>
       <button class="tab-btn" onclick="switchBarMetric('p',this)">Precision</button>
+      <button class="tab-btn" onclick="switchBarMetric('f1',this)">F1</button>
       <button class="tab-btn" onclick="switchBarMetric('perfect',this)">Perfect %</button>
       <button class="tab-btn" onclick="switchBarMetric('latency',this)">Latency</button>
     </div>
@@ -473,6 +473,7 @@ table.main tr.best {{ background: #eff6ff; }}
     <strong>Advanced (100)</strong>: 난독화, OCR 오류, 혼합 문서, 엣지케이스 등 노이즈가 반영된 어려운 상황 &middot;
     <strong>Combined (300)</strong>: Base + Advanced 전체
   </div>
+  <div id="bar-metric-desc" class="desc-box" style="margin-top:0;"></div>
   <div id="bar-chart" class="bar-chart"></div>
 
   <!-- Stats Table -->
@@ -496,9 +497,17 @@ table.main tr.best {{ background: #eff6ff; }}
 
   <!-- Confusion Matrix -->
   <div class="section-title">Confusion Matrix (Document-Category Level)</div>
-  <div style="background:#fff;border-radius:12px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.08);margin-bottom:16px;font-size:13px;color:#475569;line-height:1.7;">
-    <p><strong>TP</strong> = PII exists & detected (good), <strong>TN</strong> = No PII & not detected (good), <strong>FP</strong> = No PII but detected (false alarm), <strong>FN</strong> = PII exists but missed (privacy risk)</p>
-    <p><strong>Sensitivity</strong> = TP/(TP+FN), <strong>Specificity</strong> = TN/(TN+FP)</p>
+  <div style="background:#fff;border-radius:12px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.08);margin-bottom:16px;font-size:13px;color:#475569;line-height:1.9;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;margin-bottom:10px;">
+      <div><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#dcfce7;border:1px solid #166534;margin-right:6px;vertical-align:middle;"></span><strong style="color:#166534;">TP (True Positive)</strong> — 실제 PII를 모델이 정확히 탐지한 건수. 높을수록 탐지 능력이 우수합니다.</div>
+      <div><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#f0fdf4;border:1px solid #166534;margin-right:6px;vertical-align:middle;"></span><strong style="color:#166534;">TN (True Negative)</strong> — PII가 없는 항목을 올바르게 무시한 건수. 높을수록 불필요한 알림이 적습니다.</div>
+      <div><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#fef2f2;border:1px solid #991b1b;margin-right:6px;vertical-align:middle;"></span><strong style="color:#991b1b;">FP (False Positive)</strong> — PII가 없는데 잘못 탐지한 건수(오탐). 높으면 사용자에게 불필요한 경고를 유발합니다.</div>
+      <div><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#fff7ed;border:1px solid #9a3412;margin-right:6px;vertical-align:middle;"></span><strong style="color:#9a3412;">FN (False Negative)</strong> — 실제 PII를 놓친 건수(미탐). 높으면 개인정보 유출 위험이 증가합니다.</div>
+    </div>
+    <div style="border-top:1px solid #e2e8f0;padding-top:8px;font-size:12px;">
+      <strong>Sensitivity</strong> = TP/(TP+FN): 실제 존재하는 PII 중 모델이 얼마나 빠짐없이 찾아내는지 (재현율) &nbsp;|&nbsp;
+      <strong>Specificity</strong> = TN/(TN+FP): PII가 없는 항목을 얼마나 정확하게 무시하는지 (특이도)
+    </div>
   </div>
   <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
     <span class="filter-label">Model</span>
@@ -602,7 +611,14 @@ function renderSummary() {{
 }}
 
 // ── Bar Chart ──
-let barMetric = 'f1';
+let barMetric = 'r';
+const METRIC_DESC = {{
+  r: '<strong>Recall (재현율)</strong>: 실제 존재하는 PII 중 모델이 빠뜨리지 않고 찾아낸 비율. 높을수록 개인정보 유출 위험이 낮아집니다.',
+  p: '<strong>Precision (정밀도)</strong>: 모델이 PII라고 예측한 것 중 실제로 PII인 비율. 높을수록 불필요한 마스킹/알림이 줄어듭니다.',
+  f1: '<strong>F1 Score</strong>: Precision과 Recall의 조화 평균. 둘 사이의 균형을 하나의 숫자로 요약합니다.',
+  perfect: '<strong>Perfect Match %</strong>: 300개 테스트 케이스 중 Expected PII와 Predicted PII가 완벽히 일치한 비율.',
+  latency: '<strong>Latency (응답시간)</strong>: 1건 처리 평균 소요시간. 낮을수록 실시간 처리에 유리합니다.',
+}};
 function getMetricVal(m, dataset, metric) {{
   const s = m.stats[dataset];
   if (metric === 'latency') return m.latency_mean || 0;
@@ -642,12 +658,13 @@ function switchBarMetric(metric, btn) {{
   barMetric = metric;
   document.querySelectorAll('#bar-metric-tabs .tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  document.getElementById('bar-metric-desc').innerHTML = METRIC_DESC[metric] || '';
   renderBarChart(barDataset);
 }}
 
 // ── Stats Table ──
 function renderStats(dataset) {{
-  const sorted = [...MODELS].sort((a, b) => b.stats[dataset].f1 - a.stats[dataset].f1);
+  const sorted = [...MODELS].sort((a, b) => b.stats[dataset].r - a.stats[dataset].r);
   let html = '';
   sorted.forEach((m, i) => {{
     const s = m.stats[dataset];
@@ -685,11 +702,11 @@ function renderCM() {{
       <div class="cm-corner">Actual \\\\ Pred</div>
       <div class="cm-header">Detected</div><div class="cm-header">Not Detected</div>
       <div class="cm-row-header">PII Exists</div>
-      <div class="cm-cell tp">${{cm.tp}}<span class="pct">TP (${{pct(cm.tp)}})</span></div>
-      <div class="cm-cell fn">${{cm.fn}}<span class="pct">FN (${{pct(cm.fn)}})</span></div>
+      <div class="cm-cell tp">${{cm.tp}}<span class="pct">TP · 정확한 탐지 (${{pct(cm.tp)}})</span></div>
+      <div class="cm-cell fn">${{cm.fn}}<span class="pct">FN · 미탐 (${{pct(cm.fn)}})</span></div>
       <div class="cm-row-header">No PII</div>
-      <div class="cm-cell fp">${{cm.fp}}<span class="pct">FP (${{pct(cm.fp)}})</span></div>
-      <div class="cm-cell tn">${{cm.tn}}<span class="pct">TN (${{pct(cm.tn)}})</span></div>
+      <div class="cm-cell fp">${{cm.fp}}<span class="pct">FP · 오탐 (${{pct(cm.fp)}})</span></div>
+      <div class="cm-cell tn">${{cm.tn}}<span class="pct">TN · 정확한 무시 (${{pct(cm.tn)}})</span></div>
     </div>
     <div style="margin-top:10px;font-size:12px;color:#475569;text-align:center;line-height:1.8;">
       <strong>Sensitivity:</strong> ${{tpr}}% &nbsp; <strong>Specificity:</strong> ${{tnr}}%
@@ -898,6 +915,7 @@ function esc(s) {{ return s ? String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;'
 
 // Init
 renderSummary();
+document.getElementById('bar-metric-desc').innerHTML = METRIC_DESC[barMetric] || '';
 renderBarChart('combined');
 renderStats('combined');
 buildCMModelSelect(); renderCM();
