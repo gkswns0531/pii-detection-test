@@ -447,7 +447,7 @@ table.main tr.best {{ background: #eff6ff; }}
 <body>
 <div class="container">
   <h1>PII Detection - 12 Model Benchmark Report</h1>
-  <p class="subtitle">300 Test Cases (Base 200 + Advanced 100) &middot; V1 Full Prompt &middot; FP8 Quantization &middot; NVIDIA L40S 46GB</p>
+  <p class="subtitle">300 Test Cases (Base 200 + Advanced 100) &middot; Optimization &middot; FP8 Quantization &middot; NVIDIA L40S 48GB</p>
 
   <!-- Summary Cards -->
   <div id="summary-cards" class="summary-grid"></div>
@@ -617,7 +617,7 @@ const METRIC_DESC = {{
   r: '<strong>Recall (재현율)</strong>: 실제 존재하는 PII 중 모델이 빠뜨리지 않고 찾아낸 비율. 높을수록 개인정보 유출 위험이 낮아집니다.',
   p: '<strong>Precision (정밀도)</strong>: 모델이 PII라고 예측한 것 중 실제로 PII인 비율. 높을수록 불필요한 마스킹/알림이 줄어듭니다.',
   f1: '<strong>F1 Score</strong>: Precision과 Recall의 조화 평균. 둘 사이의 균형을 하나의 숫자로 요약합니다.',
-  perfect: '<strong>Perfect Match %</strong>: 완벽하게 모든 정보를 식별하고, 불필요한 정보를 식별하지 않은 비율. FP와 FN이 모두 0인 케이스만 해당됩니다.',
+  perfect: '<strong>Perfect Match %</strong>: 완벽하게 모든 정보를 식별하고, 불필요한 정보를 식별하지 않은 비율.',
   latency: '<strong>Latency (응답시간)</strong>: 1건 처리 평균 소요시간. 낮을수록 실시간 처리에 유리합니다.',
 }};
 function getMetricVal(m, dataset, metric) {{
