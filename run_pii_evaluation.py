@@ -66,7 +66,7 @@ PII_CATEGORIES = [
 # ============================================================================
 
 def build_json_schema() -> dict:
-    """vLLM guided_json에 전달할 JSON Schema"""
+    """vLLM response_format에 전달할 JSON Schema"""
     properties = {}
     for cat in PII_CATEGORIES:
         properties[cat] = {
@@ -81,10 +81,17 @@ def build_json_schema() -> dict:
         }
 
     return {
-        "type": "object",
-        "properties": properties,
-        "required": PII_CATEGORIES,
-        "additionalProperties": False,
+        "type": "json_schema",
+        "json_schema": {
+            "name": "pii_detection",
+            "strict": True,
+            "schema": {
+                "type": "object",
+                "properties": properties,
+                "required": PII_CATEGORIES,
+                "additionalProperties": False,
+            },
+        },
     }
 
 
@@ -482,7 +489,7 @@ def call_api(
         {"role": "user", "content": USER_PROMPT_TEMPLATE.format(document_text=tc["document_text"])},
     ]
 
-    extra_body: dict[str, Any] = {"guided_json": json_schema}
+    extra_body: dict[str, Any] = {}
     if no_think:
         extra_body["chat_template_kwargs"] = {"enable_thinking": False}
 
@@ -491,7 +498,8 @@ def call_api(
         messages=messages,
         temperature=temperature,
         max_tokens=max_tokens,
-        extra_body=extra_body,
+        response_format=json_schema,
+        **({"extra_body": extra_body} if extra_body else {}),
     )
 
     raw_text = response.choices[0].message.content.strip()
@@ -549,7 +557,7 @@ def main():
     parser.add_argument("--verbose", action="store_true",
                         help="케이스별 expected/predicted 상세 출력")
     parser.add_argument("--no-think", action="store_true",
-                        help="Qwen3 thinking 모드 비활성화 (guided_json 충돌 방지)")
+                        help="Qwen3 thinking 모드 비활성화")
     parser.add_argument("--eval-categories", type=str, nargs="+", default=None,
                         help="평가 대상 카테고리만 지정 (예: --eval-categories 이름 주소). 나머지 카테고리의 예측은 무시")
     args = parser.parse_args()
