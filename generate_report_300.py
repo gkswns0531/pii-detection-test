@@ -20,6 +20,7 @@ CATS = [
 
 MODELS = [
     ("qwen3_30b_a3b_fp8", "Qwen3-30B-A3B", "30B", "#2563eb"),
+    ("gpt_oss_20b", "GPT-OSS-20B", "20B", "#1e3a5f"),
     ("qwen3_8b", "Qwen3-8B", "8B", "#3b82f6"),
     ("qwen3_4b_2507", "Qwen3-4B", "4B", "#60a5fa"),
     ("qwen3_1.7b", "Qwen3-1.7B", "1.7B", "#93c5fd"),
@@ -208,7 +209,7 @@ def build_html(all_models: dict[str, dict]) -> str:
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PII Detection - 11 Model Benchmark Report</title>
+<title>PII Detection - 12 Model Benchmark Report</title>
 <style>
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
 body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f7fa; color: #1a1a2e; line-height: 1.6; }}
@@ -318,7 +319,7 @@ table.main tr.best {{ background: #eff6ff; }}
 </head>
 <body>
 <div class="container">
-  <h1>PII Detection - 11 Model Benchmark Report</h1>
+  <h1>PII Detection - 12 Model Benchmark Report</h1>
   <p class="subtitle">300 Test Cases (Base 200 + Advanced 100) &middot; V1 Full Prompt &middot; FP8 Quantization &middot; NVIDIA L40S 46GB</p>
 
   <!-- Summary Cards -->
