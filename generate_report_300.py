@@ -310,6 +310,8 @@ body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
 h1 {{ font-size: 24px; font-weight: 700; margin-bottom: 4px; }}
 .subtitle {{ color: #666; font-size: 14px; margin-bottom: 24px; }}
 .section-title {{ font-size: 18px; font-weight: 700; margin: 32px 0 14px; }}
+.desc-box {{ background: #fff; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px; color: #475569; box-shadow: 0 1px 4px rgba(0,0,0,0.06); line-height: 1.7; }}
+.model-select {{ padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; font-weight: 600; background: #fff; color: #1a1a2e; cursor: pointer; min-width: 180px; }}
 
 /* Summary Cards */
 .summary-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 28px; }}
@@ -450,12 +452,26 @@ table.main tr.best {{ background: #eff6ff; }}
   <!-- Summary Cards -->
   <div id="summary-cards" class="summary-grid"></div>
 
-  <!-- F1 Bar Chart -->
-  <div class="section-title">F1 Score Comparison</div>
-  <div class="tab-row" id="bar-tabs">
-    <button class="tab-btn active" onclick="switchBar('combined',this)">Combined (300)</button>
-    <button class="tab-btn" onclick="switchBar('base',this)">Base (200)</button>
-    <button class="tab-btn" onclick="switchBar('advanced',this)">Advanced (100)</button>
+  <!-- Score Comparison -->
+  <div class="section-title">Score Comparison</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
+    <div class="tab-row" id="bar-metric-tabs">
+      <button class="tab-btn active" onclick="switchBarMetric('f1',this)">F1</button>
+      <button class="tab-btn" onclick="switchBarMetric('r',this)">Recall</button>
+      <button class="tab-btn" onclick="switchBarMetric('p',this)">Precision</button>
+      <button class="tab-btn" onclick="switchBarMetric('perfect',this)">Perfect %</button>
+      <button class="tab-btn" onclick="switchBarMetric('latency',this)">Latency</button>
+    </div>
+    <div class="tab-row" id="bar-tabs">
+      <button class="tab-btn active" onclick="switchBar('combined',this)">Combined (300)</button>
+      <button class="tab-btn" onclick="switchBar('base',this)">Base (200)</button>
+      <button class="tab-btn" onclick="switchBar('advanced',this)">Advanced (100)</button>
+    </div>
+  </div>
+  <div class="desc-box">
+    <strong>Base (200)</strong>: 명확한 레이블과 정형화된 문서에서의 기본 PII 검출 &middot;
+    <strong>Advanced (100)</strong>: 난독화, OCR 오류, 혼합 문서, 엣지케이스 등 노이즈가 반영된 어려운 상황 &middot;
+    <strong>Combined (300)</strong>: Base + Advanced 전체
   </div>
   <div id="bar-chart" class="bar-chart"></div>
 
@@ -484,8 +500,11 @@ table.main tr.best {{ background: #eff6ff; }}
     <p><strong>TP</strong> = PII exists & detected (good), <strong>TN</strong> = No PII & not detected (good), <strong>FP</strong> = No PII but detected (false alarm), <strong>FN</strong> = PII exists but missed (privacy risk)</p>
     <p><strong>Sensitivity</strong> = TP/(TP+FN), <strong>Specificity</strong> = TN/(TN+FP)</p>
   </div>
-  <div class="tab-row" id="cm-model-tabs"></div>
-  <div class="tab-row" id="cm-dataset-tabs" style="margin-left:12px;">
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
+    <span class="filter-label">Model</span>
+    <select class="model-select" id="cm-model-select" onchange="cmModel=this.value;renderCM();"></select>
+  </div>
+  <div class="tab-row" id="cm-dataset-tabs">
     <button class="tab-btn active" onclick="switchCMDataset('combined',this)">Combined</button>
     <button class="tab-btn" onclick="switchCMDataset('base',this)">Base</button>
     <button class="tab-btn" onclick="switchCMDataset('advanced',this)">Advanced</button>
@@ -494,7 +513,10 @@ table.main tr.best {{ background: #eff6ff; }}
 
   <!-- Per-Category CM -->
   <div class="section-title">Per-Category Confusion Matrix</div>
-  <div class="tab-row" id="catcm-tabs"></div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
+    <span class="filter-label">Model</span>
+    <select class="model-select" id="catcm-model-select" onchange="catcmModel=this.value;renderCatCM();"></select>
+  </div>
   <div class="stats-wrap">
   <table class="cat-cm-table" id="cat-cm-table">
     <thead><tr>
@@ -511,7 +533,7 @@ table.main tr.best {{ background: #eff6ff; }}
   <div class="section-title">Case Browser</div>
   <div class="filters">
     <span class="filter-label">Model</span>
-    <div class="filter-group" id="filter-model"></div>
+    <select class="model-select" id="filter-model-select" onchange="curModel=this.value;curPage=0;renderCases();"></select>
     <span class="filter-label">Dataset</span>
     <div class="filter-group" id="filter-dataset">
       <button class="filter-btn active" data-val="combined">Combined</button>
@@ -565,30 +587,47 @@ let barDataset = 'combined';
 
 function getModel(id) {{ return MODELS.find(m => m.id === id); }}
 
-// ── Summary Cards ──
+// ── Summary Cards (Qwen3-30B-A3B baseline) ──
 function renderSummary() {{
-  const best = MODELS.reduce((a, b) => (a.stats.combined.f1 > b.stats.combined.f1 ? a : b));
-  const fastest = MODELS.filter(m => m.latency_mean).reduce((a, b) => (a.latency_mean < b.latency_mean ? a : b));
-  const bestEfficiency = MODELS.filter(m => m.latency_mean && m.stats.combined.f1 > 70)
-    .reduce((a, b) => ((a.stats.combined.f1 / a.latency_mean) > (b.stats.combined.f1 / b.latency_mean) ? a : b), MODELS[0]);
+  const m = getModel('qwen3_30b_a3b_fp8') || MODELS[0];
+  const s = m.stats.combined;
+  const lat = m.latency_mean ? m.latency_mean.toFixed(2) + 's' : '-';
   document.getElementById('summary-cards').innerHTML = `
-    <div class="card" style="border-left:4px solid #2563eb"><div class="label">Best F1</div><div class="value" style="color:#2563eb">${{best.stats.combined.f1}}%</div><div class="sub">${{best.label}}</div></div>
-    <div class="card" style="border-left:4px solid #10b981"><div class="label">Best Perfect</div><div class="value" style="color:#10b981">${{best.stats.combined.perfect}}/300</div><div class="sub">${{best.label}}</div></div>
-    <div class="card" style="border-left:4px solid #f59e0b"><div class="label">Fastest Latency</div><div class="value" style="color:#f59e0b">${{fastest.latency_mean?.toFixed(2)}}s</div><div class="sub">${{fastest.label}}</div></div>
-    <div class="card" style="border-left:4px solid #8b5cf6"><div class="label">Best Efficiency</div><div class="value" style="color:#8b5cf6">${{bestEfficiency.stats.combined.f1}}%</div><div class="sub">${{bestEfficiency.label}} (${{bestEfficiency.latency_mean?.toFixed(2)}}s)</div></div>
-    <div class="card" style="border-left:4px solid #64748b"><div class="label">Models Tested</div><div class="value" style="color:#64748b">${{MODELS.length}}</div><div class="sub">300 cases each</div></div>
+    <div class="card" style="border-left:4px solid #10b981"><div class="label">Recall</div><div class="value" style="color:#10b981">${{s.r}}%</div><div class="sub">${{m.label}}</div></div>
+    <div class="card" style="border-left:4px solid #3b82f6"><div class="label">Precision</div><div class="value" style="color:#3b82f6">${{s.p}}%</div><div class="sub">${{m.label}}</div></div>
+    <div class="card" style="border-left:4px solid #2563eb"><div class="label">F1 Score</div><div class="value" style="color:#2563eb">${{s.f1}}%</div><div class="sub">${{m.label}}</div></div>
+    <div class="card" style="border-left:4px solid #8b5cf6"><div class="label">Perfect</div><div class="value" style="color:#8b5cf6">${{s.perfect}}/300</div><div class="sub">${{(s.perfect/s.total*100).toFixed(1)}}%</div></div>
+    <div class="card" style="border-left:4px solid #f59e0b"><div class="label">Latency</div><div class="value" style="color:#f59e0b">${{lat}}</div><div class="sub">${{m.label}} (mean)</div></div>
   `;
 }}
 
 // ── Bar Chart ──
+let barMetric = 'f1';
+function getMetricVal(m, dataset, metric) {{
+  const s = m.stats[dataset];
+  if (metric === 'latency') return m.latency_mean || 0;
+  if (metric === 'perfect') return s.total > 0 ? (s.perfect / s.total * 100) : 0;
+  return s[metric] || 0;
+}}
 function renderBarChart(dataset) {{
-  const sorted = [...MODELS].sort((a, b) => b.stats[dataset].f1 - a.stats[dataset].f1);
+  const metric = barMetric;
+  const isLatency = metric === 'latency';
+  const sorted = [...MODELS].sort((a, b) => {{
+    const va = getMetricVal(a, dataset, metric);
+    const vb = getMetricVal(b, dataset, metric);
+    return isLatency ? va - vb : vb - va;
+  }});
+  const maxVal = isLatency ? Math.max(...sorted.map(m => getMetricVal(m, dataset, metric)), 1) : 100;
   let html = '';
   sorted.forEach((m, i) => {{
-    const s = m.stats[dataset];
+    const v = getMetricVal(m, dataset, metric);
+    const pct = isLatency ? (v / maxVal * 100) : v;
+    const label = isLatency ? v.toFixed(2) + 's' : v.toFixed(1) + '%';
+    const hue = isLatency ? Math.max(0, 120 - (v / maxVal * 120)) : v * 1.2;
+    const barColor = `hsl(${{hue}}, 70%, 50%)`;
     html += `<div class="bar-row">
       <div class="bar-label">${{m.label}}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${{s.f1}}%;background:${{m.color}}">${{s.f1}}%</div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${{Math.max(pct, 3)}}%;background:${{barColor}}">${{label}}</div></div>
     </div>`;
   }});
   document.getElementById('bar-chart').innerHTML = html;
@@ -598,6 +637,12 @@ function switchBar(d, btn) {{
   document.querySelectorAll('#bar-tabs .tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderBarChart(d);
+}}
+function switchBarMetric(metric, btn) {{
+  barMetric = metric;
+  document.querySelectorAll('#bar-metric-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBarChart(barDataset);
 }}
 
 // ── Stats Table ──
@@ -651,12 +696,12 @@ function renderCM() {{
     </div>
   </div>`;
 }}
-function buildCMModelTabs() {{
+function buildCMModelSelect() {{
   let html = '';
-  MODELS.forEach((m, i) => {{
-    html += `<button class="tab-btn ${{i===0?'active':''}}" onclick="cmModel='${{m.id}}';document.querySelectorAll('#cm-model-tabs .tab-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');renderCM();">${{m.label}}</button>`;
+  MODELS.forEach(m => {{
+    html += `<option value="${{m.id}}">${{m.label}} (${{m.size}})</option>`;
   }});
-  document.getElementById('cm-model-tabs').innerHTML = html;
+  document.getElementById('cm-model-select').innerHTML = html;
 }}
 function switchCMDataset(d, btn) {{
   cmDataset = d;
@@ -666,6 +711,12 @@ function switchCMDataset(d, btn) {{
 }}
 
 // ── Per-Category CM ──
+function sensColor(val) {{
+  // 0%=red, 50%=yellow, 100%=green
+  if (val === null) return '#888';
+  const h = val * 1.2; // 0→0(red), 100→120(green)
+  return `hsl(${{h}}, 75%, 42%)`;
+}}
 function renderCatCM() {{
   const m = getModel(catcmModel);
   if (!m) return;
@@ -673,30 +724,34 @@ function renderCatCM() {{
   let html = '';
   CATS.forEach(cat => {{
     const c = cc[cat] || {{tp:0,tn:0,fp:0,fn:0}};
-    const sens = (c.tp+c.fn)>0 ? ((c.tp/(c.tp+c.fn))*100).toFixed(1)+'%' : '-';
-    const spec = (c.tn+c.fp)>0 ? ((c.tn/(c.tn+c.fp))*100).toFixed(1)+'%' : '-';
+    const sensVal = (c.tp+c.fn)>0 ? (c.tp/(c.tp+c.fn)*100) : null;
+    const specVal = (c.tn+c.fp)>0 ? (c.tn/(c.tn+c.fp)*100) : null;
+    const sens = sensVal !== null ? sensVal.toFixed(1)+'%' : '-';
+    const spec = specVal !== null ? specVal.toFixed(1)+'%' : '-';
+    const sensC = sensColor(sensVal);
+    const specC = sensColor(specVal);
     html += `<tr><td>${{cat}}</td>
       <td style="color:#166534;font-weight:700">${{c.tp}}</td><td style="color:#4ade80">${{c.tn}}</td>
       <td style="color:#dc2626;font-weight:700">${{c.fp}}</td><td style="color:#ea580c;font-weight:700">${{c.fn}}</td>
-      <td>${{sens}}</td><td>${{spec}}</td></tr>`;
+      <td style="font-weight:700;color:${{sensC}}">${{sens}}</td><td style="font-weight:700;color:${{specC}}">${{spec}}</td></tr>`;
   }});
   document.getElementById('cat-cm-body').innerHTML = html;
 }}
-function buildCatCMTabs() {{
+function buildCatCMSelect() {{
   let html = '';
-  MODELS.forEach((m, i) => {{
-    html += `<button class="tab-btn ${{i===0?'active':''}}" onclick="catcmModel='${{m.id}}';document.querySelectorAll('#catcm-tabs .tab-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');renderCatCM();">${{m.label}}</button>`;
+  MODELS.forEach(m => {{
+    html += `<option value="${{m.id}}">${{m.label}} (${{m.size}})</option>`;
   }});
-  document.getElementById('catcm-tabs').innerHTML = html;
+  document.getElementById('catcm-model-select').innerHTML = html;
 }}
 
 // ── Case Browser ──
 function buildModelFilter() {{
   let html = '';
-  MODELS.forEach((m, i) => {{
-    html += `<button class="filter-btn ${{i===0?'active':''}}" data-val="${{m.id}}">${{m.label}}</button>`;
+  MODELS.forEach(m => {{
+    html += `<option value="${{m.id}}">${{m.label}} (${{m.size}})</option>`;
   }});
-  document.getElementById('filter-model').innerHTML = html;
+  document.getElementById('filter-model-select').innerHTML = html;
 }}
 
 function getFilteredCases() {{
@@ -768,14 +823,13 @@ function renderCases() {{
 
 // Filter event listeners
 document.addEventListener('DOMContentLoaded', () => {{
-  ['filter-model','filter-dataset','filter-type','filter-pii'].forEach(gid => {{
+  ['filter-dataset','filter-type','filter-pii'].forEach(gid => {{
     document.getElementById(gid).addEventListener('click', e => {{
       const btn = e.target.closest('.filter-btn');
       if (!btn) return;
       document.querySelectorAll('#'+gid+' .filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      if (gid === 'filter-model') curModel = btn.dataset.val;
-      else if (gid === 'filter-dataset') curDataset = btn.dataset.val;
+      if (gid === 'filter-dataset') curDataset = btn.dataset.val;
       else if (gid === 'filter-type') curType = btn.dataset.val;
       else if (gid === 'filter-pii') curPii = btn.dataset.val;
       curPage = 0;
@@ -846,8 +900,8 @@ function esc(s) {{ return s ? String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;'
 renderSummary();
 renderBarChart('combined');
 renderStats('combined');
-buildCMModelTabs(); renderCM();
-buildCatCMTabs(); renderCatCM();
+buildCMModelSelect(); renderCM();
+buildCatCMSelect(); renderCatCM();
 buildModelFilter(); renderCases();
 renderCaseStudy();
 </script>

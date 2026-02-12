@@ -1,0 +1,15 @@
+모델: Forturne/Qwen3-Next-80B-A3B-Instruct-INT4-GPTQ
+레이턴시 측정 모드 (batch_size=1, ~2K token document input)
+워밍업: 3회, 측정: 10회
+생성된 입력: 13개 (각 ~1000자, 모두 서로 다른 입력)
+
+워밍업 (3회)...
+Traceback (most recent call last):
+  File "/root/pii-detection-test/run_pii_evaluation.py", line 1135, in <module>
+    main()
+  File "/root/pii-detection-test/run_pii_evaluation.py", line 989, in main
+    run_latency_test(args)
+  File "/root/pii-detection-test/run_pii_evaluation.py", line 848, in run_latency_test
+    f"(prompt: {u.prompt_tokens} tok, completion: {u.completion_tokens} tok)")
+                ^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'prompt_tokens'

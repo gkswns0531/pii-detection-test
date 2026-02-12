@@ -1,0 +1,797 @@
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:18:30 [utils.py:325] 
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:18:30 [utils.py:325]        █     █     █▄   ▄█
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:18:30 [utils.py:325]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.15.1
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:18:30 [utils.py:325]   █▄█▀ █     █     █     █  model   Forturne/Qwen3-Next-80B-A3B-Instruct-INT4-GPTQ
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:18:30 [utils.py:325]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:18:30 [utils.py:325] 
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:18:30 [utils.py:261] non-default args: {'model_tag': 'Forturne/Qwen3-Next-80B-A3B-Instruct-INT4-GPTQ', 'api_server_count': 1, 'model': 'Forturne/Qwen3-Next-80B-A3B-Instruct-INT4-GPTQ', 'max_model_len': 16384, 'gpu_memory_utilization': 0.97, 'max_num_seqs': 2}
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:18:32 [model.py:541] Resolved architecture: Qwen3NextForCausalLM
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:18:32 [model.py:1561] Using max model len 16384
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:18:32 [scheduler.py:226] Chunked prefill is enabled with max_num_batched_tokens=2048.
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:18:33 [config.py:504] Setting attention block size to 544 tokens to ensure that attention page size is >= mamba page size.
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:18:33 [config.py:535] Padding mamba page size by 1.49% to ensure that mamba page size and attention page size are exactly equal.
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:18:33 [vllm.py:624] Asynchronous scheduling is enabled.
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:18:42 [core.py:96] Initializing a V1 LLM engine (v0.15.1) with config: model='Forturne/Qwen3-Next-80B-A3B-Instruct-INT4-GPTQ', speculative_config=None, tokenizer='Forturne/Qwen3-Next-80B-A3B-Instruct-INT4-GPTQ', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, disable_custom_all_reduce=False, quantization=compressed-tensors, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=Forturne/Qwen3-Next-80B-A3B-Instruct-INT4-GPTQ, enable_prefix_caching=False, enable_chunked_prefill=True, pooler_config=None, compilation_config={'level': None, 'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'splitting_ops': ['vllm::unified_attention', 'vllm::unified_attention_with_output', 'vllm::unified_mla_attention', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::unified_kv_cache_update'], 'compile_mm_encoder': False, 'compile_sizes': [], 'compile_ranges_split_points': [2048], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'eliminate_noops': True, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 4, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': True}, 'local_cache_dir': None, 'static_all_moe_layers': []}
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:18:42 [parallel_state.py:1212] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://172.20.0.2:43197 backend=nccl
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:18:42 [parallel_state.py:1423] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank 0
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:18:43 [gpu_model_runner.py:4033] Starting to load model Forturne/Qwen3-Next-80B-A3B-Instruct-INT4-GPTQ...
+[0;36m(EngineCore_DP0 pid=2169)[0;0m WARNING 02-12 20:18:43 [compressed_tensors.py:766] Acceleration for non-quantized schemes is not supported by Compressed Tensors. Falling back to UnquantizedLinearMethod
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:18:43 [compressed_tensors_wNa16.py:114] Using MarlinLinearKernel for CompressedTensorsWNA16
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:18:43 [compressed_tensors_moe.py:196] Using CompressedTensorsWNA16MarlinMoEMethod
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:18:44 [cuda.py:364] Using FLASH_ATTN attention backend out of potential backends: ('FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION')
+[0;36m(EngineCore_DP0 pid=2169)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/9 [00:00<?, ?it/s]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m Loading safetensors checkpoint shards:  11% Completed | 1/9 [00:06<00:48,  6.07s/it]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m Loading safetensors checkpoint shards:  22% Completed | 2/9 [00:12<00:44,  6.33s/it]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m Loading safetensors checkpoint shards:  33% Completed | 3/9 [00:18<00:36,  6.03s/it]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m Loading safetensors checkpoint shards:  44% Completed | 4/9 [00:24<00:31,  6.22s/it]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m Loading safetensors checkpoint shards:  56% Completed | 5/9 [00:31<00:25,  6.29s/it]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m Loading safetensors checkpoint shards:  67% Completed | 6/9 [00:37<00:19,  6.36s/it]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m Loading safetensors checkpoint shards:  78% Completed | 7/9 [00:44<00:12,  6.38s/it]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m Loading safetensors checkpoint shards:  89% Completed | 8/9 [00:50<00:06,  6.40s/it]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m Loading safetensors checkpoint shards: 100% Completed | 9/9 [00:55<00:00,  5.83s/it]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m Loading safetensors checkpoint shards: 100% Completed | 9/9 [00:55<00:00,  6.12s/it]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m 
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:19:41 [default_loader.py:291] Loading weights took 55.26 seconds
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:19:45 [gpu_model_runner.py:4130] Model loading took 40.91 GiB memory and 60.945979 seconds
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:19:54 [backends.py:812] Using cache directory: /root/.cache/vllm/torch_compile_cache/cd8e0c6d46/rank_0_0/backbone for vLLM's torch.compile
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:19:54 [backends.py:872] Dynamo bytecode transform time: 9.06 s
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:20:03 [backends.py:302] Cache the graph of compile range (1, 2048) for later use
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:20:03 [marlin_utils.py:451] Marlin kernel can achieve better performance for small size_n with experimental use_atomic_add feature. You can consider set environment variable VLLM_MARLIN_USE_ATOMIC_ADD to 1 if possible.
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:20:08 [backends.py:319] Compiling a graph for compile range (1, 2048) takes 5.33 s
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:20:08 [monitor.py:34] torch.compile takes 14.39 s in total
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:20:09 [gpu_worker.py:356] Available KV cache memory: 1.87 GiB
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:20:09 [kv_cache_utils.py:1307] GPU KV cache size: 20,128 tokens
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:20:09 [kv_cache_utils.py:1312] Maximum concurrency for 16,384 tokens per request: 4.41x
+[0;36m(EngineCore_DP0 pid=2169)[0;0m Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/3 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  33%|███▎      | 1/3 [00:00<00:00,  6.30it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  67%|██████▋   | 2/3 [00:00<00:00,  6.93it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 3/3 [00:01<00:00,  2.22it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 3/3 [00:01<00:00,  2.71it/s]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m Capturing CUDA graphs (decode, FULL):   0%|          | 0/2 [00:00<?, ?it/s]Capturing CUDA graphs (decode, FULL):  50%|█████     | 1/2 [00:01<00:01,  1.98s/it]Capturing CUDA graphs (decode, FULL): 100%|██████████| 2/2 [00:02<00:00,  1.01s/it]Capturing CUDA graphs (decode, FULL): 100%|██████████| 2/2 [00:02<00:00,  1.15s/it]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:20:14 [gpu_model_runner.py:5063] Graph capturing finished in 5 secs, took 0.17 GiB
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:20:14 [core.py:272] init engine (profile, create kv cache, warmup model) took 28.82 seconds
+[0;36m(EngineCore_DP0 pid=2169)[0;0m INFO 02-12 20:20:17 [vllm.py:624] Asynchronous scheduling is enabled.
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:17 [api_server.py:665] Supported tasks: ['generate']
+[0;36m(APIServer pid=1860)[0;0m WARNING 02-12 20:20:17 [model.py:1371] Default vLLM sampling parameters have been overridden by the model's `generation_config.json`: `{'temperature': 0.7, 'top_k': 20, 'top_p': 0.8}`. If this is not intended, please relaunch vLLM instance with `--generation-config vllm`.
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:17 [serving.py:177] Warming up chat template processing...
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [hf.py:310] Detected the chat template content format to be 'string'. You can set `--chat-template-content-format` to override this.
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [serving.py:212] Chat template warmup completed in 1914.3ms
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [api_server.py:946] Starting vLLM API server 0 on http://0.0.0.0:8000
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:38] Available routes are:
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /openapi.json, Methods: GET, HEAD
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /docs, Methods: GET, HEAD
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /docs/oauth2-redirect, Methods: GET, HEAD
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /redoc, Methods: GET, HEAD
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /scale_elastic_ep, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /is_scaling_elastic_ep, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /tokenize, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /detokenize, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /inference/v1/generate, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /pause, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /resume, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /is_paused, Methods: GET
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /metrics, Methods: GET
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /health, Methods: GET
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /v1/chat/completions, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /v1/chat/completions/render, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /v1/responses, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /v1/responses/{response_id}, Methods: GET
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /v1/responses/{response_id}/cancel, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /v1/audio/transcriptions, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /v1/audio/translations, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /v1/completions, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /v1/completions/render, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /v1/messages, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /v1/models, Methods: GET
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /load, Methods: GET
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /version, Methods: GET
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /ping, Methods: GET
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /ping, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /invocations, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /classify, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /v1/embeddings, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /score, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /v1/score, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /rerank, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /v1/rerank, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /v2/rerank, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO 02-12 20:20:19 [launcher.py:46] Route: /pooling, Methods: POST
+[0;36m(APIServer pid=1860)[0;0m INFO:     Started server process [1860]
+[0;36m(APIServer pid=1860)[0;0m INFO:     Waiting for application startup.
+[0;36m(APIServer pid=1860)[0;0m INFO:     Application startup complete.
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39758 - "GET /health HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39774 - "GET /health HTTP/1.1" 200 OK
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [dump_input.py:72] Dumping input data for V1 LLM engine (v0.15.1) with config: model='Forturne/Qwen3-Next-80B-A3B-Instruct-INT4-GPTQ', speculative_config=None, tokenizer='Forturne/Qwen3-Next-80B-A3B-Instruct-INT4-GPTQ', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, disable_custom_all_reduce=False, quantization=compressed-tensors, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=Forturne/Qwen3-Next-80B-A3B-Instruct-INT4-GPTQ, enable_prefix_caching=False, enable_chunked_prefill=True, pooler_config=None, compilation_config={'level': None, 'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '/root/.cache/vllm/torch_compile_cache/cd8e0c6d46', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'splitting_ops': ['vllm::unified_attention', 'vllm::unified_attention_with_output', 'vllm::unified_mla_attention', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::unified_kv_cache_update'], 'compile_mm_encoder': False, 'compile_sizes': [], 'compile_ranges_split_points': [2048], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'eliminate_noops': True, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 4, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': True}, 'local_cache_dir': '/root/.cache/vllm/torch_compile_cache/cd8e0c6d46/rank_0_0/backbone', 'static_all_moe_layers': ['model.layers.0.mlp.experts', 'model.layers.1.mlp.experts', 'model.layers.2.mlp.experts', 'model.layers.3.mlp.experts', 'model.layers.4.mlp.experts', 'model.layers.5.mlp.experts', 'model.layers.6.mlp.experts', 'model.layers.7.mlp.experts', 'model.layers.8.mlp.experts', 'model.layers.9.mlp.experts', 'model.layers.10.mlp.experts', 'model.layers.11.mlp.experts', 'model.layers.12.mlp.experts', 'model.layers.13.mlp.experts', 'model.layers.14.mlp.experts', 'model.layers.15.mlp.experts', 'model.layers.16.mlp.experts', 'model.layers.17.mlp.experts', 'model.layers.18.mlp.experts', 'model.layers.19.mlp.experts', 'model.layers.20.mlp.experts', 'model.layers.21.mlp.experts', 'model.layers.22.mlp.experts', 'model.layers.23.mlp.experts', 'model.layers.24.mlp.experts', 'model.layers.25.mlp.experts', 'model.layers.26.mlp.experts', 'model.layers.27.mlp.experts', 'model.layers.28.mlp.experts', 'model.layers.29.mlp.experts', 'model.layers.30.mlp.experts', 'model.layers.31.mlp.experts', 'model.layers.32.mlp.experts', 'model.layers.33.mlp.experts', 'model.layers.34.mlp.experts', 'model.layers.35.mlp.experts', 'model.layers.36.mlp.experts', 'model.layers.37.mlp.experts', 'model.layers.38.mlp.experts', 'model.layers.39.mlp.experts', 'model.layers.40.mlp.experts', 'model.layers.41.mlp.experts', 'model.layers.42.mlp.experts', 'model.layers.43.mlp.experts', 'model.layers.44.mlp.experts', 'model.layers.45.mlp.experts', 'model.layers.46.mlp.experts', 'model.layers.47.mlp.experts']}, 
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [dump_input.py:79] Dumping scheduler output for model execution: SchedulerOutput(scheduled_new_reqs=[NewRequestData(req_id=chatcmpl-8769e6c3684ff74f-8de3f71c,prompt_token_ids_len=5271,prefill_token_ids_len=None,mm_features=[],sampling_params=SamplingParams(n=1, presence_penalty=0.0, frequency_penalty=0.0, repetition_penalty=1.0, temperature=0.0, top_p=1.0, top_k=0, min_p=0.0, seed=None, stop=[], stop_token_ids=[151643], bad_words=[], include_stop_str_in_output=False, ignore_eos=False, max_tokens=4096, min_tokens=0, logprobs=None, prompt_logprobs=None, skip_special_tokens=True, spaces_between_special_tokens=True, truncate_prompt_tokens=None, structured_outputs=StructuredOutputsParams(json={'type': 'object', 'properties': {'이름': {'anyOf': [{'type': 'array', 'items': {'type': 'string'}, 'minItems': 1}, {'type': 'null'}]}, '주소': {'anyOf': [{'type': 'array', 'items': {'type': 'string'}, 'minItems': 1}, {'type': 'null'}]}, '주민등록번호': {'anyOf': [{'type': 'array', 'items': {'type': 'string'}, 'minItems': 1}, {'type': 'null'}]}, '여권번호': {'anyOf': [{'type': 'array', 'items': {'type': 'string'}, 'minItems': 1}, {'type': 'null'}]}, '운전면허번호': {'anyOf': [{'type': 'array', 'items': {'type': 'string'}, 'minItems': 1}, {'type': 'null'}]}, '이메일': {'anyOf': [{'type': 'array', 'items': {'type': 'string'}, 'minItems': 1}, {'type': 'null'}]}, 'IP주소': {'anyOf': [{'type': 'array', 'items': {'type': 'string'}, 'minItems': 1}, {'type': 'null'}]}, '전화번호': {'anyOf': [{'type': 'array', 'items': {'type': 'string'}, 'minItems': 1}, {'type': 'null'}]}, '계좌번호': {'anyOf': [{'type': 'array', 'items': {'type': 'string'}, 'minItems': 1}, {'type': 'null'}]}, '카드번호': {'anyOf': [{'type': 'array', 'items': {'type': 'string'}, 'minItems': 1}, {'type': 'null'}]}, '생년월일': {'anyOf': [{'type': 'array', 'items': {'type': 'string'}, 'minItems': 1}, {'type': 'null'}]}, '기타_고유식별정보': {'anyOf': [{'type': 'array', 'items': {'type': 'string'}, 'minItems': 1}, {'type': 'null'}]}}, 'required': ['이름', '주소', '주민등록번호', '여권번호', '운전면허번호', '이메일', 'IP주소', '전화번호', '계좌번호', '카드번호', '생년월일', '기타_고유식별정보'], 'additionalProperties': False}, regex=None, choice=None, grammar=None, json_object=None, disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, whitespace_pattern=None, structural_tag=None, _backend='xgrammar', _backend_was_auto=True), extra_args=None),block_ids=([1], [2], [3], [4, 5, 6, 7]),num_computed_tokens=0,lora_request=None,prompt_embeds_shape=None)], scheduled_cached_reqs=CachedRequestData(req_ids=[],resumed_req_ids=set(),new_token_ids_lens=[],all_token_ids_lens={},new_block_ids=[],num_computed_tokens=[],num_output_tokens=[]), num_scheduled_tokens={chatcmpl-8769e6c3684ff74f-8de3f71c: 2048}, total_num_scheduled_tokens=2048, scheduled_spec_decode_tokens={}, scheduled_encoder_inputs={}, num_common_prefix_blocks=[0, 0, 0, 0], finished_req_ids=[], free_encoder_mm_hashes=[], preempted_req_ids=[], has_structured_output_requests=true, pending_structured_output_tokens=false, num_invalid_spec_tokens=null, kv_connector_metadata=null, ec_connector_metadata=null)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [dump_input.py:81] Dumping scheduler stats: SchedulerStats(num_running_reqs=1, num_waiting_reqs=0, step_counter=0, current_wave=0, kv_cache_usage=0.046979865771812124, prefix_cache_stats=PrefixCacheStats(reset=False, requests=0, queries=0, hits=0, preempted_requests=0, preempted_queries=0, preempted_hits=0), connector_prefix_cache_stats=None, kv_cache_eviction_events=[], spec_decoding_stats=None, kv_connector_stats=None, waiting_lora_adapters={}, running_lora_adapters={}, cudagraph_stats=None, perf_stats=None)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948] EngineCore encountered a fatal error.
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948] Traceback (most recent call last):
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/engine/core.py", line 939, in run_engine_core
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     engine_core.run_busy_loop()
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/engine/core.py", line 966, in run_busy_loop
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     self._process_engine_step()
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/engine/core.py", line 999, in _process_engine_step
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     outputs, model_executed = self.step_fn()
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]                               ^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/engine/core.py", line 490, in step_with_batch_queue
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     exec_model_fut.result()
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/lib/python3.11/concurrent/futures/_base.py", line 449, in result
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return self.__get_result()
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     raise self._exception
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/executor/uniproc_executor.py", line 79, in collective_rpc
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     result = run_method(self.driver_worker, method, args, kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/serial_utils.py", line 461, in run_method
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return func(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/worker/worker_base.py", line 365, in execute_model
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return self.worker.execute_model(scheduler_output)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return func(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/worker/gpu_worker.py", line 630, in execute_model
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     output = self.model_runner.execute_model(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return func(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/worker/gpu_model_runner.py", line 3500, in execute_model
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     model_output = self._model_forward(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]                    ^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/worker/gpu_model_runner.py", line 3013, in _model_forward
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return self.model(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/compilation/cuda_graph.py", line 222, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return self.runnable(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return self._call_impl(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return forward_call(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/models/qwen3_next.py", line 1248, in forward
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     hidden_states = self.model(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]                     ^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/compilation/decorators.py", line 472, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return TorchCompileWithNoGuardsWrapper.__call__(self, *args, **kwargs)  # type: ignore[arg-type]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/compilation/wrapper.py", line 233, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return self._call_with_optional_nvtx_range(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/compilation/wrapper.py", line 119, in _call_with_optional_nvtx_range
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return callable_fn(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/models/qwen3_next.py", line 1005, in forward
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     def forward(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/_dynamo/eval_frame.py", line 1044, in _fn
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return fn(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/compilation/caching.py", line 185, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return self.optimized_call(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/fx/graph_module.py", line 837, in call_wrapped
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return self._wrapped_call(self, *args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/fx/graph_module.py", line 413, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     raise e
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/fx/graph_module.py", line 400, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return super(self.cls, obj).__call__(*args, **kwargs)  # type: ignore[misc]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return self._call_impl(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return forward_call(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "<eval_with_key>.98", line 426, in forward
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     submod_1 = self.submod_1(getitem, s72, getitem_1, getitem_2, getitem_3);  getitem = getitem_1 = getitem_2 = submod_1 = None
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/fx/graph_module.py", line 837, in call_wrapped
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return self._wrapped_call(self, *args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/fx/graph_module.py", line 413, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     raise e
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/fx/graph_module.py", line 400, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return super(self.cls, obj).__call__(*args, **kwargs)  # type: ignore[misc]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return self._call_impl(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return forward_call(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "<eval_with_key>.2", line 5, in forward
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     gdn_attention_core = torch.ops.vllm.gdn_attention_core(mixed_qkv, b_1, a_1, core_attn_out, 'model.layers.0.linear_attn');  mixed_qkv = b_1 = a_1 = core_attn_out = gdn_attention_core = None
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/_ops.py", line 1255, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return self._op(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/models/qwen3_next.py", line 1320, in gdn_attention_core
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     self._forward_core(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/models/qwen3_next.py", line 650, in _forward_core
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     ) = chunk_gated_delta_rule(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]         ^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/_dynamo/eval_frame.py", line 1044, in _fn
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return fn(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/layers/fla/ops/chunk.py", line 226, in chunk_gated_delta_rule
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     o, final_state = ChunkGatedDeltaRuleFunction.apply(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/autograd/function.py", line 581, in apply
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return super().apply(*args, **kwargs)  # type: ignore[misc]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/layers/fla/ops/utils.py", line 113, in wrapper
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return fn(*contiguous_args, **contiguous_kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/torch/amp/autocast_mode.py", line 527, in decorate_fwd
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return fwd(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/layers/fla/ops/chunk.py", line 95, in forward
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     g, o, A, final_state, w, h, v_new = chunk_gated_delta_rule_fwd(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/layers/fla/ops/chunk.py", line 50, in chunk_gated_delta_rule_fwd
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     h, v_new, final_state = chunk_gated_delta_rule_fwd_h(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/layers/fla/ops/chunk_delta_h.py", line 325, in chunk_gated_delta_rule_fwd_h
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     chunk_gated_delta_rule_fwd_kernel_h_blockdim64[grid](
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/triton/runtime/jit.py", line 419, in <lambda>
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/triton/runtime/autotuner.py", line 452, in run
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return self.fn.run(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/triton/runtime/autotuner.py", line 238, in run
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     benchmark()
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/triton/runtime/autotuner.py", line 227, in benchmark
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     timings = {config: self._bench(*args, config=config, **kwargs) for config in pruned_configs}
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/triton/runtime/autotuner.py", line 227, in <dictcomp>
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     timings = {config: self._bench(*args, config=config, **kwargs) for config in pruned_configs}
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/triton/runtime/autotuner.py", line 162, in _bench
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return self.do_bench(kernel_call, quantiles=(0.5, 0.2, 0.8))
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/triton/testing.py", line 152, in do_bench
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     cache = runtime.driver.active.get_empty_cache_for_benchmark()
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]   File "/usr/local/lib/python3.11/dist-packages/triton/backends/nvidia/driver.py", line 760, in get_empty_cache_for_benchmark
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]     return torch.empty(int(cache_size // 4), dtype=torch.int, device='cuda')
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m ERROR 02-12 20:20:56 [core.py:948] torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 256.00 MiB. GPU 0 has a total capacity of 44.40 GiB of which 230.12 MiB is free. Process 3533891 has 44.17 GiB memory in use. Of the allocated memory 43.12 GiB is allocated by PyTorch, with 44.00 MiB allocated in private pools (e.g., CUDA Graphs), and 462.19 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m Process EngineCore_DP0:
+[0;36m(APIServer pid=1860)[0;0m ERROR 02-12 20:20:56 [async_llm.py:693] AsyncLLM output_handler failed.
+[0;36m(APIServer pid=1860)[0;0m ERROR 02-12 20:20:56 [async_llm.py:693] Traceback (most recent call last):
+[0;36m(APIServer pid=1860)[0;0m ERROR 02-12 20:20:56 [async_llm.py:693]   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/engine/async_llm.py", line 649, in output_handler
+[0;36m(APIServer pid=1860)[0;0m ERROR 02-12 20:20:56 [async_llm.py:693]     outputs = await engine_core.get_output_async()
+[0;36m(APIServer pid=1860)[0;0m ERROR 02-12 20:20:56 [async_llm.py:693]               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(APIServer pid=1860)[0;0m ERROR 02-12 20:20:56 [async_llm.py:693]   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/engine/core_client.py", line 894, in get_output_async
+[0;36m(APIServer pid=1860)[0;0m ERROR 02-12 20:20:56 [async_llm.py:693]     raise self._format_exception(outputs) from None
+[0;36m(APIServer pid=1860)[0;0m ERROR 02-12 20:20:56 [async_llm.py:693] vllm.v1.engine.exceptions.EngineDeadError: EngineCore encountered an issue. See stack trace (above) for the root cause.
+[0;36m(EngineCore_DP0 pid=2169)[0;0m Traceback (most recent call last):
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     self.run()
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/lib/python3.11/multiprocessing/process.py", line 108, in run
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     self._target(*self._args, **self._kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/engine/core.py", line 950, in run_engine_core
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     raise e
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/engine/core.py", line 939, in run_engine_core
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     engine_core.run_busy_loop()
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/engine/core.py", line 966, in run_busy_loop
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     self._process_engine_step()
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/engine/core.py", line 999, in _process_engine_step
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     outputs, model_executed = self.step_fn()
+[0;36m(EngineCore_DP0 pid=2169)[0;0m                               ^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/engine/core.py", line 490, in step_with_batch_queue
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     exec_model_fut.result()
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/lib/python3.11/concurrent/futures/_base.py", line 449, in result
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return self.__get_result()
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     raise self._exception
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/executor/uniproc_executor.py", line 79, in collective_rpc
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     result = run_method(self.driver_worker, method, args, kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/serial_utils.py", line 461, in run_method
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return func(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/worker/worker_base.py", line 365, in execute_model
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return self.worker.execute_model(scheduler_output)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return func(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/worker/gpu_worker.py", line 630, in execute_model
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     output = self.model_runner.execute_model(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return func(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/worker/gpu_model_runner.py", line 3500, in execute_model
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     model_output = self._model_forward(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m                    ^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/v1/worker/gpu_model_runner.py", line 3013, in _model_forward
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return self.model(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/compilation/cuda_graph.py", line 222, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return self.runnable(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return self._call_impl(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return forward_call(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/models/qwen3_next.py", line 1248, in forward
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     hidden_states = self.model(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m                     ^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/compilation/decorators.py", line 472, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return TorchCompileWithNoGuardsWrapper.__call__(self, *args, **kwargs)  # type: ignore[arg-type]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/compilation/wrapper.py", line 233, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return self._call_with_optional_nvtx_range(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/compilation/wrapper.py", line 119, in _call_with_optional_nvtx_range
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return callable_fn(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/models/qwen3_next.py", line 1005, in forward
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     def forward(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/_dynamo/eval_frame.py", line 1044, in _fn
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return fn(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/compilation/caching.py", line 185, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return self.optimized_call(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/fx/graph_module.py", line 837, in call_wrapped
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return self._wrapped_call(self, *args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/fx/graph_module.py", line 413, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     raise e
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/fx/graph_module.py", line 400, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return super(self.cls, obj).__call__(*args, **kwargs)  # type: ignore[misc]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return self._call_impl(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return forward_call(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "<eval_with_key>.98", line 426, in forward
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     submod_1 = self.submod_1(getitem, s72, getitem_1, getitem_2, getitem_3);  getitem = getitem_1 = getitem_2 = submod_1 = None
+[0;36m(EngineCore_DP0 pid=2169)[0;0m                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/fx/graph_module.py", line 837, in call_wrapped
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return self._wrapped_call(self, *args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/fx/graph_module.py", line 413, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     raise e
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/fx/graph_module.py", line 400, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return super(self.cls, obj).__call__(*args, **kwargs)  # type: ignore[misc]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return self._call_impl(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1786, in _call_impl
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return forward_call(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "<eval_with_key>.2", line 5, in forward
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     gdn_attention_core = torch.ops.vllm.gdn_attention_core(mixed_qkv, b_1, a_1, core_attn_out, 'model.layers.0.linear_attn');  mixed_qkv = b_1 = a_1 = core_attn_out = gdn_attention_core = None
+[0;36m(EngineCore_DP0 pid=2169)[0;0m                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/_ops.py", line 1255, in __call__
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return self._op(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/models/qwen3_next.py", line 1320, in gdn_attention_core
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     self._forward_core(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/models/qwen3_next.py", line 650, in _forward_core
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     ) = chunk_gated_delta_rule(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m         ^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/_dynamo/eval_frame.py", line 1044, in _fn
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return fn(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/layers/fla/ops/chunk.py", line 226, in chunk_gated_delta_rule
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     o, final_state = ChunkGatedDeltaRuleFunction.apply(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/autograd/function.py", line 581, in apply
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return super().apply(*args, **kwargs)  # type: ignore[misc]
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/layers/fla/ops/utils.py", line 113, in wrapper
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return fn(*contiguous_args, **contiguous_kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/torch/amp/autocast_mode.py", line 527, in decorate_fwd
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return fwd(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/layers/fla/ops/chunk.py", line 95, in forward
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     g, o, A, final_state, w, h, v_new = chunk_gated_delta_rule_fwd(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/layers/fla/ops/chunk.py", line 50, in chunk_gated_delta_rule_fwd
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     h, v_new, final_state = chunk_gated_delta_rule_fwd_h(
+[0;36m(EngineCore_DP0 pid=2169)[0;0m                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/vllm/model_executor/layers/fla/ops/chunk_delta_h.py", line 325, in chunk_gated_delta_rule_fwd_h
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     chunk_gated_delta_rule_fwd_kernel_h_blockdim64[grid](
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/triton/runtime/jit.py", line 419, in <lambda>
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/triton/runtime/autotuner.py", line 452, in run
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return self.fn.run(*args, **kwargs)
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/triton/runtime/autotuner.py", line 238, in run
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     benchmark()
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/triton/runtime/autotuner.py", line 227, in benchmark
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     timings = {config: self._bench(*args, config=config, **kwargs) for config in pruned_configs}
+[0;36m(EngineCore_DP0 pid=2169)[0;0m               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/triton/runtime/autotuner.py", line 227, in <dictcomp>
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     timings = {config: self._bench(*args, config=config, **kwargs) for config in pruned_configs}
+[0;36m(EngineCore_DP0 pid=2169)[0;0m                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/triton/runtime/autotuner.py", line 162, in _bench
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return self.do_bench(kernel_call, quantiles=(0.5, 0.2, 0.8))
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/triton/testing.py", line 152, in do_bench
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     cache = runtime.driver.active.get_empty_cache_for_benchmark()
+[0;36m(EngineCore_DP0 pid=2169)[0;0m             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m   File "/usr/local/lib/python3.11/dist-packages/triton/backends/nvidia/driver.py", line 760, in get_empty_cache_for_benchmark
+[0;36m(EngineCore_DP0 pid=2169)[0;0m     return torch.empty(int(cache_size // 4), dtype=torch.int, device='cuda')
+[0;36m(EngineCore_DP0 pid=2169)[0;0m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[0;36m(EngineCore_DP0 pid=2169)[0;0m torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 256.00 MiB. GPU 0 has a total capacity of 44.40 GiB of which 230.12 MiB is free. Process 3533891 has 44.17 GiB memory in use. Of the allocated memory 43.12 GiB is allocated by PyTorch, with 44.00 MiB allocated in private pools (e.g., CUDA Graphs), and 462.19 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[rank0]:[W212 20:20:56.498934903 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+nanobind: leaked 2 instances!
+ - leaked instance 0x7bf9a1fb3a98 of type "xgrammar.xgrammar_bindings.CompiledGrammar"
+ - leaked instance 0x7bf4b8763a98 of type "xgrammar.xgrammar_bindings.GrammarMatcher"
+nanobind: leaked 6 types!
+ - leaked type "xgrammar.xgrammar_bindings.CompiledGrammar"
+ - leaked type "xgrammar.xgrammar_bindings.TokenizerInfo"
+ - leaked type "xgrammar.xgrammar_bindings.Grammar"
+ - leaked type "xgrammar.xgrammar_bindings.GrammarMatcher"
+ - leaked type "xgrammar.xgrammar_bindings.BatchGrammarMatcher"
+ - leaked type "xgrammar.xgrammar_bindings.GrammarCompiler"
+nanobind: leaked 51 functions!
+ - leaked function "batch_accept_token"
+ - leaked function "compile_builtin_json_grammar"
+ - leaked function "batch_fill_next_token_bitmask"
+ - leaked function "dump_metadata"
+ - leaked function "__init__"
+ - leaked function "compile_json_schema"
+ - leaked function "fill_next_token_bitmask"
+ - leaked function "is_terminated"
+ - leaked function "_detect_metadata_from_hf"
+ - leaked function ""
+ - leaked function ""
+ - leaked function ""
+ - leaked function "accept_string"
+ - leaked function "__init__"
+ - leaked function "__init__"
+ - leaked function "find_jump_forward_string"
+ - leaked function "deserialize_json"
+ - leaked function "builtin_json_grammar"
+ - leaked function "_debug_print_internal_state"
+ - leaked function "serialize_json"
+ - leaked function ""
+ - leaked function "get_cache_size_bytes"
+ - leaked function ""
+ - leaked function ""
+ - leaked function "accept_token"
+ - leaked function ""
+ - leaked function ""
+ - leaked function "deserialize_json"
+ - leaked function ""
+ - leaked function ""
+ - leaked function "deserialize_json"
+ - leaked function "to_string"
+ - leaked function "from_ebnf"
+ - leaked function "union"
+ - leaked function "__init__"
+ - leaked function "compile_structural_tag"
+ - leaked function "clear_cache"
+ - leaked function "serialize_json"
+ - leaked function "concat"
+ - leaked function "compile_grammar"
+ - leaked function "serialize_json"
+ - leaked function "batch_accept_string"
+ - leaked function "from_regex"
+ - leaked function ""
+ - leaked function ""
+ - leaked function "from_vocab_and_metadata"
+ - leaked function "compile_regex"
+ - leaked function "from_structural_tag"
+ - leaked function "reset"
+ - leaked function "rollback"
+ - leaked function "from_json_schema"
+nanobind: this is likely caused by a reference counting issue in the binding code.
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:39598 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+[0;36m(APIServer pid=1860)[0;0m INFO:     127.0.0.1:56994 - "POST /v1/chat/completions HTTP/1.1" 200 OK

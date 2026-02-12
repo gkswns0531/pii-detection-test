@@ -1,0 +1,417 @@
+대상 테스트 케이스: 300개
+모델: Forturne/Qwen3-Next-80B-A3B-Instruct-INT4-GPTQ
+API URL: http://localhost:8000/v1
+동시 요청 수: 1
+
+추론 시작 (300개)...
+  [TC001] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 1/300  [TC002] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 2/300  [TC003] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 3/300  [TC004] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 4/300  [TC005] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 5/300  [TC006] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 6/300  [TC007] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 7/300  [TC008] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 8/300  [TC009] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 9/300  [TC010] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 10/300  [TC011] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 11/300  [TC012] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 12/300  [TC013] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 13/300  [TC014] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 14/300  [TC015] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 15/300  [TC016] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 16/300  [TC017] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 17/300  [TC018] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 18/300  [TC019] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 19/300  [TC020] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 20/300  [TC021] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 21/300  [TC022] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 22/300  [TC023] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 23/300  [TC024] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 24/300  [TC025] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 25/300  [TC026] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 26/300  [TC027] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 27/300  [TC028] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 28/300  [TC029] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 29/300  [TC030] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 30/300  [TC031] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 31/300  [TC032] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 32/300  [TC033] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 33/300  [TC034] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 34/300  [TC035] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 35/300  [TC036] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 36/300  [TC037] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 37/300  [TC038] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 38/300  [TC039] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 39/300  [TC040] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 40/300  [TC041] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 41/300  [TC042] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 42/300  [TC043] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 43/300  [TC044] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 44/300  [TC045] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 45/300  [TC046] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 46/300  [TC047] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 47/300  [TC048] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 48/300  [TC049] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 49/300  [TC050] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 50/300  [TC051] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 51/300  [TC052] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 52/300  [TC053] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 53/300  [TC054] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 54/300  [TC055] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 55/300  [TC056] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 56/300  [TC057] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 57/300  [TC058] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 58/300  [TC059] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 59/300  [TC060] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 60/300  [TC061] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 61/300  [TC062] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 62/300  [TC063] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 63/300  [TC064] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 64/300  [TC065] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 65/300  [TC066] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 66/300  [TC067] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 67/300  [TC068] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 68/300  [TC069] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 69/300  [TC070] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 70/300  [TC071] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 71/300  [TC072] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 72/300  [TC073] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 73/300  [TC074] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 74/300  [TC075] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 75/300  [TC076] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 76/300  [TC077] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 77/300  [TC078] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 78/300  [TC079] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 79/300  [TC080] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 80/300  [TC081] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 81/300  [TC082] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 82/300  [TC083] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 83/300  [TC084] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 84/300  [TC085] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 85/300  [TC086] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 86/300  [TC087] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 87/300  [TC088] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 88/300  [TC089] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 89/300  [TC090] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 90/300  [TC091] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 91/300  [TC092] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 92/300  [TC093] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 93/300  [TC094] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 94/300  [TC095] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 95/300  [TC096] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 96/300  [TC097] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 97/300  [TC098] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 98/300  [TC099] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 99/300  [TC100] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 100/300  [TC501] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 101/300  [TC502] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 102/300  [TC503] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 103/300  [TC504] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 104/300  [TC505] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 105/300  [TC506] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 106/300  [TC507] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 107/300  [TC508] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 108/300  [TC509] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 109/300  [TC510] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 110/300  [TC511] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 111/300  [TC512] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 112/300  [TC513] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 113/300  [TC514] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 114/300  [TC515] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 115/300  [TC516] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 116/300  [TC517] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 117/300  [TC518] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 118/300  [TC519] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 119/300  [TC520] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 120/300  [TC521] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 121/300  [TC522] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 122/300  [TC523] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 123/300  [TC524] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 124/300  [TC525] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 125/300  [TC526] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 126/300  [TC527] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 127/300  [TC528] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 128/300  [TC529] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 129/300  [TC530] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 130/300  [TC531] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 131/300  [TC532] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 132/300  [TC533] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 133/300  [TC534] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 134/300  [TC535] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 135/300  [TC536] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 136/300  [TC537] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 137/300  [TC538] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 138/300  [TC539] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 139/300  [TC540] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 140/300  [TC541] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 141/300  [TC542] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 142/300  [TC543] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 143/300  [TC544] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 144/300  [TC545] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 145/300  [TC546] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 146/300  [TC547] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 147/300  [TC548] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 148/300  [TC549] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 149/300  [TC550] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 150/300  [TC551] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 151/300  [TC552] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 152/300  [TC553] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 153/300  [TC554] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 154/300  [TC555] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 155/300  [TC556] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 156/300  [TC557] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 157/300  [TC558] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 158/300  [TC559] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 159/300  [TC560] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 160/300  [TC561] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 161/300  [TC562] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 162/300  [TC563] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 163/300  [TC564] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 164/300  [TC565] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 165/300  [TC566] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 166/300  [TC567] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 167/300  [TC568] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 168/300  [TC569] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 169/300  [TC570] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 170/300  [TC571] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 171/300  [TC572] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 172/300  [TC573] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 173/300  [TC574] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 174/300  [TC575] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 175/300  [TC576] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 176/300  [TC577] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 177/300  [TC578] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 178/300  [TC579] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 179/300  [TC580] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 180/300  [TC581] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 181/300  [TC582] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 182/300  [TC583] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 183/300  [TC584] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 184/300  [TC585] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 185/300  [TC586] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 186/300  [TC587] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 187/300  [TC588] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 188/300  [TC589] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 189/300  [TC590] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 190/300  [TC591] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 191/300  [TC592] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 192/300  [TC593] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 193/300  [TC594] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 194/300  [TC595] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 195/300  [TC596] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 196/300  [TC597] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 197/300  [TC598] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 198/300  [TC599] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 199/300  [TC600] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 200/300  [TC601] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 201/300  [TC602] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 202/300  [TC603] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 203/300  [TC604] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 204/300  [TC605] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 205/300  [TC606] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 206/300  [TC607] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 207/300  [TC608] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 208/300  [TC609] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 209/300  [TC610] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 210/300  [TC611] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 211/300  [TC612] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 212/300  [TC613] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 213/300  [TC614] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 214/300  [TC615] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 215/300  [TC616] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 216/300  [TC617] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 217/300  [TC618] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 218/300  [TC619] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 219/300  [TC620] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 220/300  [TC621] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 221/300  [TC622] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 222/300  [TC623] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 223/300  [TC624] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 224/300  [TC625] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 225/300  [TC626] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 226/300  [TC627] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 227/300  [TC628] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 228/300  [TC629] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 229/300  [TC630] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 230/300  [TC631] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 231/300  [TC632] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 232/300  [TC633] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 233/300  [TC634] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 234/300  [TC635] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 235/300  [TC636] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 236/300  [TC637] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 237/300  [TC638] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 238/300  [TC639] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 239/300  [TC640] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 240/300  [TC641] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 241/300  [TC642] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 242/300  [TC643] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 243/300  [TC644] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 244/300  [TC645] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 245/300  [TC646] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 246/300  [TC647] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 247/300  [TC648] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 248/300  [TC649] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 249/300  [TC650] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 250/300  [TC651] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 251/300  [TC652] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 252/300  [TC653] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 253/300  [TC654] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 254/300  [TC655] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 255/300  [TC656] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 256/300  [TC657] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 257/300  [TC658] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 258/300  [TC659] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 259/300  [TC660] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 260/300  [TC661] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 261/300  [TC662] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 262/300  [TC663] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 263/300  [TC664] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 264/300  [TC665] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 265/300  [TC666] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 266/300  [TC667] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 267/300  [TC668] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 268/300  [TC669] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 269/300  [TC670] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 270/300  [TC671] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 271/300  [TC672] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 272/300  [TC673] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 273/300  [TC674] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 274/300  [TC675] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 275/300  [TC676] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 276/300  [TC677] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 277/300  [TC678] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 278/300  [TC679] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 279/300  [TC680] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 280/300  [TC681] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 281/300  [TC682] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 282/300  [TC683] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 283/300  [TC684] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 284/300  [TC685] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 285/300  [TC686] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 286/300  [TC687] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 287/300  [TC688] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 288/300  [TC689] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 289/300  [TC690] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 290/300  [TC691] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 291/300  [TC692] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 292/300  [TC693] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 293/300  [TC694] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 294/300  [TC695] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 295/300  [TC696] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 296/300  [TC697] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 297/300  [TC698] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 298/300  [TC699] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 299/300  [TC700] 요청 실패: 'NoneType' object is not subscriptable
+  진행: 300/300
+추론 완료! (33.9초, 평균 0.11초/케이스)
+
+
+================================================================================
+카테고리별 성능
+================================================================================
+카테고리                  Precision     Recall         F1     TP     FP     FN
+--------------------------------------------------------------------------------
+이름                        0.00%      0.00%      0.00%      0      0    351
+주소                        0.00%      0.00%      0.00%      0      0    126
+주민등록번호                    0.00%      0.00%      0.00%      0      0     31
+여권번호                      0.00%      0.00%      0.00%      0      0     16
+운전면허번호                    0.00%      0.00%      0.00%      0      0      3
+이메일                       0.00%      0.00%      0.00%      0      0     52
+IP주소                      0.00%      0.00%      0.00%      0      0     54
+전화번호                      0.00%      0.00%      0.00%      0      0     85
+계좌번호                      0.00%      0.00%      0.00%      0      0     18
+카드번호                      0.00%      0.00%      0.00%      0      0     13
+생년월일                      0.00%      0.00%      0.00%      0      0      6
+기타_고유식별정보                 0.00%      0.00%      0.00%      0      0     13
+
+================================================================================
+난이도별 성능
+================================================================================
+난이도            케이스수      Acc  Precision     Recall         F1
+--------------------------------------------------------------------------------
+EASY            221   44.80%      0.00%      0.00%      0.00%
+MEDIUM           37   13.51%      0.00%      0.00%      0.00%
+HARD             42   19.05%      0.00%      0.00%      0.00%
+
+================================================================================
+전체 Micro-Average: P=0.00%  R=0.00%  F1=0.00%  Acc=37.33%
+  총 TP=0  FP=0  FN=768
+  테스트 케이스: 300개 중 112개 완벽 통과 (Acc=37.33%)
+================================================================================
+
+================================================================================
+카테고리별 Classification Confusion Matrix (카테고리 존재 여부 이진 분류)
+================================================================================
+카테고리                    TP    TN    FP    FN        P        R       F1      Acc
+--------------------------------------------------------------------------------
+이름                       0   129     0   171  100.00%    0.00%    0.00%   43.00%
+주소                       0   218     0    82  100.00%    0.00%    0.00%   72.67%
+주민등록번호                   0   281     0    19  100.00%    0.00%    0.00%   93.67%
+여권번호                     0   293     0     7  100.00%    0.00%    0.00%   97.67%
+운전면허번호                   0   297     0     3  100.00%    0.00%    0.00%   99.00%
+이메일                      0   281     0    19  100.00%    0.00%    0.00%   93.67%
+IP주소                     0   291     0     9  100.00%    0.00%    0.00%   97.00%
+전화번호                     0   267     0    33  100.00%    0.00%    0.00%   89.00%
+계좌번호                     0   291     0     9  100.00%    0.00%    0.00%   97.00%
+카드번호                     0   295     0     5  100.00%    0.00%    0.00%   98.33%
+생년월일                     0   294     0     6  100.00%    0.00%    0.00%   98.00%
+기타_고유식별정보                0   288     0    12  100.00%    0.00%    0.00%   96.00%
+--------------------------------------------------------------------------------
+전체                       0  3225     0   375    0.00%    0.00%    0.00%   89.58%
+================================================================================
+
+================================================================================
+난이도별 Classification Confusion Matrix
+================================================================================
+난이도           케이스    TP    TN    FP    FN        P        R       F1      Acc
+--------------------------------------------------------------------------------
+EASY          221     0  2449     0   203  100.00%    0.00%    0.00%   92.35%
+MEDIUM         37     0   363     0    81  100.00%    0.00%    0.00%   81.76%
+HARD           42     0   413     0    91  100.00%    0.00%    0.00%   81.94%
+================================================================================
+
+주요 실패 케이스 (F1 낮은 순):
+  [TC001] 이름 (EASY) F1=0.00%  FP=0  FN=1
+    [MISS] 이름:
+      정답: ['김철수']
+      예측: None
+  [TC002] 이름 (EASY) F1=0.00%  FP=0  FN=3
+    [MISS] 이름:
+      정답: ['박영희', '이준호', '최민지']
+      예측: None
+  [TC003] 이름 (MEDIUM) F1=0.00%  FP=0  FN=3
+    [MISS] 이름:
+      정답: ['John Michael Smith', '정수현', '존 마이클 스미스']
+      예측: None
+  [TC004] 이름 (MEDIUM) F1=0.00%  FP=0  FN=4
+    [MISS] 이름:
+      정답: ['김나영', '윤서연', '윤태호', '한재원']
+      예측: None
+  [TC005] 이름 (MEDIUM) F1=0.00%  FP=0  FN=13
+    [MISS] 이름:
+      정답: ['김민수', '남궁현', '박서준', '배소연', '송예린', '양준혁', '오하은', '이지은', '임서영', '장우진', '정다영', '최수빈', '한지호']
+      예측: None
+  [TC006] 이름 (HARD) F1=0.00%  FP=0  FN=3
+    [MISS] 이름:
+      정답: ['오정환', '이천호', '한강수']
+      예측: None
+  [TC007] 이름 (HARD) F1=0.00%  FP=0  FN=7
+    [MISS] 이름:
+      정답: ['김태형', '남궁민석', '독고진', '사공재이', '선우혜정', '제갈공명', '황보현']
+      예측: None
+  [TC008] 이름 (HARD) F1=0.00%  FP=0  FN=8
+    [MISS] 이름:
+      정답: ['朴俊赫', '李美英', '趙恩熙', '金泰昊', '김태호', '박준혁', '이미영', '조은희']
+      예측: None
+  [TC009] 이름 (HARD) F1=0.00%  FP=0  FN=4
+    [MISS] 이름:
+      정답: ['김○수', '박◇◇', '이*영', '최△△']
+      예측: None
+  [TC010] 이름 (EASY) F1=0.00%  FP=0  FN=6
+    [MISS] 이름:
+      정답: ['Hayoon Jeong', 'Sophie Wang', 'Thomas Mueller', '소피 왕', '정하윤', '토마스 뮐러']
+      예측: None
+
+결과 저장: /root/pii-detection-test/benchmark_results/300/results_qwen3next_80b_a3b_int4.json
