@@ -33,6 +33,46 @@ MODELS = [
     ("llama32_1b", "Llama3.2-1B", "1B", "#fca5a5"),
 ]
 
+# Case study analysis for Qwen3-30B-A3B imperfect cases
+CASE_STUDY_ANALYSIS: dict[str, str] = {
+    "TC004": "모델이 '강서구에 거주하는 윤서연'에서 '강서구'를 주소 PII로 추가 예측. 이름은 4명 모두 정확히 검출했으나, 문맥 속 지명을 주소로 과잉 해석.",
+    "TC006": "지명('김포', '이천', '한강')과 이름('이천호', '한강수')이 공존하는 문서에서, 이름 3개는 정확히 검출했으나 '마포구 한강로'를 주소 PII로 추가 예측.",
+    "TC008": "한자 이름 '李美英'을 '李美영'으로 예측. 한자-한글 혼용 이름에서 마지막 글자의 한자 인식 오류.",
+    "TC022": "붙여쓰기된 주소 4개를 인식은 했으나, 공백/괄호 포함 범위가 ground truth와 불일치. Boundary 정의의 모호성 문제.",
+    "TC030": "주민등록번호 앞 6자리('870214')만 노출된 경우를 PII로 인식하지 못함. 보수적 판단.",
+    "TC045": "'macbook.seller 골뱅이 gmail 닷 com'을 검출하지 못함. 한글로 치환된 '@'('골뱅이')와 '.'('닷') 인식 실패.",
+    "TC050": "모델이 직함/역할명('정보보안팀장')을 이름으로 과탐. IP주소 검출은 정확.",
+    "TC058": "재실행에서 전체 실패(F1=0.0). LLM 비결정성(non-determinism)에 의한 것으로 추정.",
+    "TC062": "내선번호가 포함된 전화번호 '02-3456-7001 내선 1102'에서 내선 부분을 누락.",
+    "TC063": "호텔 대표번호를 개인 전화번호로 과탐. 비표준 구분자(·, 공백, 점) 전화번호는 정확히 검출.",
+    "TC064": "'010-****-3456'(마스킹된 이전 번호)을 누락. 수정 이력 맥락에서의 과거 전화번호 검출 실패.",
+    "TC069": "세금계산서에서 모든 PII 검출 실패(이름 2건, 계좌번호 1건 누락). 극단적 실패 사례.",
+    "TC070": "가상계좌 3건 중 현재 활성 계좌만 검출하고, 이전 주문의 계좌 2건을 누락.",
+    "TC071": "IBAN 형식 계좌(DE89..., GB29...)를 계좌번호로 인식하지 못함. 국제 계좌번호 형식 지원 부족.",
+    "TC072": "암호화폐 지갑 주소 7건(BTC 4건, ETH 3건)을 전혀 인식하지 못함.",
+    "TC078": "회의록 작성자 '송다영'을 이름으로 누락. 부수적 인물 누락.",
+    "TC080": "입사지원서에서 지도교수 '김영호'를 이름으로 누락. 부수적 인물 누락.",
+    "TC083": "소장에서 '위 원고 1과 같음'이라는 주소 참조 표현을 주소로 추가 예측. 법률 문서의 참조 표현 해석 오류.",
+    "TC096": "Python 설정 코드에서 127.0.0.1, 8.8.8.8 등 코드 내 IP 리터럴을 실제 PII로 과탐.",
+    "TC098": "'비밀번호 앞 두자리 구오'의 '구오'를 기타_고유식별정보로 과탐.",
+    "TC099": "OCR 오류 이름 '긤철수'→'금철수', '긤영회'→'금영회'로 교정하여 추출. 원문 그대로 추출 규칙 위반.",
+}
+
+FAILURE_PATTERNS = [
+    ("비전통적 금융정보", "3건", "TC069, TC071, TC072", "IBAN, 암호화폐 지갑, 세금계산서 내 계좌 미검출"),
+    ("문맥 지명→주소 과탐", "2건", "TC004, TC006", "지명을 주소 PII로 과탐"),
+    ("Boundary 불일치", "1건", "TC022", "주소 공백/괄호 포함 범위가 ground truth와 불일치"),
+    ("범위(Scope) 판단 차이", "4건", "TC058, TC062, TC064, TC070", "기업전화, 내선번호, 이전번호, 과거계좌"),
+    ("난독화/OCR 한계", "3건", "TC045, TC098, TC099", "한글 치환 이메일, 한글 숫자 과탐, OCR 문자 교정"),
+    ("부수적 인물 누락", "2건", "TC078, TC080", "작성자, 지도교수 등 부수적 인물 이름 누락"),
+    ("코드/설정 IP 과탐", "1건", "TC096", "코드 내 IP 리터럴을 PII로 과탐"),
+    ("대표번호 과탐", "1건", "TC063", "호텔 대표번호를 개인 전화번호로 과탐"),
+    ("직함/역할명 과탐", "1건", "TC050", "직함이나 역할명을 이름으로 과탐"),
+    ("한자 인식 오류", "1건", "TC008", "한자-한글 혼용 이름 마지막 글자 오인"),
+    ("법률문서 참조 과탐", "1건", "TC083", "'위 원고 1과 같음'을 주소로 과탐"),
+    ("주민번호 앞자리 누락", "1건", "TC030", "마스킹된 주민번호 앞 6자리만 노출 시 미검출"),
+]
+
 
 def normalize_difficulty(diff: str) -> str:
     return "base" if diff == "EASY" else "advanced"
@@ -174,6 +214,57 @@ def load_all_models() -> dict[str, dict]:
     return all_models
 
 
+def build_case_study_data(all_models: dict[str, dict]) -> str:
+    """Build JS data for the Qwen3-30B-A3B case study section."""
+    model_id = "qwen3_30b_a3b_fp8"
+    if model_id not in all_models:
+        return "[]"
+    results = all_models[model_id]["results"]["combined"]
+    imperfect = [r for r in results if r["f1"] < 1.0]
+    imperfect.sort(key=lambda r: r["f1"])
+
+    cases = []
+    for r in imperfect:
+        tc_id = r["id"]
+        # Build comparison rows
+        exp = r.get("expected", {})
+        pred = r.get("predicted", {})
+        all_types = list(dict.fromkeys(list(exp.keys()) + list(pred.keys())))
+
+        rows = []
+        for t in all_types:
+            e_vals = exp.get(t, []) or []
+            p_vals = pred.get(t, []) or []
+            for v in e_vals:
+                if v in p_vals:
+                    rows.append({"type": t, "exp": v, "pred": v, "status": "match"})
+                else:
+                    rows.append({"type": t, "exp": v, "pred": None, "status": "miss"})
+            for v in p_vals:
+                if v not in e_vals:
+                    rows.append({"type": t, "exp": None, "pred": v, "status": "fp"})
+
+        cases.append({
+            "id": tc_id,
+            "category": r.get("category", ""),
+            "difficulty": r.get("difficulty", ""),
+            "f1": r["f1"],
+            "intent": r.get("intent", ""),
+            "document_text": r.get("document_text", ""),
+            "analysis": CASE_STUDY_ANALYSIS.get(tc_id, ""),
+            "rows": rows,
+        })
+    return json.dumps(cases, ensure_ascii=False)
+
+
+def build_failure_patterns_json() -> str:
+    """Build JS data for failure pattern taxonomy."""
+    return json.dumps([
+        {"type": t, "count": c, "cases": cs, "desc": d}
+        for t, c, cs, d in FAILURE_PATTERNS
+    ], ensure_ascii=False)
+
+
 def build_html(all_models: dict[str, dict]) -> str:
     # Prepare JS-friendly data
     model_list = []
@@ -203,6 +294,8 @@ def build_html(all_models: dict[str, dict]) -> str:
     model_list_json = json.dumps(model_list, ensure_ascii=False)
     case_data_json = json.dumps(case_data, ensure_ascii=False)
     cats_json = json.dumps(CATS, ensure_ascii=False)
+    case_study_json = build_case_study_data(all_models)
+    failure_patterns_json = build_failure_patterns_json()
 
     html = f"""<!DOCTYPE html>
 <html lang="ko">
@@ -311,6 +404,38 @@ table.main tr.best {{ background: #eff6ff; }}
 .page-btn:hover:not(.active) {{ background: #f0f0f0; }}
 .case-count {{ font-size: 13px; color: #888; }}
 
+/* Case Study */
+.cs-summary {{ background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 20px; }}
+.cs-summary h3 {{ font-size: 16px; font-weight: 700; margin-bottom: 12px; }}
+.cs-kpi {{ display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }}
+.cs-kpi-item {{ background: #f8fafc; border-radius: 8px; padding: 12px 16px; text-align: center; min-width: 100px; }}
+.cs-kpi-item .num {{ font-size: 24px; font-weight: 800; }}
+.cs-kpi-item .lbl {{ font-size: 11px; color: #888; text-transform: uppercase; }}
+.fp-table {{ width: 100%; border-collapse: collapse; font-size: 13px; }}
+.fp-table th {{ background: #f8fafc; padding: 8px 10px; text-align: left; font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 600; border-bottom: 2px solid #e2e8f0; }}
+.fp-table td {{ padding: 8px 10px; border-bottom: 1px solid #f1f5f9; }}
+.fp-table tr:hover {{ background: #f8fafc; }}
+.cs-card {{ background: #fff; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden; }}
+.cs-header {{ padding: 14px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }}
+.cs-header:hover {{ background: #f8fafc; }}
+.cs-header .left {{ display: flex; gap: 8px; align-items: center; }}
+.cs-header .tc-id {{ font-weight: 700; font-size: 14px; }}
+.cs-header .tc-f1 {{ font-weight: 700; font-size: 14px; }}
+.cs-header .tc-f1.zero {{ color: #ef4444; }}
+.cs-header .tc-f1.low {{ color: #f59e0b; }}
+.cs-header .tc-f1.mid {{ color: #3b82f6; }}
+.cs-header .tc-f1.high {{ color: #10b981; }}
+.cs-body {{ display: none; padding: 0 16px 16px; }}
+.cs-card.open .cs-body {{ display: block; }}
+.cs-doc {{ background: #f8fafc; padding: 12px; border-radius: 8px; font-size: 12px; white-space: pre-wrap; word-break: break-all; max-height: 200px; overflow-y: auto; margin-bottom: 12px; border: 1px solid #e2e8f0; }}
+.cs-table {{ width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 12px; }}
+.cs-table th {{ background: #f8fafc; padding: 6px 10px; text-align: left; font-size: 11px; font-weight: 600; color: #64748b; border-bottom: 2px solid #e2e8f0; }}
+.cs-table td {{ padding: 6px 10px; border-bottom: 1px solid #f1f5f9; }}
+.cs-table .match {{ color: #10b981; }}
+.cs-table .miss {{ color: #f59e0b; }}
+.cs-table .fp-mark {{ color: #ef4444; }}
+.cs-analysis {{ background: #eff6ff; border-left: 3px solid #3b82f6; padding: 10px 14px; border-radius: 4px; font-size: 13px; color: #1e3a5f; line-height: 1.6; }}
+
 @media (max-width: 768px) {{
   .cm-container {{ flex-direction: column; }}
   .bar-label {{ width: 100px; font-size: 12px; }}
@@ -411,12 +536,27 @@ table.main tr.best {{ background: #eff6ff; }}
   </div>
   <div id="case-list"></div>
   <div id="pagination" class="pagination"></div>
+
+  <!-- Case Study: Qwen3-30B-A3B Error Analysis -->
+  <div class="section-title">Case Study: Qwen3-30B-A3B Error Analysis</div>
+  <div class="cs-summary">
+    <h3>Qwen3-30B-A3B (MoE 30B, 3B active) &mdash; 불완전 케이스 심층 분석</h3>
+    <div class="cs-kpi" id="cs-kpi"></div>
+    <h3 style="margin-top:16px;">실패 패턴 분류</h3>
+    <table class="fp-table" id="fp-table">
+      <thead><tr><th>실패 유형</th><th>건수</th><th>대표 TC</th><th>설명</th></tr></thead>
+      <tbody id="fp-body"></tbody>
+    </table>
+  </div>
+  <div id="cs-cases"></div>
 </div>
 
 <script>
 const MODELS = {model_list_json};
 const CASE_DATA = {case_data_json};
 const CATS = {cats_json};
+const CS_CASES = {case_study_json};
+const FP_PATTERNS = {failure_patterns_json};
 const PER_PAGE = 20;
 let curModel = MODELS[0]?.id || '', curDataset = 'combined', curType = 'all', curPii = 'all', curPage = 0;
 let cmModel = MODELS[0]?.id || '', cmDataset = 'combined';
@@ -644,6 +784,64 @@ document.addEventListener('DOMContentLoaded', () => {{
   }});
 }});
 
+// ── Case Study ──
+function renderCaseStudy() {{
+  // KPI
+  const total = 300;
+  const imperfect = CS_CASES.length;
+  const perfect = total - imperfect;
+  const f1Vals = CS_CASES.map(c => c.f1);
+  const zeros = f1Vals.filter(v => v === 0).length;
+  document.getElementById('cs-kpi').innerHTML = `
+    <div class="cs-kpi-item"><div class="num" style="color:#10b981">${{perfect}}</div><div class="lbl">Perfect (F1=1.0)</div></div>
+    <div class="cs-kpi-item"><div class="num" style="color:#f59e0b">${{imperfect}}</div><div class="lbl">Imperfect</div></div>
+    <div class="cs-kpi-item"><div class="num" style="color:#ef4444">${{zeros}}</div><div class="lbl">F1 = 0</div></div>
+    <div class="cs-kpi-item"><div class="num" style="color:#2563eb">${{(perfect/total*100).toFixed(1)}}%</div><div class="lbl">Accuracy</div></div>
+  `;
+  // Failure patterns table
+  let fpHtml = '';
+  FP_PATTERNS.forEach(p => {{
+    fpHtml += `<tr><td style="font-weight:600">${{p.type}}</td><td>${{p.count}}</td><td style="font-family:monospace;font-size:12px">${{p.cases}}</td><td>${{p.desc}}</td></tr>`;
+  }});
+  document.getElementById('fp-body').innerHTML = fpHtml;
+  // Case cards
+  let html = '';
+  CS_CASES.forEach(c => {{
+    const f1pct = (c.f1 * 100).toFixed(1);
+    const f1cls = c.f1 === 0 ? 'zero' : c.f1 < 0.5 ? 'low' : c.f1 < 0.9 ? 'mid' : 'high';
+    const docText = (c.document_text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    let rowsHtml = '';
+    c.rows.forEach(r => {{
+      if (r.status === 'match') {{
+        rowsHtml += `<tr><td>${{r.type}}</td><td class="match">${{esc(r.exp)}}</td><td class="match">${{esc(r.pred)}}</td><td class="match">✅</td></tr>`;
+      }} else if (r.status === 'miss') {{
+        rowsHtml += `<tr><td>${{r.type}}</td><td>${{esc(r.exp)}}</td><td class="miss"><em>(누락)</em></td><td class="miss">❌ Miss</td></tr>`;
+      }} else {{
+        rowsHtml += `<tr><td>${{r.type}}</td><td class="fp-mark"><em>(없음)</em></td><td class="fp-mark">${{esc(r.pred)}}</td><td class="fp-mark">❌ FP</td></tr>`;
+      }}
+    }});
+    const analysisHtml = c.analysis ? `<div class="cs-analysis"><strong>분석:</strong> ${{esc(c.analysis)}}</div>` : '';
+    html += `<div class="cs-card" id="cs-${{c.id}}">
+      <div class="cs-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="left">
+          <span class="tc-id">${{c.id}}</span>
+          <span class="badge cat">${{c.category}}</span>
+          <span class="badge" style="background:#f1f5f9;color:#475569">${{c.difficulty}}</span>
+        </div>
+        <span class="tc-f1 ${{f1cls}}">F1: ${{f1pct}}%</span>
+      </div>
+      <div class="cs-body">
+        <div style="font-size:13px;color:#666;margin-bottom:8px">${{esc(c.intent)}}</div>
+        <div class="cs-doc">${{docText}}</div>
+        <table class="cs-table"><thead><tr><th>Type</th><th>Expected</th><th>Predicted</th><th>Result</th></tr></thead><tbody>${{rowsHtml}}</tbody></table>
+        ${{analysisHtml}}
+      </div>
+    </div>`;
+  }});
+  document.getElementById('cs-cases').innerHTML = html;
+}}
+function esc(s) {{ return s ? String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }}
+
 // Init
 renderSummary();
 renderBarChart('combined');
@@ -651,6 +849,7 @@ renderStats('combined');
 buildCMModelTabs(); renderCM();
 buildCatCMTabs(); renderCatCM();
 buildModelFilter(); renderCases();
+renderCaseStudy();
 </script>
 </body>
 </html>"""
