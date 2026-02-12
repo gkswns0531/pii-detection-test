@@ -169,9 +169,39 @@ h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
 
   <!-- Confusion Matrix Section -->
   <div class="section-title">Confusion Matrix (Document-Category Level)</div>
-  <p style="font-size:13px;color:#666;margin-bottom:14px;">
-    Each document &times; 12 categories = one cell. "Exists" = expected PII in that category. "Detected" = model predicted PII in that category.
-  </p>
+  <div style="background:#fff;border-radius:12px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.08);margin-bottom:18px;font-size:13px;color:#475569;line-height:1.8;">
+    <p style="margin-bottom:10px;font-weight:600;color:#1a1a2e;">
+      How to read this matrix
+    </p>
+    <p style="margin-bottom:8px;">
+      Each document is evaluated across 12 PII categories, producing <strong>document &times; 12</strong> cells total.
+      For each cell, we check: "Does this category actually contain PII?" vs "Did the model detect PII in this category?"
+    </p>
+    <table style="border-collapse:collapse;margin:10px 0 14px;font-size:12px;width:100%;max-width:700px;">
+      <tr>
+        <td style="padding:6px 12px;background:#dcfce7;border:1px solid #e2e8f0;font-weight:700;color:#166534;width:60px;">TP</td>
+        <td style="padding:6px 12px;border:1px solid #e2e8f0;"><strong>True Positive</strong> &mdash; PII actually exists, and the model correctly detected it. <span style="color:#166534;font-weight:600;">Higher is better.</span></td>
+      </tr>
+      <tr>
+        <td style="padding:6px 12px;background:#f0fdf4;border:1px solid #e2e8f0;font-weight:700;color:#166534;">TN</td>
+        <td style="padding:6px 12px;border:1px solid #e2e8f0;"><strong>True Negative</strong> &mdash; No PII exists, and the model correctly ignored it. <span style="color:#166534;font-weight:600;">Higher is better.</span></td>
+      </tr>
+      <tr>
+        <td style="padding:6px 12px;background:#fef2f2;border:1px solid #e2e8f0;font-weight:700;color:#991b1b;">FP</td>
+        <td style="padding:6px 12px;border:1px solid #e2e8f0;"><strong>False Positive</strong> &mdash; No PII exists, but the model incorrectly flagged it as PII. <span style="color:#dc2626;font-weight:600;">Lower is better.</span> Users get unnecessary masking/alerts.</td>
+      </tr>
+      <tr>
+        <td style="padding:6px 12px;background:#fff7ed;border:1px solid #e2e8f0;font-weight:700;color:#9a3412;">FN</td>
+        <td style="padding:6px 12px;border:1px solid #e2e8f0;"><strong>False Negative</strong> &mdash; PII actually exists, but the model missed it. <span style="color:#ea580c;font-weight:600;">Lower is better.</span> This is a privacy risk &mdash; sensitive data goes undetected.</td>
+      </tr>
+    </table>
+    <p style="margin-bottom:6px;">
+      <strong>Sensitivity (TPR)</strong> = TP / (TP + FN) &mdash; "Of all real PII, how much did the model catch?" Higher = fewer privacy leaks.
+    </p>
+    <p style="margin-bottom:0;">
+      <strong>Specificity (TNR)</strong> = TN / (TN + FP) &mdash; "Of all non-PII, how much did the model correctly leave alone?" Higher = fewer false alarms.
+    </p>
+  </div>
 
   <div class="tab-row" id="cm-tabs">
     <button class="tab-btn active" data-dataset="combined" onclick="switchCM('combined',this)">Combined (300)</button>
@@ -182,6 +212,14 @@ h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
 
   <!-- Per-Category Confusion Matrix -->
   <div class="section-title">Per-Category Confusion Matrix</div>
+  <div style="background:#fff;border-radius:12px;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,0.08);margin-bottom:18px;font-size:13px;color:#475569;line-height:1.7;">
+    <p>
+      Below shows TP/TN/FP/FN <strong>per PII category</strong> (e.g. Name, Address, SSN...).
+      Categories with high <span style="color:#dc2626;font-weight:600;">FP</span> are being over-detected (false alarms).
+      Categories with high <span style="color:#ea580c;font-weight:600;">FN</span> are being missed (privacy risk).
+      Ideally: high TP &amp; TN, zero FP &amp; FN.
+    </p>
+  </div>
   <div class="tab-row" id="cat-cm-tabs">
     <button class="tab-btn active" data-dataset="combined" onclick="switchCatCM('combined',this)">Combined</button>
     <button class="tab-btn" data-dataset="base" onclick="switchCatCM('base',this)">Base</button>
@@ -335,17 +373,18 @@ function renderCM(dataset) {
       <h3>${title}</h3>
       <div class="cm-grid">
         <div class="cm-corner">Actual \\ Pred</div>
-        <div class="cm-header">Detected</div>
-        <div class="cm-header">Not Detected</div>
-        <div class="cm-row-header">PII Exists</div>
-        <div class="cm-cell tp">${cm.tp}<span class="pct">${pct(cm.tp)}</span></div>
-        <div class="cm-cell fn">${cm.fn}<span class="pct">${pct(cm.fn)}</span></div>
-        <div class="cm-row-header">No PII</div>
-        <div class="cm-cell fp">${cm.fp}<span class="pct">${pct(cm.fp)}</span></div>
-        <div class="cm-cell tn">${cm.tn}<span class="pct">${pct(cm.tn)}</span></div>
+        <div class="cm-header">Detected<br><span style="font-size:10px;font-weight:400;color:#94a3b8;">model said PII</span></div>
+        <div class="cm-header">Not Detected<br><span style="font-size:10px;font-weight:400;color:#94a3b8;">model said no PII</span></div>
+        <div class="cm-row-header">PII Exists<br><span style="font-size:10px;font-weight:400;color:#94a3b8;">actual PII present</span></div>
+        <div class="cm-cell tp">${cm.tp}<span class="pct">TP (${pct(cm.tp)})</span></div>
+        <div class="cm-cell fn">${cm.fn}<span class="pct">FN (${pct(cm.fn)})</span></div>
+        <div class="cm-row-header">No PII<br><span style="font-size:10px;font-weight:400;color:#94a3b8;">no actual PII</span></div>
+        <div class="cm-cell fp">${cm.fp}<span class="pct">FP (${pct(cm.fp)})</span></div>
+        <div class="cm-cell tn">${cm.tn}<span class="pct">TN (${pct(cm.tn)})</span></div>
       </div>
-      <div style="margin-top:10px;font-size:12px;color:#64748b;text-align:center;">
-        Sensitivity(TPR): ${tpr}% &nbsp;|&nbsp; Specificity(TNR): ${tnr}%
+      <div style="margin-top:12px;font-size:12px;color:#475569;text-align:center;line-height:1.8;">
+        <strong>Sensitivity(TPR):</strong> ${tpr}% <span style="color:#94a3b8;">&mdash; catches ${tpr}% of real PII</span><br>
+        <strong>Specificity(TNR):</strong> ${tnr}% <span style="color:#94a3b8;">&mdash; correctly ignores ${tnr}% of non-PII</span>
       </div>
     </div>`;
   }
