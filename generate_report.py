@@ -422,6 +422,12 @@ h1 {{ font-size: 24px; font-weight: 700; margin-bottom: 4px; }}
       <button class="filter-btn" data-val="success">Success</button>
       <button class="filter-btn" data-val="fail">Fail</button>
     </div>
+    <span class="filter-label">PII</span>
+    <div class="filter-group" id="filter-pii">
+      <button class="filter-btn active" data-val="all">All</button>
+      <button class="filter-btn" data-val="positive">PII Present</button>
+      <button class="filter-btn" data-val="negative">No PII (FP Test)</button>
+    </div>
   </div>
   <div class="case-header">
     <h2 id="case-title"></h2>
@@ -440,7 +446,7 @@ const CATS = {cats_json};
 const PROMPT_LABELS = {{"full": "After Optimization", "vanilla": "Before Optimization"}};
 
 const PER_PAGE = 20;
-let currentPrompt = 'full', currentDataset = 'base', currentType = 'all', currentPage = 0;
+let currentPrompt = 'full', currentDataset = 'base', currentType = 'all', currentPii = 'all', currentPage = 0;
 
 function getKey() {{ return currentPrompt + '_' + currentDataset + '_' + currentType; }}
 
@@ -587,8 +593,17 @@ function switchCatCM(dataset, btn) {{
 // ── Case Browser ──
 function renderCases() {{
   const key = getKey();
-  const results = DATA[key];
-  if (!results || results.length === 0) {{
+  let results = DATA[key];
+  if (!results) results = [];
+
+  // Apply PII presence filter
+  if (currentPii === 'positive') {{
+    results = results.filter(r => Object.keys(r.expected).length > 0);
+  }} else if (currentPii === 'negative') {{
+    results = results.filter(r => Object.keys(r.expected).length === 0);
+  }}
+
+  if (results.length === 0) {{
     document.getElementById('case-list').innerHTML = '<p style="color:#888;text-align:center;padding:20px;">No data for this filter</p>';
     document.getElementById('case-count').textContent = '0 cases';
     document.getElementById('pagination').innerHTML = '';
@@ -693,6 +708,7 @@ document.querySelectorAll('.filter-group').forEach(group => {{
       if (id === 'filter-prompt') currentPrompt = btn.dataset.val;
       else if (id === 'filter-dataset') currentDataset = btn.dataset.val;
       else if (id === 'filter-type') currentType = btn.dataset.val;
+      else if (id === 'filter-pii') currentPii = btn.dataset.val;
       currentPage = 0;
       renderCases();
     }});
