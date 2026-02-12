@@ -1,0 +1,2692 @@
+{
+  "model": "Qwen/Qwen3-4B-Instruct-2507",
+  "api_url": "http://localhost:8000/v1",
+  "concurrency": 10,
+  "inference_time_sec": 56.24,
+  "timestamp": "2026-02-12 21:04:38",
+  "summary": {
+    "total_cases": 79,
+    "perfect_cases": 45,
+    "overall_accuracy": 0.5696,
+    "overall_precision": 0.8411,
+    "overall_recall": 0.8779,
+    "overall_f1": 0.8591,
+    "category_metrics": {
+      "이름": {
+        "precision": 0.9195,
+        "recall": 0.9133
+      },
+      "주소": {
+        "precision": 0.807,
+        "recall": 0.9388
+      },
+      "주민등록번호": {
+        "precision": 0.7778,
+        "recall": 0.6087
+      },
+      "여권번호": {
+        "precision": 0.8462,
+        "recall": 0.8462
+      },
+      "운전면허번호": {
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "이메일": {
+        "precision": 0.8,
+        "recall": 0.8372
+      },
+      "IP주소": {
+        "precision": 0.6724,
+        "recall": 0.975
+      },
+      "전화번호": {
+        "precision": 0.8375,
+        "recall": 0.9178
+      },
+      "계좌번호": {
+        "precision": 1.0,
+        "recall": 0.75
+      },
+      "카드번호": {
+        "precision": 1.0,
+        "recall": 0.4167
+      },
+      "생년월일": {
+        "precision": 0.75,
+        "recall": 0.75
+      },
+      "기타_고유식별정보": {
+        "precision": 0.8889,
+        "recall": 1.0
+      }
+    },
+    "classification_confusion_matrix": {
+      "per_category": {
+        "이름": {
+          "precision": 0.9808,
+          "recall": 0.9808,
+          "f1": 0.9808,
+          "accuracy": 0.9747
+        },
+        "주소": {
+          "precision": 0.8621,
+          "recall": 1.0,
+          "f1": 0.9259,
+          "accuracy": 0.9494
+        },
+        "주민등록번호": {
+          "precision": 1.0,
+          "recall": 0.8667,
+          "f1": 0.9286,
+          "accuracy": 0.9747
+        },
+        "여권번호": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "accuracy": 1.0
+        },
+        "운전면허번호": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "accuracy": 1.0
+        },
+        "이메일": {
+          "precision": 0.8889,
+          "recall": 1.0,
+          "f1": 0.9412,
+          "accuracy": 0.9747
+        },
+        "IP주소": {
+          "precision": 0.6667,
+          "recall": 1.0,
+          "f1": 0.8,
+          "accuracy": 0.962
+        },
+        "전화번호": {
+          "precision": 0.931,
+          "recall": 1.0,
+          "f1": 0.9643,
+          "accuracy": 0.9747
+        },
+        "계좌번호": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "accuracy": 1.0
+        },
+        "카드번호": {
+          "precision": 1.0,
+          "recall": 0.75,
+          "f1": 0.8571,
+          "accuracy": 0.9873
+        },
+        "생년월일": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "accuracy": 1.0
+        },
+        "기타_고유식별정보": {
+          "precision": 0.875,
+          "recall": 1.0,
+          "f1": 0.9333,
+          "accuracy": 0.9873
+        }
+      },
+      "per_difficulty": {
+        "EASY": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "accuracy": 0.0
+        },
+        "MEDIUM": {
+          "precision": 0.9412,
+          "recall": 0.9877,
+          "f1": 0.9639,
+          "accuracy": 0.9865
+        },
+        "HARD": {
+          "precision": 0.9167,
+          "recall": 0.967,
+          "f1": 0.9412,
+          "accuracy": 0.9782
+        }
+      },
+      "total": {
+        "tp": 168,
+        "tn": 763,
+        "fp": 13,
+        "fn": 4,
+        "precision": 0.9282,
+        "recall": 0.9767,
+        "f1": 0.9518,
+        "accuracy": 0.9821
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "TC003",
+      "category": "이름",
+      "difficulty": "MEDIUM",
+      "intent": "영문 이름(외국인) 검출. First/Last name 순서, 한글 표기 병행 시 양쪽 모두 검출하는지 확인",
+      "f1": 0.8,
+      "expected": {
+        "이름": [
+          "John Michael Smith",
+          "정수현",
+          "존 마이클 스미스"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "John Michael Smith",
+          "존 마이클 스미스"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"John Michael Smith\", \"존 마이클 스미스\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC004",
+      "category": "이름",
+      "difficulty": "MEDIUM",
+      "intent": "서술형 문장 속에 자연스럽게 포함된 이름 검출. 레이블('성명:') 없이 문맥만으로 이름을 식별할 수 있는지 확인",
+      "f1": 0.8889,
+      "expected": {
+        "이름": [
+          "김나영",
+          "윤서연",
+          "윤태호",
+          "한재원"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "윤서연",
+          "윤태호",
+          "한재원",
+          "김나영"
+        ],
+        "주소": [
+          "강서구"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"윤서연\", \"윤태호\", \"한재원\", \"김나영\"],\n  \"주소\": [\"강서구\"],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC005",
+      "category": "이름",
+      "difficulty": "MEDIUM",
+      "intent": "동명이인/매우 흔한 이름 검출. '김민수'처럼 흔한 이름이 여러 번 등장할 때 각각 독립적으로 검출하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "김민수",
+          "남궁현",
+          "박서준",
+          "배소연",
+          "송예린",
+          "양준혁",
+          "오하은",
+          "이지은",
+          "임서영",
+          "장우진",
+          "정다영",
+          "최수빈",
+          "한지호"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "김민수",
+          "이지은",
+          "박서준",
+          "정다영",
+          "오하은",
+          "장우진",
+          "송예린",
+          "남궁현",
+          "최수빈",
+          "한지호",
+          "임서영",
+          "양준혁",
+          "배소연"
+        ]
+      },
+      "raw_response": "{\"이름\": [\"김민수\", \"이지은\", \"박서준\", \"정다영\", \"오하은\", \"장우진\", \"송예린\", \"남궁현\", \"최수빈\", \"한지호\", \"임서영\", \"양준혁\", \"배소연\"], \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC006",
+      "category": "이름",
+      "difficulty": "HARD",
+      "intent": "이름과 유사한 일반명사/지명 구분. '한강', '이천', '김포' 등 이름으로도 지명으로도 쓰이는 단어에서 문맥 기반 구분이 되는지 확인",
+      "f1": 0.8571,
+      "expected": {
+        "이름": [
+          "오정환",
+          "이천호",
+          "한강수"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "오정환",
+          "한강수",
+          "이천호"
+        ],
+        "주소": [
+          "마포구 한강로"
+        ]
+      },
+      "raw_response": "{\"이름\": [\"오정환\", \"한강수\", \"이천호\"], \"주소\": [\"마포구 한강로\"], \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC007",
+      "category": "이름",
+      "difficulty": "HARD",
+      "intent": "복합 성씨(2글자 성) 검출. 남궁, 독고, 선우, 제갈 등 2글자 성을 가진 이름을 정확히 인식하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "김태형",
+          "남궁민석",
+          "독고진",
+          "사공재이",
+          "선우혜정",
+          "제갈공명",
+          "황보현"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "남궁민석",
+          "독고진",
+          "선우혜정",
+          "제갈공명",
+          "사공재이",
+          "황보현",
+          "김태형"
+        ]
+      },
+      "raw_response": "{\"이름\": [\"남궁민석\", \"독고진\", \"선우혜정\", \"제갈공명\", \"사공재이\", \"황보현\", \"김태형\"], \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC008",
+      "category": "이름",
+      "difficulty": "HARD",
+      "intent": "한자 이름 검출. 한자로 표기된 이름을 PII로 인식하는지 확인. 한글 병기 시 매핑도 검증",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "朴俊赫",
+          "李美英",
+          "趙恩熙",
+          "金泰昊",
+          "김태호",
+          "박준혁",
+          "이미영",
+          "조은희"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "金泰昊",
+          "김태호",
+          "李美英",
+          "이미영",
+          "朴俊赫",
+          "박준혁",
+          "趙恩熙",
+          "조은희"
+        ]
+      },
+      "raw_response": "{\"이름\": [\"金泰昊\", \"김태호\", \"李美英\", \"이미영\", \"朴俊赫\", \"박준혁\", \"趙恩熙\", \"조은희\"], \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC009",
+      "category": "이름",
+      "difficulty": "HARD",
+      "intent": "부분 마스킹된 이름 검출. '김O수', '이*영' 등 일부가 마스킹된 이름도 PII로 인식하는지 확인",
+      "f1": 0.7273,
+      "expected": {
+        "이름": [
+          "김○수",
+          "박◇◇",
+          "이*영",
+          "최△△"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "김○수",
+          "이*영",
+          "박◇◇",
+          "최△△"
+        ],
+        "주소": [
+          "박◇◇ 고객님: 이름, 주소"
+        ],
+        "이메일": [
+          "김○수 고객님: 이메일"
+        ],
+        "전화번호": [
+          "이*영 고객님: 전화번호"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"김○수\", \"이*영\", \"박◇◇\", \"최△△\"],\n  \"주소\": [\"박◇◇ 고객님: 이름, 주소\"],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": [\"김○수 고객님: 이메일\"],\n  \"IP주소\": null,\n  \"전화번호\": [\"이*영 고객님: 전화번호\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC013",
+      "category": "주소",
+      "difficulty": "MEDIUM",
+      "intent": "약식/축약 주소 검출. 시도 생략, 구 이하만 표기 등 비정규 형태에서도 주소를 인식하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "주소": [
+          "강남구 역삼동 789-12 대우빌딩 3F",
+          "마포구 서교동 456-7",
+          "수원 영통구 봉영로 1500번길 32",
+          "종로구 세종대로 175"
+        ]
+      },
+      "predicted": {
+        "주소": [
+          "강남구 역삼동 789-12 대우빌딩 3F",
+          "마포구 서교동 456-7",
+          "종로구 세종대로 175",
+          "수원 영통구 봉영로 1500번길 32"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": null,\n  \"주소\": [\n    \"강남구 역삼동 789-12 대우빌딩 3F\",\n    \"마포구 서교동 456-7\",\n    \"종로구 세종대로 175\",\n    \"수원 영통구 봉영로 1500번길 32\"\n  ],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC014",
+      "category": "주소",
+      "difficulty": "MEDIUM",
+      "intent": "영문 한국 주소 검출. 영문으로 작성된 한국 주소를 인식하는지 확인",
+      "f1": 0.6667,
+      "expected": {
+        "이름": [
+          "Park Jinho"
+        ],
+        "주소": [
+          "25, Digital-ro 26-gil, Guro-gu, Seoul, 08390, Korea",
+          "3F, Gangnam Finance Center, 152 Teheran-ro, Gangnam-gu, Seoul, 06236, Republic of Korea"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "Mr. Park Jinho"
+        ],
+        "주소": [
+          "3F, Gangnam Finance Center, 152 Teheran-ro, Gangnam-gu, Seoul, 06236, Republic of Korea",
+          "25, Digital-ro 26-gil, Guro-gu, Seoul, 08390, Korea"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"Mr. Park Jinho\"],\n  \"주소\": [\n    \"3F, Gangnam Finance Center, 152 Teheran-ro, Gangnam-gu, Seoul, 06236, Republic of Korea\",\n    \"25, Digital-ro 26-gil, Guro-gu, Seoul, 08390, Korea\"\n  ],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC015",
+      "category": "주소",
+      "difficulty": "HARD",
+      "intent": "여러 줄에 걸친 주소 검출. 줄바꿈/들여쓰기로 분리된 주소를 하나의 완전한 주소로 인식하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "홍길동"
+        ],
+        "주소": [
+          "서울특별시 서초구 반포대로 58 서초동 1500-3 반포자이아파트 105동 1203호"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "홍길동"
+        ],
+        "주소": [
+          "서울특별시 서초구 반포대로 58 서초동 1500-3 반포자이아파트 105동 1203호"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"홍길동\"],\n  \"주소\": [\"서울특별시 서초구 반포대로 58 서초동 1500-3 반포자이아파트 105동 1203호\"],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC016",
+      "category": "주소",
+      "difficulty": "HARD",
+      "intent": "부분 주소(시/군/구만) 검출 여부 확인. 전체 주소가 아닌 '강남구 역삼동' 같은 부분만으로도 PII로 간주해야 하는지 테스트",
+      "f1": 0.3333,
+      "expected": {
+        "주소": [
+          "제주도 서귀포시 중문동"
+        ]
+      },
+      "predicted": {
+        "주소": [
+          "서울 강남구",
+          "서울 서초구",
+          "경기 성남시 분당구",
+          "부산 해운대구",
+          "제주도 서귀포시 중문동"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": null,\n  \"주소\": [\n    \"서울 강남구\",\n    \"서울 서초구\",\n    \"경기 성남시 분당구\",\n    \"부산 해운대구\",\n    \"제주도 서귀포시 중문동\"\n  ],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC017",
+      "category": "주소",
+      "difficulty": "MEDIUM",
+      "intent": "우편번호 포함 주소 검출. 5자리 우편번호가 주소의 일부로 포함된 경우 전체를 정확히 추출하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "주소": [
+          "(13494) 경기도 성남시 분당구 판교역로 235, 에이치스퀘어 N동 8층"
+        ]
+      },
+      "predicted": {
+        "주소": [
+          "(13494) 경기도 성남시 분당구 판교역로 235, 에이치스퀘어 N동 8층"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": null,\n  \"주소\": [\"(13494) 경기도 성남시 분당구 판교역로 235, 에이치스퀘어 N동 8층\"],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC018",
+      "category": "주소",
+      "difficulty": "HARD",
+      "intent": "주소처럼 보이지만 주소가 아닌 텍스트 구분. 건물 이름, 랜드마크 설명 등이 주소로 오인되지 않는지 확인",
+      "f1": 1.0,
+      "expected": {},
+      "predicted": {},
+      "raw_response": "{\"이름\": null, \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC019",
+      "category": "주소",
+      "difficulty": "MEDIUM",
+      "intent": "아파트/오피스텔 등 복합 주소 검출. 동/호수까지 포함된 상세 주소를 빠짐없이 추출하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "이하영"
+        ],
+        "주소": [
+          "서울특별시 송파구 올림픽로 300, 롯데월드타워앤드롯데월드몰 시그니엘레지던스 85층 8502호",
+          "인천광역시 남동구 논현고잔로 120, 논현래미안 아파트 302동 1504호"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "이하영"
+        ],
+        "주소": [
+          "인천광역시 남동구 논현고잔로 120, 논현래미안 아파트 302동 1504호",
+          "서울특별시 송파구 올림픽로 300, 롯데월드타워앤드롯데월드몰 시그니엘레지던스 85층 8502호"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"이하영\"],\n  \"주소\": [\n    \"인천광역시 남동구 논현고잔로 120, 논현래미안 아파트 302동 1504호\",\n    \"서울특별시 송파구 올림픽로 300, 롯데월드타워앤드롯데월드몰 시그니엘레지던스 85층 8502호\"\n  ],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC020",
+      "category": "주소",
+      "difficulty": "HARD",
+      "intent": "해외(일본/중국) 주소 검출. 일본어/중국어 주소도 PII로 인식하는지 확인",
+      "f1": 0.8571,
+      "expected": {
+        "이름": [
+          "Nguyen Van Anh",
+          "Tanaka Taro",
+          "Wang Ming",
+          "王明",
+          "田中太郎"
+        ],
+        "주소": [
+          "123 Nguyen Hue Street, District 1, Ho Chi Minh City, Vietnam",
+          "〒100-0005 東京都千代田区丸の内1-1-1 パレスビル5F",
+          "中国上海市浦东新区陆家嘴环路1000号 恒生银行大厦20层"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "田中太郎",
+          "王明",
+          "Nguyen Van Anh"
+        ],
+        "주소": [
+          "〒100-0005 東京都千代田区丸の内1-1-1 パレスビル5F",
+          "中国上海市浦东新区陆家嘴环路1000号 恒生银行大厦20层",
+          "123 Nguyen Hue Street, District 1, Ho Chi Minh City, Vietnam"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"田中太郎\", \"王明\", \"Nguyen Van Anh\"],\n  \"주소\": [\n    \"〒100-0005 東京都千代田区丸の内1-1-1 パレスビル5F\",\n    \"中国上海市浦东新区陆家嘴环路1000号 恒生银行大厦20层\",\n    \"123 Nguyen Hue Street, District 1, Ho Chi Minh City, Vietnam\"\n  ],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC021",
+      "category": "주소",
+      "difficulty": "MEDIUM",
+      "intent": "사서함(P.O. Box) 주소 검출. 사서함 형태의 주소도 PII로 인식하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "김상호"
+        ],
+        "주소": [
+          "서울특별시 영등포구 국제금융로 10, 국제금융센터 Three IFC 38층",
+          "서울특별시 영등포구 여의도동 우체국 사서함 제128호"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "김상호"
+        ],
+        "주소": [
+          "서울특별시 영등포구 여의도동 우체국 사서함 제128호",
+          "서울특별시 영등포구 국제금융로 10, 국제금융센터 Three IFC 38층"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"김상호\"],\n  \"주소\": [\n    \"서울특별시 영등포구 여의도동 우체국 사서함 제128호\",\n    \"서울특별시 영등포구 국제금융로 10, 국제금융센터 Three IFC 38층\"\n  ],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC022",
+      "category": "주소",
+      "difficulty": "HARD",
+      "intent": "불완전/비정형 주소 검출. 오타, 띄어쓰기 오류, 비표준 표기가 포함된 주소를 인식할 수 있는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "주소": [
+          "경기성남시분당구 불정로6 NAVER그린팩토리",
+          "대전 유성구 대학로 99(어은동, 한국과학기술원)",
+          "부산광역시해운대구우동 1234",
+          "서울시강남구 테헤란로152번길 (역삼동)"
+        ]
+      },
+      "predicted": {
+        "주소": [
+          "서울시강남구 테헤란로152번길 (역삼동)",
+          "경기성남시분당구 불정로6 NAVER그린팩토리",
+          "부산광역시해운대구우동 1234",
+          "대전 유성구 대학로 99(어은동, 한국과학기술원)"
+        ]
+      },
+      "raw_response": "{\"이름\": null, \"주소\": [\"서울시강남구 테헤란로152번길 (역삼동)\", \"경기성남시분당구 불정로6 NAVER그린팩토리\", \"부산광역시해운대구우동 1234\", \"대전 유성구 대학로 99(어은동, 한국과학기술원)\"], \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC025",
+      "category": "주민등록번호",
+      "difficulty": "MEDIUM",
+      "intent": "서술형 문장 속에 자연스럽게 포함된 주민등록번호를 문맥에서 정확히 추출하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "주민등록번호": [
+          "780923-2456789",
+          "861107-1987654"
+        ]
+      },
+      "predicted": {
+        "주민등록번호": [
+          "780923-2456789",
+          "861107-1987654"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": null,\n  \"주소\": null,\n  \"주민등록번호\": [\"780923-2456789\", \"861107-1987654\"],\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC026",
+      "category": "주민등록번호",
+      "difficulty": "MEDIUM",
+      "intent": "뒷자리가 마스킹 처리된 주민등록번호(850315-1******)도 PII로 인식하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "박지현"
+        ],
+        "주민등록번호": [
+          "920418-2******"
+        ],
+        "전화번호": [
+          "010-****-5678"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "박지현"
+        ],
+        "주민등록번호": [
+          "920418-2******"
+        ],
+        "전화번호": [
+          "010-****-5678"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"박지현\"],\n  \"주소\": null,\n  \"주민등록번호\": [\"920418-2******\"],\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\"010-****-5678\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC027",
+      "category": "주민등록번호",
+      "difficulty": "HARD",
+      "intent": "OCR 스캔 결과로 공백이나 특수문자가 삽입된 주민등록번호를 검출할 수 있는지 확인",
+      "f1": 0.6667,
+      "expected": {
+        "이름": [
+          "정 우 진"
+        ],
+        "주소": [
+          "서울대학교 기숙사 301호",
+          "서울특별시 관악구 관악로 1"
+        ],
+        "주민등록번호": [
+          "8 8 0 7 1 5-1 2 3 4 5 6 7",
+          "88 07 15 - 1 2 3 4 5 6 7"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "정 우 진"
+        ],
+        "주소": [
+          "서울특별시 관악구 관악로 1",
+          "서울대학교 기숙사 301호"
+        ],
+        "주민등록번호": [
+          "880715-1234567"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"정 우 진\"],\n  \"주소\": [\"서울특별시 관악구 관악로 1\", \"서울대학교 기숙사 301호\"],\n  \"주민등록번호\": [\"880715-1234567\"],\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC028",
+      "category": "주민등록번호",
+      "difficulty": "HARD",
+      "intent": "주민등록번호와 유사한 13자리 숫자열(주문번호, 송장번호 등)이 주민번호로 오탐되지 않는지 확인",
+      "f1": 1.0,
+      "expected": {},
+      "predicted": {},
+      "raw_response": "{\"이름\": null, \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC029",
+      "category": "주민등록번호",
+      "difficulty": "MEDIUM",
+      "intent": "외국인등록번호(뒷자리 첫숫자 5~8)를 주민등록번호와 구분하여 검출하는지 확인",
+      "f1": 0.6667,
+      "expected": {
+        "이름": [
+          "Nguyen Van Duc",
+          "Tanaka Yuki",
+          "Zhang Wei"
+        ],
+        "주민등록번호": [
+          "850612-5123456",
+          "880103-7345678",
+          "910830-6234567"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "Nguyen Van Duc",
+          "Zhang Wei",
+          "Tanaka Yuki"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"Nguyen Van Duc\", \"Zhang Wei\", \"Tanaka Yuki\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC030",
+      "category": "주민등록번호",
+      "difficulty": "HARD",
+      "intent": "주민등록번호 앞 6자리(생년월일)만 노출된 경우에도 PII로 인식할 수 있는지 확인",
+      "f1": 0.6667,
+      "expected": {
+        "이름": [
+          "한수정"
+        ],
+        "주민등록번호": [
+          "870214"
+        ],
+        "전화번호": [
+          "010-XXXX-XXXX"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "한수정"
+        ],
+        "주소": [
+          "서울시 마포구 서교동 일대"
+        ],
+        "전화번호": [
+          "010-XXXX-XXXX"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"한수정\"],\n  \"주소\": [\"서울시 마포구 서교동 일대\"],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\"010-XXXX-XXXX\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC032",
+      "category": "주민등록번호",
+      "difficulty": "HARD",
+      "intent": "OCR 인식 오류로 O/0, l/1 등이 혼동된 주민등록번호를 검출할 수 있는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "최영수"
+        ],
+        "주소": [
+          "서울시 강남구 역삼동 12-3"
+        ],
+        "주민등록번호": [
+          "85O315-l234567"
+        ],
+        "전화번호": [
+          "O1O-9876-543Z"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "최영수"
+        ],
+        "주소": [
+          "서울시 강남구 역삼동 12-3"
+        ],
+        "주민등록번호": [
+          "85O315-l234567"
+        ],
+        "전화번호": [
+          "O1O-9876-543Z"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"최영수\"],\n  \"주소\": [\"서울시 강남구 역삼동 12-3\"],\n  \"주민등록번호\": [\"85O315-l234567\"],\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\"O1O-9876-543Z\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC034",
+      "category": "운전면허번호",
+      "difficulty": "MEDIUM",
+      "intent": "한국 운전면허번호(NN-NN-NNNNNN-NN) 형식이 정확히 검출되는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "이승민"
+        ],
+        "운전면허번호": [
+          "11-22-345678-90"
+        ],
+        "생년월일": [
+          "1988년 07월 22일"
+        ],
+        "기타_고유식별정보": [
+          "123가 4567"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "이승민"
+        ],
+        "운전면허번호": [
+          "11-22-345678-90"
+        ],
+        "생년월일": [
+          "1988년 07월 22일"
+        ],
+        "기타_고유식별정보": [
+          "123가 4567"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"이승민\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": [\"11-22-345678-90\"],\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": [\"1988년 07월 22일\"],\n  \"기타_고유식별정보\": [\"123가 4567\"]\n}"
+    },
+    {
+      "id": "TC035",
+      "category": "여권번호",
+      "difficulty": "MEDIUM",
+      "intent": "서술형 문장 속에 포함된 여권번호를 문맥에서 정확히 추출하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "김하진",
+          "이정아"
+        ],
+        "여권번호": [
+          "M87654321",
+          "RP5432109"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "김하진",
+          "이정아"
+        ],
+        "여권번호": [
+          "M87654321",
+          "RP5432109"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"김하진\", \"이정아\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": [\"M87654321\", \"RP5432109\"],\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC036",
+      "category": "여권번호",
+      "difficulty": "HARD",
+      "intent": "다양한 외국 여권번호 형식(미국/일본/독일 등)을 인식할 수 있는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "Hans Mueller",
+          "James Robert Wilson",
+          "Marie Dupont",
+          "Yuki Tanaka",
+          "오수빈"
+        ],
+        "여권번호": [
+          "22AB12345",
+          "567890123",
+          "C4F7HJ2K1",
+          "TK1234567"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "James Robert Wilson",
+          "Yuki Tanaka",
+          "Hans Mueller",
+          "Marie Dupont",
+          "오수빈"
+        ],
+        "여권번호": [
+          "567890123",
+          "TK1234567",
+          "C4F7HJ2K1",
+          "22AB12345"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"James Robert Wilson\", \"Yuki Tanaka\", \"Hans Mueller\", \"Marie Dupont\", \"오수빈\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": [\"567890123\", \"TK1234567\", \"C4F7HJ2K1\", \"22AB12345\"],\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC038",
+      "category": "운전면허번호",
+      "difficulty": "HARD",
+      "intent": "운전면허번호와 유사한 형식의 장비 시리얼코드/제품코드를 구분하는지 확인 (false positive)",
+      "f1": 1.0,
+      "expected": {},
+      "predicted": {},
+      "raw_response": "{\"이름\": null, \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC039",
+      "category": "여권번호",
+      "difficulty": "MEDIUM",
+      "intent": "국제학술대회 참가자 명단에서 다양한 국가의 여권번호가 혼재된 경우 모두 검출하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "Akira Suzuki",
+          "Chen Wei-Lin",
+          "Liu Xiaoming",
+          "Sarah Johnson",
+          "김태호"
+        ],
+        "여권번호": [
+          "301234567",
+          "432198765",
+          "E12345678",
+          "M11223344",
+          "TZ5678901"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "김태호",
+          "Sarah Johnson",
+          "Liu Xiaoming",
+          "Akira Suzuki",
+          "Chen Wei-Lin"
+        ],
+        "여권번호": [
+          "M11223344",
+          "432198765",
+          "E12345678",
+          "TZ5678901",
+          "301234567"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"김태호\", \"Sarah Johnson\", \"Liu Xiaoming\", \"Akira Suzuki\", \"Chen Wei-Lin\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": [\"M11223344\", \"432198765\", \"E12345678\", \"TZ5678901\", \"301234567\"],\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC040",
+      "category": "운전면허번호",
+      "difficulty": "HARD",
+      "intent": "군번, 사번과 운전면허번호가 함께 등장할 때 각각을 정확히 구분하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "강현우"
+        ],
+        "운전면허번호": [
+          "13-07-654321-58"
+        ],
+        "기타_고유식별정보": [
+          "19-70123456",
+          "2018-001234"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "강현우"
+        ],
+        "운전면허번호": [
+          "13-07-654321-58"
+        ],
+        "기타_고유식별정보": [
+          "19-70123456",
+          "2018-001234"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"강현우\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": [\"13-07-654321-58\"],\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": [\"19-70123456\", \"2018-001234\"]\n}"
+    },
+    {
+      "id": "TC043",
+      "category": "이메일",
+      "difficulty": "MEDIUM",
+      "intent": "문장 속에서 괄호, 쉼표 등으로 둘러싸인 이메일을 정확히 추출하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이메일": [
+          "billing@hanbit.kr",
+          "emergency@hanbit.kr",
+          "finance_team@hanbit.kr",
+          "info@hanbit.kr",
+          "new_tech@hanbit.kr",
+          "old_tech@hanbit.kr"
+        ]
+      },
+      "predicted": {
+        "이메일": [
+          "old_tech@hanbit.kr",
+          "new_tech@hanbit.kr",
+          "billing@hanbit.kr",
+          "finance_team@hanbit.kr",
+          "emergency@hanbit.kr",
+          "info@hanbit.kr"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": null,\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": [\n    \"old_tech@hanbit.kr\",\n    \"new_tech@hanbit.kr\",\n    \"billing@hanbit.kr\",\n    \"finance_team@hanbit.kr\",\n    \"emergency@hanbit.kr\",\n    \"info@hanbit.kr\"\n  ],\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC044",
+      "category": "이메일",
+      "difficulty": "MEDIUM",
+      "intent": "서브도메인이 포함된 복잡한 도메인의 이메일 주소를 정확히 검출하는지 확인",
+      "f1": 0.8333,
+      "expected": {
+        "이름": [
+          "박준형"
+        ],
+        "이메일": [
+          "alerts+jpark@monitoring.ops.company.co.kr",
+          "jpark@dev.staging.company.co.kr",
+          "jpark@infra.internal.company.co.kr",
+          "junhyung.park@cloud.aws.company.co.kr"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "박준형",
+          "jpark",
+          "junhyung.park"
+        ],
+        "이메일": [
+          "jpark@infra.internal.company.co.kr",
+          "jpark@dev.staging.company.co.kr",
+          "junhyung.park@cloud.aws.company.co.kr",
+          "alerts+jpark@monitoring.ops.company.co.kr"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"박준형\", \"jpark\", \"junhyung.park\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": [\n    \"jpark@infra.internal.company.co.kr\",\n    \"jpark@dev.staging.company.co.kr\",\n    \"junhyung.park@cloud.aws.company.co.kr\",\n    \"alerts+jpark@monitoring.ops.company.co.kr\"\n  ],\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC045",
+      "category": "이메일",
+      "difficulty": "HARD",
+      "intent": "난독화/변형된 이메일([at], [dot], 골뱅이 등)을 PII로 인식할 수 있는지 확인",
+      "f1": 0.6667,
+      "expected": {
+        "이메일": [
+          "macbook.seller 골뱅이 gmail 닷 com",
+          "macbook.seller[at]gmail[dot]com",
+          "mseller(a)daum.net",
+          "sell_mac (at) naver . com"
+        ]
+      },
+      "predicted": {
+        "이메일": [
+          "macbook.seller[at]gmail[dot]com",
+          "sell_mac (at) naver . com"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": null,\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": [\n    \"macbook.seller[at]gmail[dot]com\",\n    \"sell_mac (at) naver . com\"\n  ],\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC046",
+      "category": "이메일",
+      "difficulty": "HARD",
+      "intent": "SNS 핸들(@company)과 이메일 주소를 정확히 구분하는지 확인 (false positive)",
+      "f1": 1.0,
+      "expected": {
+        "이메일": [
+          "marketing@koreabeauty.co.kr",
+          "partnership@koreabeauty.co.kr"
+        ]
+      },
+      "predicted": {
+        "이메일": [
+          "marketing@koreabeauty.co.kr",
+          "partnership@koreabeauty.co.kr"
+        ]
+      },
+      "raw_response": "{\"이름\": null, \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": [\"marketing@koreabeauty.co.kr\", \"partnership@koreabeauty.co.kr\"], \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC047",
+      "category": "이메일",
+      "difficulty": "MEDIUM",
+      "intent": "한글 문맥 속에 자연스럽게 삽입된 이메일을 정확히 추출하는지 확인",
+      "f1": 0.9231,
+      "expected": {
+        "이름": [
+          "김유진",
+          "이수현"
+        ],
+        "이메일": [
+          "professor.kim@university.ac.kr",
+          "profkim.personal@hanmail.net",
+          "soohyun.lee@lab.university.ac.kr",
+          "yujin.kim22@student.university.ac.kr"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "김유진",
+          "이수현",
+          "soohyun.lee"
+        ],
+        "이메일": [
+          "professor.kim@university.ac.kr",
+          "profkim.personal@hanmail.net",
+          "soohyun.lee@lab.university.ac.kr",
+          "yujin.kim22@student.university.ac.kr"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"김유진\", \"이수현\", \"soohyun.lee\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": [\"professor.kim@university.ac.kr\", \"profkim.personal@hanmail.net\", \"soohyun.lee@lab.university.ac.kr\", \"yujin.kim22@student.university.ac.kr\"],\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC048",
+      "category": "이메일",
+      "difficulty": "HARD",
+      "intent": "부분 마스킹된 이메일(h****@gmail.com)도 PII로 인식하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이메일": [
+          "****@daum.net",
+          "h****n@gmail.com",
+          "lee.min**@company.co.kr",
+          "park***@naver.com"
+        ]
+      },
+      "predicted": {
+        "이메일": [
+          "h****n@gmail.com",
+          "park***@naver.com",
+          "****@daum.net",
+          "lee.min**@company.co.kr"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": null,\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": [\n    \"h****n@gmail.com\",\n    \"park***@naver.com\",\n    \"****@daum.net\",\n    \"lee.min**@company.co.kr\"\n  ],\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC051",
+      "category": "IP주소",
+      "difficulty": "MEDIUM",
+      "intent": "서버 액세스 로그 속에 포함된 IP 주소를 정확히 추출하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "IP주소": [
+          "172.16.0.105",
+          "198.51.100.23",
+          "203.0.113.50",
+          "45.33.32.156"
+        ]
+      },
+      "predicted": {
+        "IP주소": [
+          "45.33.32.156",
+          "198.51.100.23",
+          "172.16.0.105",
+          "203.0.113.50"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": null,\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": [\n    \"45.33.32.156\",\n    \"198.51.100.23\",\n    \"172.16.0.105\",\n    \"203.0.113.50\"\n  ],\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC052",
+      "category": "IP주소",
+      "difficulty": "MEDIUM",
+      "intent": "IPv6 주소(풀 표기 및 축약형 포함)를 정확히 검출하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "IP주소": [
+          "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+          "2001:4860:4860::8888",
+          "2001:db8:85a3::8a2e:370:7334",
+          "2606:4700:4700::1111",
+          "fd00::1"
+        ]
+      },
+      "predicted": {
+        "IP주소": [
+          "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+          "2001:db8:85a3::8a2e:370:7334",
+          "fd00::1",
+          "2606:4700:4700::1111",
+          "2001:4860:4860::8888"
+        ]
+      },
+      "raw_response": "{\"이름\": null, \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": [\"2001:0db8:85a3:0000:0000:8a2e:0370:7334\", \"2001:db8:85a3::8a2e:370:7334\", \"fd00::1\", \"2606:4700:4700::1111\", \"2001:4860:4860::8888\"], \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC053",
+      "category": "IP주소",
+      "difficulty": "HARD",
+      "intent": "사설 IP와 공인 IP를 구분하여 태깅할 수 있는지 확인. 사설 IP도 내부 인프라 노출 위험이 있으므로 PII로 취급",
+      "f1": 1.0,
+      "expected": {
+        "IP주소": [
+          "10.0.0.50",
+          "10.10.5.15",
+          "125.209.222.100",
+          "172.31.0.100",
+          "192.168.1.1",
+          "192.168.10.200",
+          "211.45.67.89",
+          "61.100.25.30"
+        ]
+      },
+      "predicted": {
+        "IP주소": [
+          "192.168.1.1",
+          "10.0.0.50",
+          "172.31.0.100",
+          "61.100.25.30",
+          "211.45.67.89",
+          "125.209.222.100",
+          "192.168.10.200",
+          "10.10.5.15"
+        ]
+      },
+      "raw_response": "{\"이름\": null, \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": [\"192.168.1.1\", \"10.0.0.50\", \"172.31.0.100\", \"61.100.25.30\", \"211.45.67.89\", \"125.209.222.100\", \"192.168.10.200\", \"10.10.5.15\"], \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC054",
+      "category": "IP주소",
+      "difficulty": "HARD",
+      "intent": "IP 주소와 유사한 버전번호/빌드번호를 구분할 수 있는지 확인 (false positive)",
+      "f1": 0.8,
+      "expected": {
+        "이메일": [
+          "support@smartoffice.com"
+        ],
+        "IP주소": [
+          "10.20.30.40",
+          "203.100.50.25"
+        ]
+      },
+      "predicted": {
+        "이메일": [
+          "support@smartoffice.com"
+        ],
+        "IP주소": [
+          "10.20.30.40"
+        ]
+      },
+      "raw_response": "{\"이름\": null, \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": [\"support@smartoffice.com\"], \"IP주소\": [\"10.20.30.40\"], \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC055",
+      "category": "IP주소",
+      "difficulty": "MEDIUM",
+      "intent": "CIDR 표기법(10.0.0.0/8)으로 된 IP 대역을 검출하는지 확인",
+      "f1": 0.0,
+      "expected": {},
+      "predicted": {
+        "IP주소": [
+          "10.10.0.0/16",
+          "10.20.0.0/16",
+          "172.16.100.0/24",
+          "10.100.0.0/16",
+          "10.200.0.0/16",
+          "192.168.50.0/24",
+          "10.250.0.0/24",
+          "10.251.0.0/24",
+          "10.10.0.1",
+          "61.100.25.1"
+        ]
+      },
+      "raw_response": "{\"이름\": null, \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": [\"10.10.0.0/16\", \"10.20.0.0/16\", \"172.16.100.0/24\", \"10.100.0.0/16\", \"10.200.0.0/16\", \"192.168.50.0/24\", \"10.250.0.0/24\", \"10.251.0.0/24\", \"10.10.0.1\", \"61.100.25.1\"], \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC056",
+      "category": "IP주소",
+      "difficulty": "HARD",
+      "intent": "IP:포트 조합(192.168.1.1:8080)에서 IP 주소와 포트를 정확히 파싱하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "IP주소": [
+          "10.100.1.10:8080",
+          "10.100.1.20:8081",
+          "10.100.1.20:9090",
+          "10.100.1.30:8082",
+          "10.100.1.40:8083",
+          "10.100.1.50:8084",
+          "10.100.2.10:587",
+          "10.100.3.10:27017",
+          "10.100.3.20:6379",
+          "10.100.3.30:9200",
+          "10.100.5.10:3000",
+          "10.100.5.20:9090",
+          "125.200.50.60:443",
+          "211.45.67.89:443"
+        ]
+      },
+      "predicted": {
+        "IP주소": [
+          "211.45.67.89:443",
+          "10.100.1.10:8080",
+          "10.100.1.20:8081",
+          "10.100.1.20:9090",
+          "10.100.1.30:8082",
+          "125.200.50.60:443",
+          "10.100.1.40:8083",
+          "10.100.1.50:8084",
+          "10.100.2.10:587",
+          "10.100.3.10:27017",
+          "10.100.3.20:6379",
+          "10.100.3.30:9200",
+          "10.100.5.10:3000",
+          "10.100.5.20:9090"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": null,\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": [\n    \"211.45.67.89:443\",\n    \"10.100.1.10:8080\",\n    \"10.100.1.20:8081\",\n    \"10.100.1.20:9090\",\n    \"10.100.1.30:8082\",\n    \"125.200.50.60:443\",\n    \"10.100.1.40:8083\",\n    \"10.100.1.50:8084\",\n    \"10.100.2.10:587\",\n    \"10.100.3.10:27017\",\n    \"10.100.3.20:6379\",\n    \"10.100.3.30:9200\",\n    \"10.100.5.10:3000\",\n    \"10.100.5.20:9090\"\n  ],\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC059",
+      "category": "전화번호",
+      "difficulty": "MEDIUM",
+      "intent": "하이픈 없는 연속 숫자 전화번호 검출. 01012345678, 0212345678 등 구분자 없이 이어진 전화번호를 인식하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "한소영"
+        ],
+        "전화번호": [
+          "01056781234",
+          "01087654321",
+          "0311234567"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "한소영"
+        ],
+        "전화번호": [
+          "01087654321",
+          "0311234567",
+          "01056781234"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"한소영\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\"01087654321\", \"0311234567\", \"01056781234\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC060",
+      "category": "전화번호",
+      "difficulty": "MEDIUM",
+      "intent": "국제 전화번호 형식 검출. +82(한국), +1(미국), +81(일본) 등 국가번호가 포함된 전화번호가 정확히 인식되는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "David Kim",
+          "Priya Sharma",
+          "Yuki Tanaka",
+          "강민호"
+        ],
+        "전화번호": [
+          "+1-202-555-0123",
+          "+1-408-555-0456",
+          "+65-9123-4567",
+          "+81-3-5678-9012",
+          "+81-90-1234-5678",
+          "+82-10-2345-6789",
+          "+82-2-3456-7890"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "강민호",
+          "David Kim",
+          "Yuki Tanaka",
+          "Priya Sharma"
+        ],
+        "전화번호": [
+          "+82-10-2345-6789",
+          "+82-2-3456-7890",
+          "+1-202-555-0123",
+          "+1-408-555-0456",
+          "+81-90-1234-5678",
+          "+81-3-5678-9012",
+          "+65-9123-4567"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"강민호\", \"David Kim\", \"Yuki Tanaka\", \"Priya Sharma\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\"+82-10-2345-6789\", \"+82-2-3456-7890\", \"+1-202-555-0123\", \"+1-408-555-0456\", \"+81-90-1234-5678\", \"+81-3-5678-9012\", \"+65-9123-4567\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC061",
+      "category": "전화번호",
+      "difficulty": "HARD",
+      "intent": "전화번호와 유사한 숫자열 구분. 1588-XXXX(대표전화), 080-XXX-XXXX(수신자부담), 1544-XXXX(ARS) 등 비개인 전화번호와 개인 전화번호를 구분하는지 확인",
+      "f1": 0.5,
+      "expected": {
+        "이름": [
+          "김태형"
+        ],
+        "전화번호": [
+          "010-4567-8901",
+          "010-8901-2345"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "김태형"
+        ],
+        "전화번호": [
+          "1588-1234",
+          "1544-5678",
+          "080-000-1234",
+          "+82-2-1588-1234",
+          "02-555-1234",
+          "051-333-5678",
+          "010-4567-8901",
+          "010-8901-2345"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"김태형\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\n    \"1588-1234\",\n    \"1544-5678\",\n    \"080-000-1234\",\n    \"+82-2-1588-1234\",\n    \"02-555-1234\",\n    \"051-333-5678\",\n    \"010-4567-8901\",\n    \"010-8901-2345\"\n  ],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC062",
+      "category": "전화번호",
+      "difficulty": "MEDIUM",
+      "intent": "내선번호가 포함된 전화번호 검출. 'XX-XXXX-XXXX 내선 XXX' 형태에서 본번호와 내선번호를 모두 포함하여 검출하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "박성민",
+          "서진우",
+          "양현석",
+          "오지영",
+          "한미래"
+        ],
+        "전화번호": [
+          "010-5678-1234",
+          "010-8765-4321",
+          "02-3456-7001 내선 1001",
+          "02-3456-7001 내선 1002",
+          "02-3456-7001 내선 1101",
+          "02-3456-7001 내선 1102",
+          "02-3456-7001 내선 1201"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "박성민",
+          "오지영",
+          "한미래",
+          "서진우",
+          "양현석"
+        ],
+        "전화번호": [
+          "02-3456-7001 내선 1001",
+          "02-3456-7001 내선 1002",
+          "02-3456-7001 내선 1101",
+          "02-3456-7001 내선 1102",
+          "02-3456-7001 내선 1201",
+          "010-5678-1234",
+          "010-8765-4321"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"박성민\", \"오지영\", \"한미래\", \"서진우\", \"양현석\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\"02-3456-7001 내선 1001\", \"02-3456-7001 내선 1002\", \"02-3456-7001 내선 1101\", \"02-3456-7001 내선 1102\", \"02-3456-7001 내선 1201\", \"010-5678-1234\", \"010-8765-4321\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC063",
+      "category": "전화번호",
+      "difficulty": "HARD",
+      "intent": "다양한 구분자로 표기된 전화번호 검출. 점(.), 공백, 괄호 등 비표준 구분자로 작성된 전화번호를 모두 인식하는지 확인",
+      "f1": 0.9565,
+      "expected": {
+        "이름": [
+          "Akiko Yamamoto",
+          "James Park",
+          "김나래",
+          "이정훈"
+        ],
+        "전화번호": [
+          "(02) 1234-5678",
+          "(202) 555-0147",
+          "010 3456 7890",
+          "010-5678-9012",
+          "010.2345.6789",
+          "010·8901·2345",
+          "090.1234.5678"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "James Park",
+          "이정훈",
+          "Akiko Yamamoto",
+          "김나래"
+        ],
+        "전화번호": [
+          "010.2345.6789",
+          "(202) 555-0147",
+          "010 3456 7890",
+          "(02) 1234-5678",
+          "010-5678-9012",
+          "090.1234.5678",
+          "010·8901·2345",
+          "1661-0055"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"James Park\", \"이정훈\", \"Akiko Yamamoto\", \"김나래\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\"010.2345.6789\", \"(202) 555-0147\", \"010 3456 7890\", \"(02) 1234-5678\", \"010-5678-9012\", \"090.1234.5678\", \"010·8901·2345\", \"1661-0055\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC064",
+      "category": "전화번호",
+      "difficulty": "HARD",
+      "intent": "부분 마스킹된 전화번호 검출. 010-****-5678, 010-1234-**** 등 일부가 가려진 전화번호도 PII로 인식하는지 확인",
+      "f1": 0.9231,
+      "expected": {
+        "이름": [
+          "최유진"
+        ],
+        "전화번호": [
+          "010-****-3456",
+          "010-****-7890",
+          "010-8765-****",
+          "02-345*-**78",
+          "02-6789-12**",
+          "031-***-4567"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "최유진"
+        ],
+        "전화번호": [
+          "010-****-7890",
+          "02-345*-**78",
+          "02-6789-12**",
+          "010-8765-****",
+          "031-***-4567"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"최유진\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\n    \"010-****-7890\",\n    \"02-345*-**78\",\n    \"02-6789-12**\",\n    \"010-8765-****\",\n    \"031-***-4567\"\n  ],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC067",
+      "category": "금융정보",
+      "difficulty": "MEDIUM",
+      "intent": "부분 마스킹된 카드번호 검출. 1234-56**-****-7890 등 보안 처리된 카드번호도 PII로 인식하는지 확인",
+      "f1": 0.9091,
+      "expected": {
+        "이름": [
+          "이서준"
+        ],
+        "계좌번호": [
+          "****-**-****-789"
+        ],
+        "카드번호": [
+          "5412-****-****-3456",
+          "9430-12**-****-5678",
+          "9430-12**-****-9012"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "이서준",
+          "배우자"
+        ],
+        "계좌번호": [
+          "****-**-****-789"
+        ],
+        "카드번호": [
+          "9430-12**-****-5678",
+          "9430-12**-****-9012",
+          "5412-****-****-3456"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"이서준\", \"배우자\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": [\"****-**-****-789\"],\n  \"카드번호\": [\"9430-12**-****-5678\", \"9430-12**-****-9012\", \"5412-****-****-3456\"],\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC068",
+      "category": "금융정보",
+      "difficulty": "MEDIUM",
+      "intent": "다양한 은행별 계좌번호 형식 검출. 신한(12자리), 우리(13자리), 하나(14자리) 등 은행마다 다른 자릿수/구분 형식을 모두 인식하는지 확인",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "오현정"
+        ],
+        "계좌번호": [
+          "012-34-567890",
+          "1002-345-678901",
+          "110-345-678901",
+          "152-910345-67890",
+          "3333-12-3456789"
+        ],
+        "기타_고유식별정보": [
+          "EMP-2024-0891"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "오현정"
+        ],
+        "계좌번호": [
+          "110-345-678901",
+          "1002-345-678901",
+          "152-910345-67890",
+          "3333-12-3456789",
+          "012-34-567890"
+        ],
+        "기타_고유식별정보": [
+          "EMP-2024-0891"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"오현정\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": [\n    \"110-345-678901\",\n    \"1002-345-678901\",\n    \"152-910345-67890\",\n    \"3333-12-3456789\",\n    \"012-34-567890\"\n  ],\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": [\"EMP-2024-0891\"]\n}"
+    },
+    {
+      "id": "TC069",
+      "category": "금융정보",
+      "difficulty": "HARD",
+      "intent": "계좌번호와 유사한 숫자열 구분. 사업자등록번호(XXX-XX-XXXXX), 법인등록번호(XXXXXX-XXXXXXX), 전화번호 등 유사 패턴을 계좌번호로 오인하지 않는지 확인",
+      "f1": 0.5,
+      "expected": {
+        "이름": [
+          "강동원",
+          "임세진"
+        ],
+        "계좌번호": [
+          "1005-403-567890"
+        ]
+      },
+      "predicted": {
+        "계좌번호": [
+          "1005-403-567890"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": null,\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": null,\n  \"계좌번호\": [\"1005-403-567890\"],\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC070",
+      "category": "금융정보",
+      "difficulty": "HARD",
+      "intent": "가상계좌번호(일회성/임시 계좌) 검출. 결제용 가상계좌는 실제 계좌와 형태가 같으나 일시적으로 발급되므로, 이를 금융 PII로 인식할 수 있는지 확인",
+      "f1": 0.75,
+      "expected": {
+        "이름": [
+          "나윤서"
+        ],
+        "전화번호": [
+          "010-3344-5566"
+        ],
+        "계좌번호": [
+          "16640987654321",
+          "56211098765432",
+          "79200114523678"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "나윤서"
+        ],
+        "전화번호": [
+          "010-3344-5566"
+        ],
+        "계좌번호": [
+          "79200114523678"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"나윤서\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\"010-3344-5566\"],\n  \"계좌번호\": [\"79200114523678\"],\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC071",
+      "category": "금융정보",
+      "difficulty": "MEDIUM",
+      "intent": "IBAN(국제 은행 계좌 번호) 형식 검출. 해외 송금에 사용되는 국제 표준 계좌번호(2자리 국가코드+2자리 체크+은행코드+계좌번호)를 PII로 인식하는지 확인",
+      "f1": 0.8571,
+      "expected": {
+        "이름": [
+          "Michael Braun",
+          "김재훈"
+        ],
+        "주소": [
+          "Friedrichstrasse 123, 10117 Berlin, Germany",
+          "서울특별시 서초구 서초대로 398"
+        ],
+        "전화번호": [
+          "010-7788-9900"
+        ],
+        "계좌번호": [
+          "267-910123-45678",
+          "DE89 3704 0044 0532 0130 00",
+          "GB29 NWBK 6016 1331 9268 19"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "김재훈",
+          "Michael Braun"
+        ],
+        "주소": [
+          "서울특별시 서초구 서초대로 398",
+          "Friedrichstrasse 123, 10117 Berlin, Germany"
+        ],
+        "전화번호": [
+          "010-7788-9900"
+        ],
+        "계좌번호": [
+          "267-910123-45678"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"김재훈\", \"Michael Braun\"],\n  \"주소\": [\"서울특별시 서초구 서초대로 398\", \"Friedrichstrasse 123, 10117 Berlin, Germany\"],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\"010-7788-9900\"],\n  \"계좌번호\": [\"267-910123-45678\"],\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC072",
+      "category": "금융정보",
+      "difficulty": "HARD",
+      "intent": "암호화폐 지갑 주소(BTC, ETH) 검출. 비트코인(1/3/bc1으로 시작, 26~35자) 및 이더리움(0x로 시작, 42자) 지갑 주소를 금융 PII로 인식하는지 확인",
+      "f1": 0.1818,
+      "expected": {
+        "이름": [
+          "정민기"
+        ],
+        "카드번호": [
+          "0x267be1C1D684F78cb4F6a176C4911b741E4Ffdc0",
+          "0x742d35Cc6634C0532925a3b844Bc9e7595f2bD18",
+          "0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe",
+          "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+          "1BoatSLRHtKNngkdXEeobR76b53LETtpyT",
+          "3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy",
+          "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "정민기"
+        ],
+        "전화번호": [
+          "1588-0088"
+        ],
+        "기타_고유식별정보": [
+          "USR-2024-08-77234"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"정민기\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\"1588-0088\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": [\"USR-2024-08-77234\"]\n}"
+    },
+    {
+      "id": "TC075",
+      "category": "복합 PII",
+      "difficulty": "MEDIUM",
+      "intent": "진료기록부에서 환자 이름+주민번호+주소+전화번호+보호자 정보 검출. 의료기록 특유의 반정형 서식 속에 다양한 PII가 포함된 경우",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "이광수",
+          "이서준",
+          "최영민"
+        ],
+        "주소": [
+          "부산광역시 해운대구 센텀중앙로 97, 센텀파크아파트 203동 1801호"
+        ],
+        "주민등록번호": [
+          "950723-1234567"
+        ],
+        "전화번호": [
+          "010-7654-3210",
+          "010-9182-3456"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "이서준",
+          "이광수",
+          "최영민"
+        ],
+        "주소": [
+          "부산광역시 해운대구 센텀중앙로 97, 센텀파크아파트 203동 1801호"
+        ],
+        "주민등록번호": [
+          "950723-1234567"
+        ],
+        "전화번호": [
+          "010-9182-3456",
+          "010-7654-3210"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"이서준\", \"이광수\", \"최영민\"],\n  \"주소\": [\"부산광역시 해운대구 센텀중앙로 97, 센텀파크아파트 203동 1801호\"],\n  \"주민등록번호\": [\"950723-1234567\"],\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\"010-9182-3456\", \"010-7654-3210\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC076",
+      "category": "복합 PII",
+      "difficulty": "MEDIUM",
+      "intent": "CS 상담일지에서 이름+전화번호+이메일+주소가 서술형으로 산재된 경우 검출. 정형 양식이 아닌 자유 서술 속에서 PII를 식별",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "유재석",
+          "유재하",
+          "한지민"
+        ],
+        "주소": [
+          "대전광역시 서구 둔산로 100, 둔산타워 1203호",
+          "대전광역시 유성구 도룡동 123-45 카이스트빌 502호"
+        ],
+        "이메일": [
+          "yoo.jaeseok@naver.com"
+        ],
+        "전화번호": [
+          "010-2345-6789",
+          "010-8765-4321"
+        ],
+        "기타_고유식별정보": [
+          "CS-0482"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "한지민",
+          "유재석",
+          "유재하"
+        ],
+        "주소": [
+          "대전광역시 유성구 도룡동 123-45 카이스트빌 502호",
+          "대전광역시 서구 둔산로 100, 둔산타워 1203호"
+        ],
+        "이메일": [
+          "yoo.jaeseok@naver.com"
+        ],
+        "전화번호": [
+          "010-2345-6789",
+          "010-8765-4321"
+        ],
+        "기타_고유식별정보": [
+          "CS-0482"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"한지민\", \"유재석\", \"유재하\"],\n  \"주소\": [\n    \"대전광역시 유성구 도룡동 123-45 카이스트빌 502호\",\n    \"대전광역시 서구 둔산로 100, 둔산타워 1203호\"\n  ],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": [\"yoo.jaeseok@naver.com\"],\n  \"IP주소\": null,\n  \"전화번호\": [\"010-2345-6789\", \"010-8765-4321\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": [\"CS-0482\"]\n}"
+    },
+    {
+      "id": "TC077",
+      "category": "복합 PII",
+      "difficulty": "MEDIUM",
+      "intent": "택배 송장 형태에서 발신인/수신인의 이름+주소+전화번호 검출. 송장 양식의 반복 구조 속 PII를 정확히 분리",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "강예린",
+          "오민혁",
+          "임동건"
+        ],
+        "주소": [
+          "부산광역시 수영구 광안해변로 219, 광안리센트럴파크 1004호",
+          "서울특별시 종로구 종로 33, 그랑서울빌딩 2층 ㈜프레시마켓"
+        ],
+        "전화번호": [
+          "010-1234-5678",
+          "010-4567-8901",
+          "010-5555-0001",
+          "02-3478-9012",
+          "051-742-6589"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "오민혁",
+          "강예린",
+          "임동건"
+        ],
+        "주소": [
+          "서울특별시 종로구 종로 33, 그랑서울빌딩 2층 ㈜프레시마켓",
+          "부산광역시 수영구 광안해변로 219, 광안리센트럴파크 1004호"
+        ],
+        "전화번호": [
+          "02-3478-9012",
+          "010-4567-8901",
+          "051-742-6589",
+          "010-1234-5678",
+          "010-5555-0001"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"오민혁\", \"강예린\", \"임동건\"],\n  \"주소\": [\n    \"서울특별시 종로구 종로 33, 그랑서울빌딩 2층 ㈜프레시마켓\",\n    \"부산광역시 수영구 광안해변로 219, 광안리센트럴파크 1004호\"\n  ],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\n    \"02-3478-9012\",\n    \"010-4567-8901\",\n    \"051-742-6589\",\n    \"010-1234-5678\",\n    \"010-5555-0001\"\n  ],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC078",
+      "category": "복합 PII",
+      "difficulty": "HARD",
+      "intent": "회의록에서 여러 참석자의 이름+이메일+전화번호가 본문 속에 산재된 경우 검출. 논의 내용과 뒤섞인 PII를 빠짐없이 식별",
+      "f1": 0.9655,
+      "expected": {
+        "이름": [
+          "김형준",
+          "문성호",
+          "송다영",
+          "신재훈",
+          "윤하나",
+          "이소라",
+          "장동혁",
+          "채은비"
+        ],
+        "이메일": [
+          "donghyuk.jang@company.co.kr",
+          "eunbi.chae@consulting-firm.com",
+          "hjkim@company.co.kr",
+          "jaehoon.shin@company.co.kr",
+          "sora.lee@company.co.kr"
+        ],
+        "전화번호": [
+          "010-6677-8899",
+          "02-3400-5521"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "송다영",
+          "김형준",
+          "이소라",
+          "장동혁",
+          "윤하나",
+          "신재훈",
+          "문성호",
+          "채은비"
+        ],
+        "이메일": [
+          "hjkim@company.co.kr",
+          "sora.lee@company.co.kr",
+          "donghyuk.jang@company.co.kr",
+          "eunbi.chae@consulting-firm.com"
+        ],
+        "전화번호": [
+          "010-6677-8899",
+          "02-3400-5521"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"송다영\", \"김형준\", \"이소라\", \"장동혁\", \"윤하나\", \"신재훈\", \"문성호\", \"채은비\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": [\"hjkim@company.co.kr\", \"sora.lee@company.co.kr\", \"donghyuk.jang@company.co.kr\", \"eunbi.chae@consulting-firm.com\"],\n  \"IP주소\": null,\n  \"전화번호\": [\"010-6677-8899\", \"02-3400-5521\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC079",
+      "category": "복합 PII",
+      "difficulty": "HARD",
+      "intent": "보안 이벤트 로그에서 IP+이메일+이름이 혼재된 경우 검출. 시스템 로그 특유의 반정형 텍스트 속에서 다양한 PII를 식별",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "박민재",
+          "이정훈",
+          "정수현",
+          "최은지"
+        ],
+        "이메일": [
+          "admin@corp-internal.net",
+          "choi.eunji@corp-internal.net",
+          "jung.soohyun@corp-internal.net",
+          "lee.junghoon@corp-internal.net",
+          "park.minjae@corp-internal.net"
+        ],
+        "IP주소": [
+          "10.0.45.200",
+          "118.235.67.12",
+          "172.16.0.89",
+          "192.168.1.105",
+          "203.247.58.31",
+          "211.36.148.90",
+          "59.15.223.44"
+        ],
+        "전화번호": [
+          "010-3322-1100"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "박민재",
+          "정수현",
+          "최은지",
+          "이정훈"
+        ],
+        "이메일": [
+          "park.minjae@corp-internal.net",
+          "admin@corp-internal.net",
+          "jung.soohyun@corp-internal.net",
+          "choi.eunji@corp-internal.net",
+          "lee.junghoon@corp-internal.net"
+        ],
+        "IP주소": [
+          "192.168.1.105",
+          "203.247.58.31",
+          "10.0.45.200",
+          "172.16.0.89",
+          "118.235.67.12",
+          "211.36.148.90",
+          "59.15.223.44"
+        ],
+        "전화번호": [
+          "010-3322-1100"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"박민재\", \"정수현\", \"최은지\", \"이정훈\"],\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": [\"park.minjae@corp-internal.net\", \"admin@corp-internal.net\", \"jung.soohyun@corp-internal.net\", \"choi.eunji@corp-internal.net\", \"lee.junghoon@corp-internal.net\"],\n  \"IP주소\": [\"192.168.1.105\", \"203.247.58.31\", \"10.0.45.200\", \"172.16.0.89\", \"118.235.67.12\", \"211.36.148.90\", \"59.15.223.44\"],\n  \"전화번호\": [\"010-3322-1100\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC080",
+      "category": "복합 PII",
+      "difficulty": "MEDIUM",
+      "intent": "온라인 입사지원서에서 이름+생년월일+전화번호+이메일+주소+학력 정보 검출. 채용 양식에 빈칸을 채운 형태의 복합 PII",
+      "f1": 0.9231,
+      "expected": {
+        "이름": [
+          "김영호",
+          "한소희"
+        ],
+        "주소": [
+          "서울특별시 관악구 관악로 1, 서울대학교 기숙사 901동 312호"
+        ],
+        "이메일": [
+          "sohee.han97@gmail.com"
+        ],
+        "전화번호": [
+          "010-7712-3300",
+          "031-456-7890"
+        ],
+        "생년월일": [
+          "1997년 11월 23일"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "한소희"
+        ],
+        "주소": [
+          "서울특별시 관악구 관악로 1, 서울대학교 기숙사 901동 312호"
+        ],
+        "이메일": [
+          "sohee.han97@gmail.com"
+        ],
+        "전화번호": [
+          "010-7712-3300",
+          "031-456-7890"
+        ],
+        "생년월일": [
+          "1997년 11월 23일"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"한소희\"],\n  \"주소\": [\"서울특별시 관악구 관악로 1, 서울대학교 기숙사 901동 312호\"],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": [\"sohee.han97@gmail.com\"],\n  \"IP주소\": null,\n  \"전화번호\": [\"010-7712-3300\", \"031-456-7890\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": [\"1997년 11월 23일\"],\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC081",
+      "category": "복합 PII",
+      "difficulty": "HARD",
+      "intent": "관공서 민원 서류에서 이름+주민번호+주소+전화번호가 서술형 본문 속에 산재된 경우 검출. 행정 특유의 서술체와 혼합된 PII 식별",
+      "f1": 0.963,
+      "expected": {
+        "이름": [
+          "김태영",
+          "류진호",
+          "백승호",
+          "백윤아",
+          "조현우"
+        ],
+        "주소": [
+          "서울특별시 강서구 화곡로 264, 우장산현대아파트 108동 301호",
+          "서울특별시 강서구 화곡로 268"
+        ],
+        "주민등록번호": [
+          "790305-1876543",
+          "820517-2345612"
+        ],
+        "이메일": [
+          "baek.sh79@hanmail.net"
+        ],
+        "전화번호": [
+          "010-4488-2200",
+          "010-5566-7788",
+          "010-9900-1122",
+          "02-2600-6543"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "백승호",
+          "백윤아",
+          "류진호",
+          "김태영",
+          "조현우"
+        ],
+        "주소": [
+          "서울특별시 강서구 화곡로 264, 우장산현대아파트 108동 301호",
+          "서울특별시 강서구 화곡로 268"
+        ],
+        "주민등록번호": [
+          "790305-1876543",
+          "820517-2345612"
+        ],
+        "이메일": [
+          "baek.sh79@hanmail.net"
+        ],
+        "전화번호": [
+          "010-4488-2200",
+          "010-9900-1122",
+          "02-2600-6543"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"백승호\", \"백윤아\", \"류진호\", \"김태영\", \"조현우\"],\n  \"주소\": [\"서울특별시 강서구 화곡로 264, 우장산현대아파트 108동 301호\", \"서울특별시 강서구 화곡로 268\"],\n  \"주민등록번호\": [\"790305-1876543\", \"820517-2345612\"],\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": [\"baek.sh79@hanmail.net\"],\n  \"IP주소\": null,\n  \"전화번호\": [\"010-4488-2200\", \"010-9900-1122\", \"02-2600-6543\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC082",
+      "category": "복합 PII",
+      "difficulty": "MEDIUM",
+      "intent": "보험금 청구서에서 이름+주민번호+계좌번호+전화번호+주소 검출. 보험 양식의 정형 구조 속 피보험자/수익자/의료기관 정보를 모두 식별",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "나윤서",
+          "서동진"
+        ],
+        "주소": [
+          "경기도 고양시 일산서구 주화로 170",
+          "경기도 고양시 일산서구 중앙로 1601, 킨텍스꿈에그린 305동 1202호"
+        ],
+        "주민등록번호": [
+          "010215-4567890"
+        ],
+        "전화번호": [
+          "010-8899-2345"
+        ],
+        "계좌번호": [
+          "110-342-567890"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "나윤서",
+          "서동진"
+        ],
+        "주소": [
+          "경기도 고양시 일산서구 중앙로 1601, 킨텍스꿈에그린 305동 1202호",
+          "경기도 고양시 일산서구 주화로 170"
+        ],
+        "주민등록번호": [
+          "010215-4567890"
+        ],
+        "전화번호": [
+          "010-8899-2345"
+        ],
+        "계좌번호": [
+          "110-342-567890"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"나윤서\", \"서동진\"],\n  \"주소\": [\"경기도 고양시 일산서구 중앙로 1601, 킨텍스꿈에그린 305동 1202호\", \"경기도 고양시 일산서구 주화로 170\"],\n  \"주민등록번호\": [\"010215-4567890\"],\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\"010-8899-2345\"],\n  \"계좌번호\": [\"110-342-567890\"],\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC083",
+      "category": "복합 PII",
+      "difficulty": "HARD",
+      "intent": "소송 서류(소장)에서 원고/피고/대리인 다수의 이름+주소+주민번호 검출. 법률 문서 특유의 복잡한 구조 속에서 다수 당사자의 PII를 식별",
+      "f1": 0.95,
+      "expected": {
+        "이름": [
+          "金恩晶",
+          "金賢洙",
+          "김은정",
+          "김현수",
+          "문재호",
+          "박지원",
+          "양승우",
+          "이승환"
+        ],
+        "주소": [
+          "경기도 용인시 수지구 성복1로 55, 성복역롯데캐슬 102동 903호",
+          "서울특별시 강남구 영동대로 731, 대한건설빌딩",
+          "서울특별시 서초구 법원로 15, 서초법조타운 1202호",
+          "서울특별시 서초구 서초대로 398, 플래티넘타워 2504호",
+          "서울특별시 중구 세종대로 39, 대한상공회의소 빌딩 17층"
+        ],
+        "주민등록번호": [
+          "750610-1987654",
+          "780923-1234567",
+          "811107-2654321"
+        ],
+        "전화번호": [
+          "010-3344-5566",
+          "010-7788-9900",
+          "02-2022-9000",
+          "02-533-4567",
+          "02-533-4568"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "김현수",
+          "김은정",
+          "문재호",
+          "이승환",
+          "양승우",
+          "박지원"
+        ],
+        "주소": [
+          "서울특별시 서초구 서초대로 398, 플래티넘타워 2504호",
+          "서울특별시 서초구 법원로 15, 서초법조타운 1202호",
+          "서울특별시 강남구 영동대로 731, 대한건설빌딩",
+          "경기도 용인시 수지구 성복1로 55, 성복역롯데캐슬 102동 903호",
+          "서울특별시 중구 세종대로 39, 대한상공회의소 빌딩 17층"
+        ],
+        "주민등록번호": [
+          "780923-1234567",
+          "811107-2654321",
+          "750610-1987654"
+        ],
+        "전화번호": [
+          "010-3344-5566",
+          "02-533-4567",
+          "02-533-4568",
+          "010-7788-9900",
+          "02-2022-9000"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"김현수\", \"김은정\", \"문재호\", \"이승환\", \"양승우\", \"박지원\"],\n  \"주소\": [\n    \"서울특별시 서초구 서초대로 398, 플래티넘타워 2504호\",\n    \"서울특별시 서초구 법원로 15, 서초법조타운 1202호\",\n    \"서울특별시 강남구 영동대로 731, 대한건설빌딩\",\n    \"경기도 용인시 수지구 성복1로 55, 성복역롯데캐슬 102동 903호\",\n    \"서울특별시 중구 세종대로 39, 대한상공회의소 빌딩 17층\"\n  ],\n  \"주민등록번호\": [\n    \"780923-1234567\",\n    \"811107-2654321\",\n    \"750610-1987654\"\n  ],\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\n    \"010-3344-5566\",\n    \"02-533-4567\",\n    \"02-533-4568\",\n    \"010-7788-9900\",\n    \"02-2022-9000\"\n  ],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC084",
+      "category": "복합 PII",
+      "difficulty": "MEDIUM",
+      "intent": "급여명세서에서 이름+주민번호+계좌번호+금액 정보 검출. 급여 관련 정형 양식에 포함된 직원 개인정보와 금융정보를 식별",
+      "f1": 0.9091,
+      "expected": {
+        "이름": [
+          "권나래",
+          "조민기"
+        ],
+        "주민등록번호": [
+          "910815-1234567"
+        ],
+        "전화번호": [
+          "02-1234-5600"
+        ],
+        "계좌번호": [
+          "110-456-789012"
+        ],
+        "기타_고유식별정보": [
+          "EMP-20190315"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "조민기"
+        ],
+        "주민등록번호": [
+          "910815-1234567"
+        ],
+        "전화번호": [
+          "02-1234-5600"
+        ],
+        "계좌번호": [
+          "110-456-789012"
+        ],
+        "기타_고유식별정보": [
+          "EMP-20190315"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"조민기\"],\n  \"주소\": null,\n  \"주민등록번호\": [\"910815-1234567\"],\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\"02-1234-5600\"],\n  \"계좌번호\": [\"110-456-789012\"],\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": [\"EMP-20190315\"]\n}"
+    },
+    {
+      "id": "TC085",
+      "category": "복합 PII",
+      "difficulty": "HARD",
+      "intent": "학교 성적표에서 이름+생년월일+주소+학번 검출. 학생과 보호자 정보가 혼재된 성적 통지서 속 PII 식별",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "윤광호",
+          "윤채원",
+          "정미라"
+        ],
+        "주소": [
+          "서울특별시 노원구 동일로 1340, 상계주공아파트 7동 502호"
+        ],
+        "전화번호": [
+          "010-2233-4455",
+          "02-950-1234"
+        ],
+        "생년월일": [
+          "2008년 3월 12일"
+        ],
+        "기타_고유식별정보": [
+          "2023-10315"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "윤채원",
+          "윤광호",
+          "정미라"
+        ],
+        "주소": [
+          "서울특별시 노원구 동일로 1340, 상계주공아파트 7동 502호"
+        ],
+        "전화번호": [
+          "010-2233-4455",
+          "02-950-1234"
+        ],
+        "생년월일": [
+          "2008년 3월 12일"
+        ],
+        "기타_고유식별정보": [
+          "2023-10315"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"윤채원\", \"윤광호\", \"정미라\"],\n  \"주소\": [\"서울특별시 노원구 동일로 1340, 상계주공아파트 7동 502호\"],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\"010-2233-4455\", \"02-950-1234\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": [\"2008년 3월 12일\"],\n  \"기타_고유식별정보\": [\"2023-10315\"]\n}"
+    },
+    {
+      "id": "TC086",
+      "category": "복합 PII",
+      "difficulty": "HARD",
+      "intent": "부동산 매매계약서에서 매도인/매수인의 이름+주민번호+주소+계좌번호+전화번호 검출. 가장 복합적인 PII가 포함된 실제 계약서 형태",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "손예진",
+          "안정환",
+          "허재명"
+        ],
+        "주소": [
+          "서울특별시 강동구 천호대로 1077, 래미안강동팰리스 205동 1503호",
+          "서울특별시 송파구 올림픽로 102, 1층",
+          "서울특별시 송파구 올림픽로 135",
+          "서울특별시 송파구 올림픽로 135, 잠실엘스아파트 109동 1802호"
+        ],
+        "주민등록번호": [
+          "760110-1456789",
+          "850930-2876543"
+        ],
+        "전화번호": [
+          "010-1111-2222",
+          "010-3333-4444",
+          "02-421-5678"
+        ],
+        "계좌번호": [
+          "374-910456-12307"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "안정환",
+          "손예진",
+          "허재명"
+        ],
+        "주소": [
+          "서울특별시 송파구 올림픽로 135",
+          "서울특별시 송파구 올림픽로 135, 잠실엘스아파트 109동 1802호",
+          "서울특별시 강동구 천호대로 1077, 래미안강동팰리스 205동 1503호",
+          "서울특별시 송파구 올림픽로 102, 1층"
+        ],
+        "주민등록번호": [
+          "760110-1456789",
+          "850930-2876543"
+        ],
+        "전화번호": [
+          "010-1111-2222",
+          "010-3333-4444",
+          "02-421-5678"
+        ],
+        "계좌번호": [
+          "374-910456-12307"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"안정환\", \"손예진\", \"허재명\"],\n  \"주소\": [\n    \"서울특별시 송파구 올림픽로 135\",\n    \"서울특별시 송파구 올림픽로 135, 잠실엘스아파트 109동 1802호\",\n    \"서울특별시 강동구 천호대로 1077, 래미안강동팰리스 205동 1503호\",\n    \"서울특별시 송파구 올림픽로 102, 1층\"\n  ],\n  \"주민등록번호\": [\n    \"760110-1456789\",\n    \"850930-2876543\"\n  ],\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": null,\n  \"IP주소\": null,\n  \"전화번호\": [\n    \"010-1111-2222\",\n    \"010-3333-4444\",\n    \"02-421-5678\"\n  ],\n  \"계좌번호\": [\"374-910456-12307\"],\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC087",
+      "category": "복합 PII",
+      "difficulty": "MEDIUM",
+      "intent": "온라인 쇼핑몰 주문 확인서에서 이름+전화번호+이메일+주소+카드번호 일부 검출. 주문/결제/배송 정보가 하나의 문서에 포함된 케이스",
+      "f1": 1.0,
+      "expected": {
+        "이름": [
+          "장서윤"
+        ],
+        "주소": [
+          "인천광역시 연수구 송도과학로 32, 송도더샵퍼스트파크 C동 2308호"
+        ],
+        "이메일": [
+          "seoyoon.jang@kakao.com"
+        ],
+        "전화번호": [
+          "010-6543-2100"
+        ],
+        "카드번호": [
+          "9410-12**-****-7856"
+        ],
+        "기타_고유식별정보": [
+          "#1234*"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "장서윤"
+        ],
+        "주소": [
+          "인천광역시 연수구 송도과학로 32, 송도더샵퍼스트파크 C동 2308호"
+        ],
+        "이메일": [
+          "seoyoon.jang@kakao.com"
+        ],
+        "전화번호": [
+          "010-6543-2100"
+        ],
+        "카드번호": [
+          "9410-12**-****-7856"
+        ],
+        "기타_고유식별정보": [
+          "#1234*"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"장서윤\"],\n  \"주소\": [\"인천광역시 연수구 송도과학로 32, 송도더샵퍼스트파크 C동 2308호\"],\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": [\"seoyoon.jang@kakao.com\"],\n  \"IP주소\": null,\n  \"전화번호\": [\"010-6543-2100\"],\n  \"계좌번호\": null,\n  \"카드번호\": [\"9410-12**-****-7856\"],\n  \"생년월일\": null,\n  \"기타_고유식별정보\": [\"#1234*\"]\n}"
+    },
+    {
+      "id": "TC089",
+      "category": "False Positive",
+      "difficulty": "MEDIUM",
+      "intent": "기술 문서의 숫자 패턴(포트번호, 메모리 용량, IP 대역 등)이 전화번호나 개인 IP로 오인되지 않는지 확인",
+      "f1": 0.0,
+      "expected": {},
+      "predicted": {
+        "IP주소": [
+          "10.0.0.0/24",
+          "172.16.0.0/16",
+          "192.168.100.0/24"
+        ]
+      },
+      "raw_response": "{\"이름\": null, \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": [\"10.0.0.0/24\", \"172.16.0.0/16\", \"192.168.100.0/24\"], \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC090",
+      "category": "False Positive",
+      "difficulty": "MEDIUM",
+      "intent": "회사명, 부서명, 지명+시설명이 사람 이름으로 오인되지 않는지 확인. 한국어 고유명사 구분 능력 검증",
+      "f1": 1.0,
+      "expected": {},
+      "predicted": {},
+      "raw_response": "{\"이름\": null, \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC091",
+      "category": "False Positive",
+      "difficulty": "HARD",
+      "intent": "법률 용어, 법원명, 랜드마크 지명이 주소나 이름으로 오인되지 않는지 확인. 법원명은 지역명이 포함되어 있어 주소로 혼동 가능",
+      "f1": 1.0,
+      "expected": {},
+      "predicted": {},
+      "raw_response": "{\"이름\": null, \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC092",
+      "category": "False Positive",
+      "difficulty": "HARD",
+      "intent": "제품 코드/모델번호가 여권번호, 운전면허번호, 주민등록번호 등과 유사한 패턴을 가지지만 문맥상 PII가 아님을 구분하는지 확인",
+      "f1": 1.0,
+      "expected": {},
+      "predicted": {},
+      "raw_response": "{\"이름\": null, \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC093",
+      "category": "False Positive",
+      "difficulty": "MEDIUM",
+      "intent": "기업 대표번호, 고객센터 번호, 팩스번호 등 공개된 법인 번호가 개인 전화번호로 오인되지 않는지 확인",
+      "f1": 1.0,
+      "expected": {},
+      "predicted": {},
+      "raw_response": "{\"이름\": null, \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC094",
+      "category": "False Positive",
+      "difficulty": "HARD",
+      "intent": "학술 논문의 참고문헌에 등장하는 저자명이 PII로 처리되지 않아야 하는지 확인. 학술 저자명은 공개 정보",
+      "f1": 1.0,
+      "expected": {},
+      "predicted": {},
+      "raw_response": "{\"이름\": null, \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC095",
+      "category": "False Positive",
+      "difficulty": "HARD",
+      "intent": "뉴스 기사에 등장하는 공인(대통령, 장관, CEO 등)의 이름과 공적 정보가 PII 처리 대상이 아님을 확인",
+      "f1": 0.0,
+      "expected": {},
+      "predicted": {
+        "이름": [
+          "이창용",
+          "안덕근",
+          "이재용",
+          "최태원"
+        ]
+      },
+      "raw_response": "{\"이름\": [\"이창용\", \"안덕근\", \"이재용\", \"최태원\"], \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC096",
+      "category": "False Positive",
+      "difficulty": "MEDIUM",
+      "intent": "프로그래밍 코드 내 IP 리터럴, 이메일 정규식, 테스트용 dummy 데이터가 실제 PII로 오인되지 않는지 확인",
+      "f1": 0.0,
+      "expected": {},
+      "predicted": {
+        "이메일": [
+          "test@example.com",
+          "not-an-email",
+          "admin@localhost",
+          "noreply@company.example.org"
+        ],
+        "IP주소": [
+          "0.0.0.0",
+          "127.0.0.1",
+          "8.8.8.8",
+          "8.8.4.4",
+          "192.168.1.100",
+          "10.0.1.50"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": null,\n  \"주소\": null,\n  \"주민등록번호\": null,\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": [\n    \"test@example.com\",\n    \"not-an-email\",\n    \"admin@localhost\",\n    \"noreply@company.example.org\"\n  ],\n  \"IP주소\": [\n    \"0.0.0.0\",\n    \"127.0.0.1\",\n    \"8.8.8.8\",\n    \"8.8.4.4\",\n    \"192.168.1.100\",\n    \"10.0.1.50\"\n  ],\n  \"전화번호\": null,\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC097",
+      "category": "False Positive",
+      "difficulty": "HARD",
+      "intent": "사업자등록번호, 법인번호, 주문번호, 접수번호 등 업무용 식별번호가 주민등록번호·계좌번호·기타_고유식별정보 등 PII로 오인되지 않는지 확인",
+      "f1": 1.0,
+      "expected": {},
+      "predicted": {},
+      "raw_response": "{\"이름\": null, \"주소\": null, \"주민등록번호\": null, \"여권번호\": null, \"운전면허번호\": null, \"이메일\": null, \"IP주소\": null, \"전화번호\": null, \"계좌번호\": null, \"카드번호\": null, \"생년월일\": null, \"기타_고유식별정보\": null}"
+    },
+    {
+      "id": "TC098",
+      "category": "난독화/변형",
+      "difficulty": "HARD",
+      "intent": "의도적 난독화(공백 삽입, 특수문자 삽입, 한글 숫자 변환 등)된 PII를 검출할 수 있는지 확인. 다양한 난독화 기법이 혼합된 문서",
+      "f1": 0.5,
+      "expected": {
+        "이름": [
+          "김ㅇ철ㅇ수"
+        ],
+        "주소": [
+          "서 울 시 강 남 구 역 삼 동 7 3 2 - 1 5"
+        ],
+        "주민등록번호": [
+          "8 5 0 3 1 5 - 1 2 3 4 5 6 7"
+        ],
+        "여권번호": [
+          "엠 일이삼사오육칠팔"
+        ],
+        "운전면허번호": [
+          "일이-삼사-오육칠팔구공-일이"
+        ],
+        "이메일": [
+          "hong . gildong @ naver . com"
+        ],
+        "전화번호": [
+          "공일공-일이삼사-오육칠팔"
+        ],
+        "카드번호": [
+          "사삼이일-오*육*칠-팔구공일-이삼사오"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "김ㅇ철ㅇ수"
+        ],
+        "주소": [
+          "서울특별시 강남구 역삼동 732-15"
+        ],
+        "주민등록번호": [
+          "850315-1234567"
+        ],
+        "여권번호": [
+          "엠일이삼사오육칠팔"
+        ],
+        "운전면허번호": [
+          "일이-삼사-오육칠팔구공-일이"
+        ],
+        "이메일": [
+          "hong.gildong@naver.com"
+        ],
+        "전화번호": [
+          "공일공-일이삼사-오육칠팔"
+        ],
+        "카드번호": [
+          "사삼이일-오*육*칠-팔구공일-이삼사오"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"김ㅇ철ㅇ수\"],\n  \"주소\": [\"서울특별시 강남구 역삼동 732-15\"],\n  \"주민등록번호\": [\"850315-1234567\"],\n  \"여권번호\": [\"엠일이삼사오육칠팔\"],\n  \"운전면허번호\": [\"일이-삼사-오육칠팔구공-일이\"],\n  \"이메일\": [\"hong.gildong@naver.com\"],\n  \"IP주소\": null,\n  \"전화번호\": [\"공일공-일이삼사-오육칠팔\"],\n  \"계좌번호\": null,\n  \"카드번호\": [\"사삼이일-오*육*칠-팔구공일-이삼사오\"],\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC099",
+      "category": "난독화/변형",
+      "difficulty": "HARD",
+      "intent": "OCR 스캔 문서에서 인식 오류가 발생한 PII를 검출할 수 있는지 확인. 이미지 품질 저하로 문자가 유사한 다른 문자로 치환된 경우",
+      "f1": 0.0,
+      "expected": {
+        "이름": [
+          "긤영회",
+          "긤철수"
+        ],
+        "주소": [
+          "서울시 강남구 역삽동 732-l5 현대아파트 lO3동 8O2호"
+        ],
+        "주민등록번호": [
+          "85O3l5-l234567"
+        ],
+        "이메일": [
+          "ki mcs@nave r.c om"
+        ],
+        "전화번호": [
+          "O1O-I234-5G78",
+          "O2-555-78gO",
+          "OlO-8765-432l"
+        ],
+        "생년월일": [
+          "l985년 O3월 l5일"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "김철수",
+          "김영희"
+        ],
+        "주소": [
+          "서울시 강남구 역삼동 732-15 현대아파트 103동 802호"
+        ],
+        "주민등록번호": [
+          "850315-1234567"
+        ],
+        "이메일": [
+          "kimcs@naver.com"
+        ],
+        "전화번호": [
+          "010-1234-5678",
+          "02-555-7890",
+          "010-8765-4321"
+        ],
+        "생년월일": [
+          "1985년 03월 15일"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"김철수\", \"김영희\"],\n  \"주소\": [\"서울시 강남구 역삼동 732-15 현대아파트 103동 802호\"],\n  \"주민등록번호\": [\"850315-1234567\"],\n  \"여권번호\": null,\n  \"운전면허번호\": null,\n  \"이메일\": [\"kimcs@naver.com\"],\n  \"IP주소\": null,\n  \"전화번호\": [\"010-1234-5678\", \"02-555-7890\", \"010-8765-4321\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": [\"1985년 03월 15일\"],\n  \"기타_고유식별정보\": null\n}"
+    },
+    {
+      "id": "TC100",
+      "category": "난독화/변형",
+      "difficulty": "HARD",
+      "intent": "유니코드 전각/반각 문자 혼합, 유사 유니코드 문자 치환 등으로 변형된 PII를 검출할 수 있는지 확인",
+      "f1": 0.0,
+      "expected": {
+        "이름": [
+          "ㅋㅣㅁㅊㅓㄹㅅㅜ"
+        ],
+        "주소": [
+          "서울시 강남구 테헤란로 １５２ 강남파이낸스센터 ２３층"
+        ],
+        "주민등록번호": [
+          "９３０１０１－１１２３４５６"
+        ],
+        "여권번호": [
+          "Μ１２３４５６７８"
+        ],
+        "이메일": [
+          "раrk.minjае＠nаvеr.cоm",
+          "ｔｅｓｔｕｓｅｒ＠ｇｍａｉｌ．ｃｏｍ"
+        ],
+        "전화번호": [
+          "０１０−１２３４−５６７８"
+        ]
+      },
+      "predicted": {
+        "이름": [
+          "김철수"
+        ],
+        "주소": [
+          "서울시 강남구 테헤란로 152 강남파이낸스센터 23층"
+        ],
+        "주민등록번호": [
+          "930101-1123456"
+        ],
+        "여권번호": [
+          "M12345678"
+        ],
+        "이메일": [
+          "testuser@gmail.com",
+          "park.minjae@naver.com"
+        ],
+        "전화번호": [
+          "010-1234-5678"
+        ]
+      },
+      "raw_response": "{\n  \"이름\": [\"김철수\"],\n  \"주소\": [\"서울시 강남구 테헤란로 152 강남파이낸스센터 23층\"],\n  \"주민등록번호\": [\"930101-1123456\"],\n  \"여권번호\": [\"M12345678\"],\n  \"운전면허번호\": null,\n  \"이메일\": [\"testuser@gmail.com\", \"park.minjae@naver.com\"],\n  \"IP주소\": null,\n  \"전화번호\": [\"010-1234-5678\"],\n  \"계좌번호\": null,\n  \"카드번호\": null,\n  \"생년월일\": null,\n  \"기타_고유식별정보\": null\n}"
+    }
+  ]
+}

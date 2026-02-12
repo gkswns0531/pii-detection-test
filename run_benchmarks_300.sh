@@ -36,9 +36,8 @@ declare -a MODELS=(
     "gemma3_4b|google/gemma-3-4b-it|--block-size 32||"
     # Baseline (native FP8)
     "qwen3_30b_a3b_fp8|Qwen/Qwen3-30B-A3B-Instruct-2507-FP8||--no-think|skip_fp8"
-    # Large MoE
+    # Large
     "gpt_oss_20b|openai/gpt-oss-20b|||skip_fp8"
-    "qwen3next_80b_a3b_int4|Forturne/Qwen3-Next-80B-A3B-Instruct-INT4-GPTQ|--quantization gptq|--no-think|skip_fp8"
 )
 
 # ── 유틸 함수 ──

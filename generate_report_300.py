@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""HTML report generator for 11-model × 300-case PII benchmark.
+"""HTML report generator for 12-model × 300-case PII benchmark.
 
 Reads result + latency JSONs from benchmark_results/300/,
 splits into base/advanced/combined, generates interactive HTML.
@@ -19,7 +19,6 @@ CATS = [
 ]
 
 MODELS = [
-    ("qwen3next_80b_a3b_int4", "Qwen3-Next-80B-A3B", "80B", "#0f172a"),
     ("qwen3_30b_a3b_fp8", "Qwen3-30B-A3B", "30B", "#2563eb"),
     ("gpt_oss_20b", "GPT-OSS-20B", "20B", "#1e3a5f"),
     ("qwen3_8b", "Qwen3-8B", "8B", "#3b82f6"),
