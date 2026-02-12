@@ -535,6 +535,7 @@ def call_api(
         "expected": expected,
         "predicted": predicted,
         "metrics": metrics,
+        "raw_response": raw_text,
     }
 
 
@@ -639,6 +640,7 @@ def main():
                     "expected": expected,
                     "predicted": predicted_err,
                     "metrics": compute_metrics(expected, predicted_err),
+                    "raw_response": f"ERROR: {e}",
                 })
             completed += 1
             print(f"\r  진행: {completed}/{len(test_cases)}", end="", flush=True)
@@ -689,6 +691,7 @@ def main():
                 "f1": r["metrics"]["micro_f1"],
                 "expected": {k: v for k, v in r["expected"].items() if v is not None},
                 "predicted": {k: v for k, v in r["predicted"].items() if v is not None},
+                "raw_response": r.get("raw_response", ""),
             }
             for r in all_results
         ],
