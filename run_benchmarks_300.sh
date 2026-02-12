@@ -3,7 +3,7 @@ set -uo pipefail
 # Note: no 'set -e' so script continues even if one model fails
 
 # ============================================================================
-# PII Detection - 11 Model Benchmark Runner (300 cases, combined dataset)
+# PII Detection - Model Benchmark Runner (300 cases, combined dataset)
 # 각 모델: vLLM 서버 시작 → 정확도 벤치마크 → 레이턴시 측정 → 서버 종료
 # ============================================================================
 
@@ -18,23 +18,27 @@ WAIT_TIMEOUT=600  # 서버 대기 최대 10분
 
 mkdir -p "$RESULTS_DIR" "$LOG_DIR"
 
-# ── 모델 정의 (name|hf_id|vllm_extra_args|eval_extra_args) ──
+# ── 모델 정의 (name|hf_id|vllm_extra_args|eval_extra_args|skip_fp8) ──
+# skip_fp8 필드가 비어있으면 --quantization fp8 자동 추가
 declare -a MODELS=(
     # Category 1: ≤1B
-    "qwen3_0.6b|Qwen/Qwen3-0.6B||--no-think"
-    "gemma3_1b|google/gemma-3-1b-it|--block-size 32|"
-    "llama32_1b|meta-llama/Llama-3.2-1B-Instruct||"
+    "qwen3_0.6b|Qwen/Qwen3-0.6B||--no-think|"
+    "gemma3_1b|google/gemma-3-1b-it|--block-size 32||"
+    "llama32_1b|meta-llama/Llama-3.2-1B-Instruct|||"
     # Category 2: 1B-3B
-    "qwen3_1.7b|Qwen/Qwen3-1.7B||--no-think"
-    "smollm3_3b|HuggingFaceTB/SmolLM3-3B||"
-    "llama32_3b|meta-llama/Llama-3.2-3B-Instruct||"
+    "qwen3_1.7b|Qwen/Qwen3-1.7B||--no-think|"
+    "smollm3_3b|HuggingFaceTB/SmolLM3-3B|||"
+    "llama32_3b|meta-llama/Llama-3.2-3B-Instruct|||"
     # Category 3: 3B-10B
-    "qwen3_8b|Qwen/Qwen3-8B||--no-think"
-    "qwen3_4b_2507|Qwen/Qwen3-4B-Instruct-2507||--no-think"
-    "falcon_h1r_7b|tiiuae/Falcon-H1R-7B||"
-    "gemma3_4b|google/gemma-3-4b-it|--block-size 32|"
+    "qwen3_8b|Qwen/Qwen3-8B||--no-think|"
+    "qwen3_4b_2507|Qwen/Qwen3-4B-Instruct-2507||--no-think|"
+    "falcon_h1r_7b|tiiuae/Falcon-H1R-7B|||"
+    "gemma3_4b|google/gemma-3-4b-it|--block-size 32||"
     # Baseline (native FP8)
-    "qwen3_30b_a3b_fp8|Qwen/Qwen3-30B-A3B-Instruct-2507-FP8||--no-think"
+    "qwen3_30b_a3b_fp8|Qwen/Qwen3-30B-A3B-Instruct-2507-FP8||--no-think|skip_fp8"
+    # Large MoE
+    "gpt_oss_20b|openai/gpt-oss-20b|||skip_fp8"
+    "qwen3next_80b_a3b_int4|Forturne/Qwen3-Next-80B-A3B-Instruct-INT4-GPTQ|--quantization gptq|--no-think|skip_fp8"
 )
 
 # ── 유틸 함수 ──
@@ -84,7 +88,7 @@ kill_server() {
 # ── 메인 루프 ──
 
 echo "============================================================"
-echo "PII Detection Benchmark - 11 Models × 300 Cases"
+echo "PII Detection Benchmark - ${#MODELS[@]} Models × 300 Cases"
 echo "시작 시각: $(date '+%Y-%m-%d %H:%M:%S')"
 echo "결과 저장: $RESULTS_DIR"
 echo "============================================================"
@@ -93,7 +97,7 @@ TOTAL=${#MODELS[@]}
 CURRENT=0
 
 for entry in "${MODELS[@]}"; do
-    IFS='|' read -r name hf_id vllm_extra eval_extra <<< "$entry"
+    IFS='|' read -r name hf_id vllm_extra eval_extra skip_fp8 <<< "$entry"
     CURRENT=$((CURRENT + 1))
 
     echo ""
@@ -112,7 +116,7 @@ for entry in "${MODELS[@]}"; do
 
     # vLLM 서버 시작
     QUANT_ARG=""
-    if [[ "$name" != "qwen3_30b_a3b_fp8" ]]; then
+    if [ -z "${skip_fp8:-}" ]; then
         QUANT_ARG="--quantization fp8"
     fi
 
