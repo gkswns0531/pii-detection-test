@@ -451,34 +451,59 @@ function renderCases() {
     const f1class = r.f1 === 1.0 ? 'perfect' : r.f1 >= 0.7 ? 'good' : 'bad';
     const f1pct = (r.f1 * 100).toFixed(1);
     let catHtml = '';
-    CATS.forEach(cat => {
-      const e = r.expected[cat] || [];
-      const p = r.predicted[cat] || [];
-      if (e.length === 0 && p.length === 0) return;
-      const pSet = new Set(p);
-      const isMatch = e.length === p.length && e.every(v => pSet.has(v));
-      let status, statusCls;
-      if (isMatch) { status = '\u2713'; statusCls = 'ok'; }
-      else if (e.length > 0 && p.length === 0) { status = 'FN'; statusCls = 'fn'; }
-      else if (e.length === 0 && p.length > 0) { status = 'FP'; statusCls = 'fp'; }
-      else { status = '\u2260'; statusCls = 'ne'; }
-      catHtml += `<div class="cat-row">
-        <span class="cat-status ${statusCls}">${status}</span>
-        <span class="cat-name">${cat}</span>
+    const hasAnyExpected = Object.keys(r.expected).length > 0;
+    const hasAnyPredicted = Object.keys(r.predicted).length > 0;
+
+    if (!hasAnyExpected && !hasAnyPredicted) {
+      catHtml = `<div class="cat-row">
+        <span class="cat-status ok">\u2713</span>
+        <span class="cat-name" style="width:auto;">No PII</span>
         <div class="cat-values">
-          ${e.length > 0 ? '<div class="exp">Expected: ' + JSON.stringify(e) + '</div>' : ''}
-          ${p.length > 0 ? '<div class="pred">Predicted: ' + JSON.stringify(p) + '</div>' : ''}
-          ${e.length === 0 && p.length > 0 ? '<div class="missing">Expected: (none)</div>' : ''}
-          ${e.length > 0 && p.length === 0 ? '<div class="missing">Predicted: (none)</div>' : ''}
+          <div class="exp">Expected: No PII in this document</div>
+          <div class="pred">Predicted: No PII detected (correct)</div>
         </div>
       </div>`;
-    });
+    } else if (!hasAnyExpected && hasAnyPredicted) {
+      Object.keys(r.predicted).forEach(cat => {
+        const p = r.predicted[cat];
+        catHtml += `<div class="cat-row">
+          <span class="cat-status fp">FP</span>
+          <span class="cat-name">${cat}</span>
+          <div class="cat-values">
+            <div class="missing">Expected: No PII in this document</div>
+            <div class="pred">Predicted: ${JSON.stringify(p)}</div>
+          </div>
+        </div>`;
+      });
+    } else {
+      CATS.forEach(cat => {
+        const e = r.expected[cat] || [];
+        const p = r.predicted[cat] || [];
+        if (e.length === 0 && p.length === 0) return;
+        const pSet = new Set(p);
+        const isMatch = e.length === p.length && e.every(v => pSet.has(v));
+        let status, statusCls;
+        if (isMatch) { status = '\u2713'; statusCls = 'ok'; }
+        else if (e.length > 0 && p.length === 0) { status = 'FN'; statusCls = 'fn'; }
+        else if (e.length === 0 && p.length > 0) { status = 'FP'; statusCls = 'fp'; }
+        else { status = '\u2260'; statusCls = 'ne'; }
+        catHtml += `<div class="cat-row">
+          <span class="cat-status ${statusCls}">${status}</span>
+          <span class="cat-name">${cat}</span>
+          <div class="cat-values">
+            ${e.length > 0 ? '<div class="exp">Expected: ' + JSON.stringify(e) + '</div>' : ''}
+            ${p.length > 0 ? '<div class="pred">Predicted: ' + JSON.stringify(p) + '</div>' : ''}
+            ${e.length === 0 && p.length > 0 ? '<div class="missing">Expected: (none)</div>' : ''}
+            ${e.length > 0 && p.length === 0 ? '<div class="missing">Predicted: (none)</div>' : ''}
+          </div>
+        </div>`;
+      });
+    }
     const docText = r.document_text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
     html += `<div class="case-card" onclick="this.classList.toggle('expanded')">
       <div class="case-top">
         <div class="case-meta">
           <span class="case-id">${r.id}</span>
-          <span class="badge ${r.difficulty === 'base' ? 'base' : 'advanced'}">${r.difficulty}</span>
           <span class="badge vanilla">${r.category}</span>
         </div>
         <span class="case-f1 ${f1class}">F1: ${f1pct}%</span>
