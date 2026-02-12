@@ -37,25 +37,25 @@ MODELS = [
 CASE_STUDY_ANALYSIS: dict[str, str] = {
     "TC004": "모델이 '강서구에 거주하는 윤서연'에서 '강서구'를 주소 PII로 추가 예측. 이름은 4명 모두 정확히 검출했으나, 문맥 속 지명을 주소로 과잉 해석.",
     "TC006": "지명('김포', '이천', '한강')과 이름('이천호', '한강수')이 공존하는 문서에서, 이름 3개는 정확히 검출했으나 '마포구 한강로'를 주소 PII로 추가 예측.",
-    "TC008": "한자 이름 '李美英'을 '李美영'으로 예측. 한자-한글 혼용 이름에서 마지막 글자의 한자 인식 오류.",
-    "TC022": "붙여쓰기된 주소 4개를 인식은 했으나, 공백/괄호 포함 범위가 ground truth와 불일치. Boundary 정의의 모호성 문제.",
-    "TC030": "주민등록번호 앞 6자리('870214')만 노출된 경우를 PII로 인식하지 못함. 보수적 판단.",
-    "TC045": "'macbook.seller 골뱅이 gmail 닷 com'을 검출하지 못함. 한글로 치환된 '@'('골뱅이')와 '.'('닷') 인식 실패.",
-    "TC050": "모델이 직함/역할명('정보보안팀장')을 이름으로 과탐. IP주소 검출은 정확.",
-    "TC058": "재실행에서 전체 실패(F1=0.0). LLM 비결정성(non-determinism)에 의한 것으로 추정.",
-    "TC062": "내선번호가 포함된 전화번호 '02-3456-7001 내선 1102'에서 내선 부분을 누락.",
-    "TC063": "호텔 대표번호를 개인 전화번호로 과탐. 비표준 구분자(·, 공백, 점) 전화번호는 정확히 검출.",
+    "TC008": "한자 이름 '李美英'을 '李美영'으로 예측. 한자-한글 혼용 이름에서 마지막 글자의 한자 인식 오류. 한자 OCR/인코딩 경계 문제.",
+    "TC022": "붙여쓰기된 주소 4개를 인식은 했으나, 공백/괄호 포함 범위가 ground truth와 불일치. 예: 기대 '서울시강남구 테헤란로152번길 (역삼동)' vs 출력 '서울시강남구테헤란로152번길'. Boundary 정의의 모호성 문제.",
+    "TC030": "주민등록번호 앞 6자리('870214')만 노출된 경우를 PII로 인식하지 못함. 6자리 숫자만으로는 주민번호로 단정하기 어렵다는 보수적 판단.",
+    "TC045": "'macbook.seller 골뱅이 gmail 닷 com'을 검출하지 못함. 한글로 치환된 '@'('골뱅이')와 '.'('닷')를 이메일 구성요소로 인식하는 데 실패.",
+    "TC050": "모델이 직함/역할명을 이름으로 과탐. IP주소 검출은 정확하나 이름 카테고리에서 FP 발생.",
+    "TC058": "재실행에서 전체 실패(F1=0.0). 이전 실행(F1=0.76)에서는 부분 검출이 있었으나, 동일 프롬프트에서 결과가 비결정적으로 악화. LLM 비결정성(non-determinism)에 의한 것으로 추정.",
+    "TC062": "내선번호가 포함된 전화번호 '02-3456-7001 내선 1102'에서 내선 부분을 누락. 프롬프트에 내선번호 포함 규칙이 있으나 모델이 이를 적용하지 못함.",
+    "TC063": "호텔 대표번호 '(02)771-2200'과 '02 - 771 - 2201'을 개인 전화번호로 과탐. 비표준 구분자(·, 공백, 점) 전화번호는 정확히 검출.",
     "TC064": "'010-****-3456'(마스킹된 이전 번호)을 누락. 수정 이력 맥락에서의 과거 전화번호 검출 실패.",
-    "TC069": "세금계산서에서 모든 PII 검출 실패(이름 2건, 계좌번호 1건 누락). 극단적 실패 사례.",
-    "TC070": "가상계좌 3건 중 현재 활성 계좌만 검출하고, 이전 주문의 계좌 2건을 누락.",
-    "TC071": "IBAN 형식 계좌(DE89..., GB29...)를 계좌번호로 인식하지 못함. 국제 계좌번호 형식 지원 부족.",
-    "TC072": "암호화폐 지갑 주소 7건(BTC 4건, ETH 3건)을 전혀 인식하지 못함.",
-    "TC078": "회의록 작성자 '송다영'을 이름으로 누락. 부수적 인물 누락.",
-    "TC080": "입사지원서에서 지도교수 '김영호'를 이름으로 누락. 부수적 인물 누락.",
+    "TC069": "세금계산서에서 모든 PII 검출 실패(이름 2건, 계좌번호 1건 누락). 사업자등록번호/법인등록번호와 계좌번호가 혼재된 문서에서 모델이 혼동한 극단적 실패 사례.",
+    "TC070": "가상계좌 3건 중 현재 활성 계좌만 검출하고, 이전 주문의 계좌 2건을 누락. 문맥상 '과거' 계좌에 대한 검출 누락.",
+    "TC071": "IBAN 형식 계좌(DE89..., GB29...)를 계좌번호로 인식하지 못함. 국내 은행 계좌는 검출했으나 국제 계좌번호 형식 지원 부족.",
+    "TC072": "암호화폐 지갑 주소 7건(BTC 4건, ETH 3건)을 전혀 인식하지 못함. 프롬프트에 '카드번호' 카테고리에 암호화폐 지갑 주소가 포함된다고 명시했으나 모델이 이를 적용하지 못함.",
+    "TC078": "회의록 작성자 '송다영'을 이름으로 누락. 문서 말미의 작성자 정보가 참여자 이름과 분리되어 놓친 것으로 추정.",
+    "TC080": "입사지원서에서 지도교수 '김영호'를 이름으로 누락. 본 지원자(한소희)의 정보는 완벽히 검출했으나 부수적 인물 누락.",
     "TC083": "소장에서 '위 원고 1과 같음'이라는 주소 참조 표현을 주소로 추가 예측. 법률 문서의 참조 표현 해석 오류.",
-    "TC096": "Python 설정 코드에서 127.0.0.1, 8.8.8.8 등 코드 내 IP 리터럴을 실제 PII로 과탐.",
-    "TC098": "'비밀번호 앞 두자리 구오'의 '구오'를 기타_고유식별정보로 과탐.",
-    "TC099": "OCR 오류 이름 '긤철수'→'금철수', '긤영회'→'금영회'로 교정하여 추출. 원문 그대로 추출 규칙 위반.",
+    "TC096": "Python 설정 코드에서 127.0.0.1, 8.8.8.8 등 코드 내 IP 리터럴을 실제 PII로 과탐. 프로그래밍 컨텍스트 인식 부족.",
+    "TC098": "'비밀번호 앞 두자리 구오'의 '구오'를 기타_고유식별정보로 과탐. 8가지 난독화 PII 중 7가지를 완벽히 검출한 것은 인상적.",
+    "TC099": "OCR 오류 이름 '긤철수'→'금철수', '긤영회'→'금영회'로 다르게 인식. OCR 오류 문자의 정확한 재현에 한계.",
 }
 
 FAILURE_PATTERNS = [
@@ -468,12 +468,12 @@ table.main tr.best {{ background: #eff6ff; }}
       <button class="tab-btn" onclick="switchBar('advanced',this)">Advanced (100)</button>
     </div>
   </div>
-  <div class="desc-box">
+  <div id="bar-metric-desc" class="desc-box"></div>
+  <div class="desc-box" style="margin-top:0;">
     <strong>Base (200)</strong>: 명확한 레이블과 정형화된 문서에서의 기본 PII 검출 &middot;
     <strong>Advanced (100)</strong>: 난독화, OCR 오류, 혼합 문서, 엣지케이스 등 노이즈가 반영된 어려운 상황 &middot;
     <strong>Combined (300)</strong>: Base + Advanced 전체
   </div>
-  <div id="bar-metric-desc" class="desc-box" style="margin-top:0;"></div>
   <div id="bar-chart" class="bar-chart"></div>
 
   <!-- Stats Table -->
@@ -533,6 +533,7 @@ table.main tr.best {{ background: #eff6ff; }}
       <th style="color:#166534">TP</th><th style="color:#4ade80">TN</th>
       <th style="color:#dc2626">FP</th><th style="color:#ea580c">FN</th>
       <th>Sensitivity</th><th>Specificity</th>
+      <th style="text-align:left">Description</th>
     </tr></thead>
     <tbody id="cat-cm-body"></tbody>
   </table>
@@ -616,7 +617,7 @@ const METRIC_DESC = {{
   r: '<strong>Recall (재현율)</strong>: 실제 존재하는 PII 중 모델이 빠뜨리지 않고 찾아낸 비율. 높을수록 개인정보 유출 위험이 낮아집니다.',
   p: '<strong>Precision (정밀도)</strong>: 모델이 PII라고 예측한 것 중 실제로 PII인 비율. 높을수록 불필요한 마스킹/알림이 줄어듭니다.',
   f1: '<strong>F1 Score</strong>: Precision과 Recall의 조화 평균. 둘 사이의 균형을 하나의 숫자로 요약합니다.',
-  perfect: '<strong>Perfect Match %</strong>: 300개 테스트 케이스 중 Expected PII와 Predicted PII가 완벽히 일치한 비율.',
+  perfect: '<strong>Perfect Match %</strong>: 완벽하게 모든 정보를 식별하고, 불필요한 정보를 식별하지 않은 비율. FP와 FN이 모두 0인 케이스만 해당됩니다.',
   latency: '<strong>Latency (응답시간)</strong>: 1건 처리 평균 소요시간. 낮을수록 실시간 처리에 유리합니다.',
 }};
 function getMetricVal(m, dataset, metric) {{
@@ -674,7 +675,7 @@ function renderStats(dataset) {{
     html += `<tr${{cls}}>
       <td>${{rank}}${{m.label}}</td>
       <td>${{s.total}}</td><td>${{s.perfect}}</td><td>${{s.acc}}%</td>
-      <td>${{s.p}}%</td><td>${{s.r}}%</td><td><strong>${{s.f1}}%</strong></td>
+      <td>${{s.p}}%</td><td><strong>${{s.r}}%</strong></td><td>${{s.f1}}%</td>
       <td>${{s.tp}}</td><td style="color:#ef4444">${{s.fp}}</td><td style="color:#f59e0b">${{s.fn}}</td>
       <td>${{lat}}</td>
     </tr>`;
@@ -734,6 +735,20 @@ function sensColor(val) {{
   const h = val * 1.2; // 0→0(red), 100→120(green)
   return `hsl(${{h}}, 75%, 42%)`;
 }}
+const CAT_DESC = {{
+  '이름': '문서에 등장하는 인명을 빠짐없이 검출하는지. 동명이인, 한자이름, 부수적 인물 포함.',
+  '주소': '도로명/지번 등 물리적 위치 정보 검출. 지명과의 혼동 여부가 관건.',
+  '주민등록번호': '13자리 전체 또는 부분 노출된 주민번호 검출. 가장 민감한 PII.',
+  '여권번호': '여권번호(M/S + 8자리 등) 검출. 출현 빈도가 낮아 학습 데이터 부족 가능.',
+  '운전면허번호': '운전면허번호(2자리-6자리-6자리-2자리) 검출. 지역코드 포함 형식.',
+  '이메일': '표준 및 난독화된 이메일 주소 검출. 골뱅이/닷 등 한글 치환 포함.',
+  'IP주소': 'IPv4/IPv6 주소 검출. 코드 내 리터럴 IP와 실제 PII 구분이 과제.',
+  '전화번호': '휴대폰/유선/내선/국제 전화번호 검출. 대표번호 과탐 주의.',
+  '계좌번호': '국내 은행 계좌 및 국제(IBAN) 계좌 검출. 형식 다양성이 도전 과제.',
+  '카드번호': '신용/체크카드 번호 및 암호화폐 지갑 주소 검출.',
+  '생년월일': '다양한 형식(YYYY.MM.DD, 00년생 등)의 생년월일 검출.',
+  '기타_고유식별정보': '사번, 학번, 회원번호 등 문맥 의존적 식별자 검출.',
+}};
 function renderCatCM() {{
   const m = getModel(catcmModel);
   if (!m) return;
@@ -747,10 +762,12 @@ function renderCatCM() {{
     const spec = specVal !== null ? specVal.toFixed(1)+'%' : '-';
     const sensC = sensColor(sensVal);
     const specC = sensColor(specVal);
+    const desc = CAT_DESC[cat] || '';
     html += `<tr><td>${{cat}}</td>
       <td style="color:#166534;font-weight:700">${{c.tp}}</td><td style="color:#4ade80">${{c.tn}}</td>
       <td style="color:#dc2626;font-weight:700">${{c.fp}}</td><td style="color:#ea580c;font-weight:700">${{c.fn}}</td>
-      <td style="font-weight:700;color:${{sensC}}">${{sens}}</td><td style="font-weight:700;color:${{specC}}">${{spec}}</td></tr>`;
+      <td style="font-weight:700;color:${{sensC}}">${{sens}}</td><td style="font-weight:700;color:${{specC}}">${{spec}}</td>
+      <td style="text-align:left;font-size:11px;color:#64748b;">${{desc}}</td></tr>`;
   }});
   document.getElementById('cat-cm-body').innerHTML = html;
 }}
