@@ -758,7 +758,7 @@ def main():
     if args.test_cases:
         tc_path = Path(args.test_cases)
     else:
-        tc_path = Path(__file__).parent / "all_test_cases.json"
+        tc_path = Path(__file__).parent / "combined_test_cases.json"
     with open(tc_path, encoding="utf-8") as f:
         test_cases = json.load(f)
 
