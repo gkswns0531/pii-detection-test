@@ -47,11 +47,50 @@
 
 ---
 
-## 테스트 대상 모델 선정 (계열별 1개, 총 4개)
+## 실제 테스트 완료 모델 (총 11개 + 베이스라인 1개)
 
-| Category | Model | Family | 선정 이유 |
-|----------|-------|--------|----------|
-| ≤1B | Qwen3-0.6B | Qwen | sub-1B 최강, 한국어 포함 119개 언어 |
-| 1B-3B | EXAONE-3.5-2.4B-Instruct | EXAONE (LG) | 한국어 특화 이중언어 모델 |
-| 3-10B | Gemma-3-4B-IT | Gemma (Google) | 140+언어, 멀티모달, 안정적 |
-| 3-10B | Falcon-H1R-7B | Falcon (TII) | 2026년 1월 최신, 7B 최강 추론 |
+평가 환경: NVIDIA B200, vLLM v0.15.1, 299개 한국어 PII 검출 테스트 케이스
+
+### Baseline
+
+| Model | Params | HuggingFace ID | Acc | F1 | Median Latency | 비고 |
+|-------|--------|----------------|-----|-----|----------------|------|
+| Qwen3-30B-A3B-Instruct-2507-FP8 | 30B (3B active) | `Qwen/Qwen3-30B-A3B-Instruct-2507-FP8` | 90.30% | 94.90% | - | MoE 베이스라인 |
+
+### Category 1: ≤1B (3개 테스트)
+
+| Model | Params | HuggingFace ID | Acc | F1 | 비고 |
+|-------|--------|----------------|-----|-----|------|
+| Qwen3-0.6B | 0.6B | `Qwen/Qwen3-0.6B` | 13.71% | 39.86% | `--no-think` 필요 |
+| Gemma-3-1B-IT | 1.0B | `google/gemma-3-1b-it` | 13.38% | 39.01% | `--block-size 32` 필요 |
+| Llama-3.2-1B-Instruct | 1.0B | `meta-llama/Llama-3.2-1B-Instruct` | 6.02% | 16.83% | FP 폭발 |
+
+### Category 2: 1B-3B (3개 테스트 + 1개 스킵)
+
+| Model | Params | HuggingFace ID | Acc | F1 | Median Latency | 비고 |
+|-------|--------|----------------|-----|-----|----------------|------|
+| Qwen3-1.7B | 1.7B | `Qwen/Qwen3-1.7B` | 62.54% | 77.22% | 0.409s | `--no-think` 필요 |
+| SmolLM3-3B | 3.0B | `HuggingFaceTB/SmolLM3-3B` | 60.20% | 70.75% | 0.414s | P 높고 R 낮음 |
+| Llama-3.2-3B-Instruct | 3.0B | `meta-llama/Llama-3.2-3B-Instruct` | 16.72% | 26.44% | - | FP 폭발 |
+| ~~EXAONE-3.5-2.4B~~ | 2.4B | `LGAI-EXAONE/EXAONE-3.5-2.4B-Instruct` | - | - | - | transformers 호환 이슈 (RopeParameters) |
+
+### Category 3: 3-10B (4개 테스트 + 1개 스킵)
+
+| Model | Params | HuggingFace ID | Acc | F1 | Median Latency | 비고 |
+|-------|--------|----------------|-----|-----|----------------|------|
+| Qwen3-8B | 8.0B | `Qwen/Qwen3-8B` | 79.60% | 90.04% | 0.947s | `--no-think` 필요, 30B에 가장 근접 |
+| Qwen3-4B-Instruct-2507 | 4.0B | `Qwen/Qwen3-4B-Instruct-2507` | 79.60% | 87.79% | 0.622s | `--no-think` 필요, 가성비 최강 |
+| Falcon-H1R-7B | 7.0B | `tiiuae/Falcon-H1R-7B` | 47.49% | 69.66% | 1.061s | Mamba2 하이브리드, 한국어 PII 부진 |
+| Gemma-3-4B-IT | 4.0B | `google/gemma-3-4b-it` | 9.70% | 42.85% | - | `--block-size 32` 필요, FP 폭발 |
+| ~~EXAONE-3.5-7.8B~~ | 7.8B | `LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct` | - | - | - | transformers 호환 이슈 (RopeParameters) |
+
+### vLLM 실행 참고사항
+
+| 모델 | vLLM 실행 명령 |
+|------|---------------|
+| Qwen 계열 | `vllm serve <model> --max-model-len 8192` + 평가 시 `--no-think` |
+| Gemma 계열 | `vllm serve <model> --max-model-len 8192 --block-size 32` |
+| Falcon-H1R | `vllm serve <model> --max-model-len 8192` |
+| Llama 계열 | `vllm serve <model> --max-model-len 8192` |
+| SmolLM3 | `vllm serve <model> --max-model-len 8192` |
+| EXAONE 계열 | `--trust-remote-code` 필요하나 transformers 4.57.3 호환 불가 |
