@@ -1,0 +1,41 @@
+모델: HuggingFaceTB/SmolLM3-3B
+레이턴시 측정 모드 (batch_size=1, ~2K token document input)
+워밍업: 3회, 측정: 10회
+생성된 입력: 13개 (각 ~1000자, 모두 서로 다른 입력)
+
+워밍업 (3회)...
+  워밍업 1: 0.932s (prompt: 5309 tok, completion: 97 tok)
+  워밍업 2: 0.796s (prompt: 5187 tok, completion: 102 tok)
+  워밍업 3: 0.728s (prompt: 5159 tok, completion: 92 tok)
+
+레이턴시 측정 (10회)...
+  측정  1: 1.103s (prompt: 5143 tok, completion: 140 tok)
+  측정  2: 0.770s (prompt: 5127 tok, completion: 97 tok)
+  측정  3: 1.336s (prompt: 5655 tok, completion: 171 tok)
+  측정  4: 0.879s (prompt: 5229 tok, completion: 112 tok)
+  측정  5: 0.784s (prompt: 5270 tok, completion: 99 tok)
+  측정  6: 1.198s (prompt: 5259 tok, completion: 155 tok)
+  측정  7: 0.733s (prompt: 5188 tok, completion: 92 tok)
+  측정  8: 0.964s (prompt: 4961 tok, completion: 126 tok)
+  측정  9: 0.917s (prompt: 5214 tok, completion: 117 tok)
+  측정 10: 0.804s (prompt: 5175 tok, completion: 102 tok)
+
+============================================================
+레이턴시 통계 (batch_size=1, ~2K token document input)
+============================================================
+  모델:       HuggingFaceTB/SmolLM3-3B
+  측정 횟수:  10
+  평균 입력:  5222 tokens (system+user+document)
+  평균 출력:  121 tokens
+────────────────────────────────────────────────────────────
+  Mean:   0.9489s
+  Median: 0.8983s
+  StdDev: 0.2022s
+  Min:    0.7327s
+  Max:    1.3357s
+  P90:    1.2114s
+  P95:    1.2736s
+  P99:    1.3233s
+============================================================
+
+결과 저장: /root/pii-detection-test/benchmark_results/300/latency_smollm3_3b.json

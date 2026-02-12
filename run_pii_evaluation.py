@@ -226,6 +226,186 @@ USER_PROMPT_TEMPLATE = """아래 문서에서 개인정보(PII)를 검출하여 
 ---"""
 
 
+# ============================================================================
+# 3-1. 압축 프롬프트 버전들
+# ============================================================================
+
+# ── V5: 성씨/예시 축소, 제외 규칙 유지 ──
+SYSTEM_PROMPT_V5 = """당신은 문서에서 개인정보(PII)를 검출하는 전문가입니다.
+
+주어진 문서를 분석하여 아래 카테고리별로 개인정보를 검출해 주세요.
+
+## 검출 카테고리
+1. **이름**: 실제 특정 개인의 이름. 한글/영문/한자/일본어 등 모든 문자 체계. 병기 시 각각 추출. 부분 마스킹(김○수 등)도 포함. 흔하지 않은 성씨(독고, 남궁, 황보, 제갈, 선우, 사공 등 복합성씨 및 모든 한국 단성)도 반드시 검출. 외국인 이름도 포함.
+2. **주소**: 도로명/지번 주소, 해외 주소. 우편번호 포함 가능. 어떤 레이블이든 구체적 주소이면 모두 검출.
+3. **주민등록번호**: YYMMDD-NNNNNNN. 외국인등록번호(뒷자리 5~8)도 포함. 마스킹/변형/앞6자리만 노출도 포함.
+4. **여권번호**: 한국(M+8자리) 및 외국 여권번호.
+5. **운전면허번호**: NN-NN-NNNNNN-NN. 구형식도 포함.
+6. **이메일**: 난독화([at],[dot],골뱅이 등)나 마스킹/유니코드 변형도 포함.
+7. **IP주소**: IPv4, IPv6, CIDR. IP:포트 직접 연결 시 포트까지 하나로 추출. IP만 있으면 IP만.
+8. **전화번호**: 개인 휴대폰/유선/국제번호. 내선 포함 시 전체 추출.
+9. **계좌번호**: 은행 계좌, 가상계좌, IBAN, SWIFT.
+10. **카드번호**: 신용/체크카드, 암호화폐 지갑 주소(BTC, ETH 등).
+11. **생년월일**: "생년월일/출생/생일/DOB/born" 레이블과 직접 연결된 날짜만.
+12. **기타_고유식별정보**: 학번, 차량번호, 군번, 사번, 현관/도어락 비밀번호만. 이 외에는 절대 넣지 마세요.
+
+## 추출 규칙
+- 원문 그대로 추출. OCR 오류/스캔 노이즈/유니코드 깨짐도 절대 교정 금지.
+- 완전한 문자열 하나로 추출 (글자 단위 쪼개기 금지).
+- PII 없는 카테고리는 null.
+- 동일 인물 이름은 한 번만. 계좌/카드는 번호만(은행명 제외).
+
+## PII가 아닌 것 (반드시 제외)
+
+### 이름 제외
+- 회사/법인/기관/부서/팀/브랜드/상호명
+- 직위/직책만 단독 사용 (이름 없이 직책만이면 제외)
+- 학술 논문 인용/참고문헌 저자명
+- 역사 인물/공인/유명인이 뉴스/교과서/관광/백과사전 맥락으로 언급된 경우
+- 소설/드라마/영화/게임의 가상 캐릭터
+- 코드 내 더미 데이터
+- 음식/한약재/품종 등 사람 이름과 유사한 고유명사
+
+### 주소 제외
+- 지명/관광지/랜드마크/역/공항 이름
+- 행정구역명만의 위치 설명 (구체적 도로명/지번 없으면 제외)
+- 법원명/기관 소재지
+- 통계 목적 지역명, 고속도로/철도 노선명
+- 기상 보도 지역명, 물류 허브/개발 구역 명칭
+- URL/파일경로/네트워크 주소
+- "상동", "동일" 등 참조 표현
+
+### 전화번호 제외
+- 15xx/16xx 서비스번호, 080 수신자부담
+- 긴급/공공서비스 번호 (110, 112, 119 등)
+- 고객센터/ARS, 사업장/기관 대표번호
+
+### IP주소 제외
+- 127.0.0.1, 0.0.0.0, ::1 등 테스트용
+- 공용 DNS (8.8.8.8, 1.1.1.1 등)
+- 네트워크 설계/아키텍처 문서의 대역 계획용 IP (단, 보안 로그/ACL/침입탐지의 식별용 IP는 PII)
+- API 문서/RFC 예시 IP
+
+### 이메일 제외
+- 테스트/예시용 (test@example.com, noreply@ 등)
+- 조직 공용 (info@, support@, contact@, admin@ 등)
+
+### 생년월일 제외 (중요)
+- 문서 작성일/발령일/계약일/입사일/만료일 등 업무 날짜는 생년월일 아님
+- 여권/면허 발급일/만료일도 생년월일 아님
+- "생년월일/출생일/DOB/born" 레이블이 명시적으로 붙은 경우만 추출
+- 주민번호 앞6자리는 주민등록번호로만 분류
+
+### 기타_고유식별정보 제외 (중요)
+- 학번/차량번호/군번/사번/현관비밀번호만 해당
+- 주문번호, 사업자등록번호, 제품코드, 시리얼번호, MAC/UUID/해시, 법조항, 특허번호, 사용자ID, 재무 수치 등은 절대 아님
+
+## 출력 예시
+문서: "담당자 김철수(010-1234-5678, chulsoo@company.com)에게 서울특별시 강남구 테헤란로 152로 서류를 보내주세요."
+→ {"이름": ["김철수"], "주소": ["서울특별시 강남구 테헤란로 152"], "주민등록번호": null, "여권번호": null, "운전면허번호": null, "이메일": ["chulsoo@company.com"], "IP주소": null, "전화번호": ["010-1234-5678"], "계좌번호": null, "카드번호": null, "생년월일": null, "기타_고유식별정보": null}"""
+
+USER_PROMPT_V5 = """아래 문서에서 개인정보(PII)를 검출하여 JSON으로 응답하세요.
+
+핵심: 원문 그대로 추출(교정 금지), 문서 날짜≠생년월일, 기타_고유식별정보=학번/차량번호/군번/사번/현관비밀번호만.
+
+---
+{document_text}
+---"""
+
+
+# ── V2: Medium 압축 (~60% 크기) ──
+SYSTEM_PROMPT_V2 = """문서에서 개인정보(PII)를 검출하는 전문가입니다.
+
+## 검출 카테고리
+1. **이름**: 실제 특정 개인의 이름. 한글/영문/한자/일본어 등 모든 문자 체계. 병기 시 각각 추출. 마스킹(김○수)도 포함. 희귀 성씨(독고, 남궁, 선우, 사공 등 복합성씨 및 드문 단성)도 검출. 외국인 이름 포함.
+2. **주소**: 도로명/지번 주소, 해외 주소. 우편번호 포함 가능. 등록지/전출지/배송지/본적/사업장 등 모든 구체적 주소.
+3. **주민등록번호**: YYMMDD-NNNNNNN. 외국인등록번호(뒷자리 5~8)도 포함. 마스킹/부분 노출 포함.
+4. **여권번호**: 한국(M+8자리) 및 외국 여권번호.
+5. **운전면허번호**: NN-NN-NNNNNN-NN 및 구형식.
+6. **이메일**: 난독화([at],[dot],골뱅이)나 마스킹/유니코드 변형도 포함.
+7. **IP주소**: IPv4, IPv6, CIDR. IP:포트 직접 연결 시 포트 포함 추출.
+8. **전화번호**: 개인 휴대폰/유선/국제번호. 내선 포함 시 전체 추출.
+9. **계좌번호**: 은행 계좌, 가상계좌, IBAN, SWIFT.
+10. **카드번호**: 신용/체크카드, 암호화폐 지갑 주소.
+11. **생년월일**: "생년월일/출생/DOB/born" 레이블과 직접 연결된 날짜만.
+12. **기타_고유식별정보**: 학번, 차량번호, 군번, 사번, 현관비밀번호만. 그 외 null.
+
+## 추출 규칙
+- 원문 그대로 추출 (OCR 오류/노이즈 교정 금지)
+- 완전한 문자열 하나로 추출 (글자 단위 쪼개기 금지)
+- PII 없는 카테고리는 null
+- 계좌/카드는 번호만 추출 (은행명 제외)
+
+## 제외 대상
+- **이름 제외**: 회사/기관/부서/팀/브랜드명, 직위만 단독 사용, 논문 인용 저자, 역사인물/공인/유명인(뉴스/교과서 맥락), 가상 캐릭터, 코드 내 더미 데이터
+- **주소 제외**: 지명/랜드마크/역/공항, 행정구역명만의 위치 설명(구체적 도로명/지번 없으면 제외), 법원명, 고속도로/물류허브/개발구역명
+- **전화번호 제외**: 15xx/16xx 서비스번호, 080 수신자부담, 긴급번호(110/112/119 등), 기관 대표번호
+- **IP 제외**: 127.0.0.1/0.0.0.0/::1, 공용DNS(8.8.8.8 등), 네트워크 설계문서 IP, RFC 예시 대역
+- **이메일 제외**: test@example.com 등 테스트용, 조직 공용(info@/support@ 등)
+- **생년월일 제외**: 문서 작성일/발령일/계약일/입사일/만료일 등 업무 날짜, 여권/면허 발급일
+- **기타 제외**: 주문번호/사업자등록번호/제품코드/시리얼/MAC/UUID/해시/법조항/특허번호 등은 절대 기타_고유식별정보 아님
+
+## 출력 예시
+문서: "담당자 김철수(010-1234-5678, chulsoo@company.com)에게 서울특별시 강남구 테헤란로 152로 서류를 보내주세요."
+→ {"이름": ["김철수"], "주소": ["서울특별시 강남구 테헤란로 152"], "주민등록번호": null, "여권번호": null, "운전면허번호": null, "이메일": ["chulsoo@company.com"], "IP주소": null, "전화번호": ["010-1234-5678"], "계좌번호": null, "카드번호": null, "생년월일": null, "기타_고유식별정보": null}"""
+
+USER_PROMPT_V2 = """아래 문서에서 개인정보(PII)를 검출하여 JSON으로 응답하세요.
+
+핵심: 원문 그대로 추출(교정 금지), 문서 날짜≠생년월일, 기타_고유식별정보=학번/차량번호/군번/사번/현관비밀번호만.
+
+---
+{document_text}
+---"""
+
+
+# ── V3: Aggressive 압축 (~40% 크기) ──
+SYSTEM_PROMPT_V3 = """문서에서 PII를 검출합니다.
+
+## 카테고리
+1. 이름: 실제 개인 이름(한글/영문/한자). 마스킹(김○수) 포함. 희귀성씨/외국인 포함. 회사명/직위/논문저자/역사인물/캐릭터는 제외.
+2. 주소: 구체적 도로명/지번 주소. 지명/랜드마크/행정구역명만은 제외.
+3. 주민등록번호: YYMMDD-NNNNNNN. 외국인등록번호/마스킹 포함.
+4. 여권번호: 한국(M+8자리) 및 외국 여권.
+5. 운전면허번호: NN-NN-NNNNNN-NN.
+6. 이메일: 난독화 포함. test@example.com/조직공용(info@) 제외.
+7. IP주소: IPv4/IPv6/CIDR. IP:포트 직접연결 시 포트포함. 127.0.0.1/8.8.8.8/네트워크설계문서 IP 제외.
+8. 전화번호: 개인 전화만. 15xx/16xx서비스번호/080/긴급번호/기관대표번호 제외.
+9. 계좌번호: 은행계좌/IBAN/SWIFT. 번호만 추출.
+10. 카드번호: 신용카드/암호화폐지갑.
+11. 생년월일: "생년월일/출생/DOB/born" 레이블 붙은 것만. 업무날짜/발급일/만료일 제외.
+12. 기타_고유식별정보: 학번/차량번호/군번/사번/현관비밀번호만. 주문번호/사업자등록번호/제품코드/MAC/UUID 등 모두 제외.
+
+## 규칙
+- 원문 그대로 추출 (OCR 오류 교정 금지)
+- 완전한 문자열 하나로 추출
+- 없으면 null"""
+
+USER_PROMPT_V3 = """문서에서 PII를 검출하여 JSON으로 응답.
+
+---
+{document_text}
+---"""
+
+
+# ── V4: Ultra 압축 (~25% 크기) ──
+SYSTEM_PROMPT_V4 = """문서에서 개인정보(PII) 검출. 카테고리: 이름, 주소, 주민등록번호, 여권번호, 운전면허번호, 이메일, IP주소, 전화번호, 계좌번호, 카드번호, 생년월일, 기타_고유식별정보.
+
+규칙:
+- 원문 그대로 추출(OCR오류 교정 금지). 없으면 null.
+- 이름: 실제 개인만(회사/직위/역사인물/캐릭터 제외)
+- 주소: 구체적 도로명/지번만(지명/랜드마크 제외)
+- 생년월일: "생년월일/DOB/born" 레이블 있는 것만(업무날짜 제외)
+- 기타_고유식별정보: 학번/차량번호/군번/사번/현관비밀번호만
+- 전화번호: 개인만(15xx/16xx서비스/080/긴급번호 제외)
+- IP: 개인식별용만(127.0.0.1/8.8.8.8/설계문서 제외)"""
+
+USER_PROMPT_V4 = """PII를 JSON으로 검출하세요.
+
+---
+{document_text}
+---"""
+
+
 # ── Vanilla 프롬프트 (최소한의 지시) ──
 
 VANILLA_SYSTEM_PROMPT = """주어진 문서에서 개인정보(PII)를 검출하세요."""
@@ -233,6 +413,17 @@ VANILLA_SYSTEM_PROMPT = """주어진 문서에서 개인정보(PII)를 검출하
 VANILLA_USER_PROMPT_TEMPLATE = """아래 문서에서 개인정보를 찾아 JSON으로 응답하세요.
 
 {document_text}"""
+
+
+# ── 프롬프트 버전 매핑 ──
+PROMPT_VERSIONS: dict[str, tuple[str, str]] = {
+    "v1": (SYSTEM_PROMPT, USER_PROMPT_TEMPLATE),
+    "v5": (SYSTEM_PROMPT_V5, USER_PROMPT_V5),
+    "v2": (SYSTEM_PROMPT_V2, USER_PROMPT_V2),
+    "v3": (SYSTEM_PROMPT_V3, USER_PROMPT_V3),
+    "v4": (SYSTEM_PROMPT_V4, USER_PROMPT_V4),
+    "vanilla": (VANILLA_SYSTEM_PROMPT, VANILLA_USER_PROMPT_TEMPLATE),
+}
 
 
 # ============================================================================
@@ -522,10 +713,15 @@ def call_api(
     no_think: bool = False,
     eval_categories: list[str] | None = None,
     vanilla: bool = False,
+    prompt_version: str | None = None,
 ) -> dict:
     """단일 테스트 케이스에 대해 API 요청을 보내고 결과를 반환"""
-    sys_prompt = VANILLA_SYSTEM_PROMPT if vanilla else SYSTEM_PROMPT
-    usr_template = VANILLA_USER_PROMPT_TEMPLATE if vanilla else USER_PROMPT_TEMPLATE
+    if prompt_version:
+        sys_prompt, usr_template = PROMPT_VERSIONS[prompt_version]
+    elif vanilla:
+        sys_prompt, usr_template = PROMPT_VERSIONS["vanilla"]
+    else:
+        sys_prompt, usr_template = PROMPT_VERSIONS["v1"]
     messages = [
         {"role": "system", "content": sys_prompt},
         {"role": "user", "content": usr_template.format(document_text=tc["document_text"])},
@@ -620,10 +816,13 @@ def run_latency_test(args):
     client = OpenAI(base_url=args.api_url, api_key=args.api_key)
     json_schema = build_json_schema()
 
+    pv = args.prompt_version or "v1"
+    lat_sys, lat_usr = PROMPT_VERSIONS[pv]
+
     def send_request(doc_text: str):
         messages = [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": USER_PROMPT_TEMPLATE.format(document_text=doc_text)},
+            {"role": "system", "content": lat_sys},
+            {"role": "user", "content": lat_usr.format(document_text=doc_text)},
         ]
         extra_body: dict[str, Any] = {}
         if args.no_think:
@@ -779,6 +978,9 @@ def main():
                         help="레이턴시 측정 모드 (3회 워밍업 + 10회 측정, batch_size=1, ~2K token input)")
     parser.add_argument("--vanilla", action="store_true",
                         help="바닐라 프롬프트 모드 (최소한의 지시만 사용)")
+    parser.add_argument("--prompt-version", type=str, default=None,
+                        choices=["v1", "v5", "v2", "v3", "v4", "vanilla"],
+                        help="프롬프트 버전 (v1=full, v5=slim, v2=medium, v3=aggressive, v4=ultra, vanilla=minimal)")
     args = parser.parse_args()
 
     # ── 레이턴시 모드 ──
@@ -826,13 +1028,14 @@ def main():
     completed = 0
 
     eval_cats = args.eval_categories
+    prompt_ver = args.prompt_version
 
     with ThreadPoolExecutor(max_workers=args.concurrency) as executor:
         futures = {
             executor.submit(
                 call_api, client, args.model, tc, json_schema,
                 args.temperature, args.max_tokens, args.no_think, eval_cats,
-                args.vanilla,
+                args.vanilla, prompt_ver,
             ): tc["id"]
             for tc in test_cases
         }
@@ -891,6 +1094,16 @@ def main():
     summary = print_report(all_results)
 
     # ── 결과 저장 (기본: results.json) ──
+    def sanitize(obj: Any) -> Any:
+        """Remove surrogate characters that break JSON serialization."""
+        if isinstance(obj, str):
+            return obj.encode("utf-8", errors="replace").decode("utf-8")
+        if isinstance(obj, list):
+            return [sanitize(v) for v in obj]
+        if isinstance(obj, dict):
+            return {k: sanitize(v) for k, v in obj.items()}
+        return obj
+
     output_data = {
         "model": args.model,
         "api_url": args.api_url,
@@ -899,7 +1112,7 @@ def main():
         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
         "summary": summary,
         "results": [
-            {
+            sanitize({
                 "id": r["id"],
                 "category": r["category"],
                 "difficulty": r["difficulty"],
@@ -908,7 +1121,7 @@ def main():
                 "expected": {k: v for k, v in r["expected"].items() if v is not None},
                 "predicted": {k: v for k, v in r["predicted"].items() if v is not None},
                 "raw_response": r.get("raw_response", ""),
-            }
+            })
             for r in all_results
         ],
     }

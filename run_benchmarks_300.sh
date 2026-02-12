@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail
+# Note: no 'set -e' so script continues even if one model fails
 
 # ============================================================================
 # PII Detection - 11 Model Benchmark Runner (300 cases, combined dataset)
@@ -12,7 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 EVAL_SCRIPT="$SCRIPT_DIR/run_pii_evaluation.py"
 RESULTS_DIR="$SCRIPT_DIR/benchmark_results/300"
 LOG_DIR="$RESULTS_DIR/logs"
-MAX_MODEL_LEN=8192
+MAX_MODEL_LEN=16384
 WAIT_TIMEOUT=600  # 서버 대기 최대 10분
 
 mkdir -p "$RESULTS_DIR" "$LOG_DIR"
@@ -59,9 +60,24 @@ wait_for_server() {
 kill_server() {
     echo "  서버 종료중..."
     pkill -f "vllm serve" 2>/dev/null || true
-    sleep 10
-    pkill -9 -f "vllm serve" 2>/dev/null || true
     sleep 5
+    pkill -9 -f "vllm serve" 2>/dev/null || true
+    pkill -9 -f "ray::" 2>/dev/null || true
+    pkill -9 -f "from vllm" 2>/dev/null || true
+    sleep 5
+    # Kill any process holding GPU memory
+    local gpu_pids
+    gpu_pids=$(nvidia-smi --query-compute-apps=pid --format=csv,noheader 2>/dev/null || true)
+    if [ -n "$gpu_pids" ]; then
+        echo "  GPU 프로세스 정리: $gpu_pids"
+        for pid in $gpu_pids; do
+            # Don't kill jupyter
+            if ! ps -p "$pid" -o cmd= 2>/dev/null | grep -q "jupyter"; then
+                kill -9 "$pid" 2>/dev/null || true
+            fi
+        done
+        sleep 5
+    fi
     echo "  서버 종료 완료"
 }
 
@@ -100,7 +116,7 @@ for entry in "${MODELS[@]}"; do
         QUANT_ARG="--quantization fp8"
     fi
 
-    VLLM_CMD="vllm serve $hf_id --max-model-len $MAX_MODEL_LEN $QUANT_ARG $vllm_extra"
+    VLLM_CMD="vllm serve $hf_id --max-model-len $MAX_MODEL_LEN --gpu-memory-utilization 0.90 $QUANT_ARG $vllm_extra"
     echo "  서버 시작: $VLLM_CMD"
 
     $VLLM_CMD > "$LOG_DIR/${name}_server.log" 2>&1 &
@@ -124,6 +140,14 @@ for entry in "${MODELS[@]}"; do
         $eval_extra \
         2>&1 | tee "$LOG_DIR/${name}_accuracy.log"
 
+    # 결과 파일 생성 확인 - 실패 시 이 모델 건너뛰기
+    if [ ! -f "$RESULTS_DIR/results_${name}.json" ]; then
+        echo "  FAIL: 결과 파일 미생성 - $name 건너뜀"
+        kill_server
+        continue
+    fi
+    echo "  정확도 벤치마크 성공"
+
     # 2) 레이턴시 측정
     echo "  [2/2] 레이턴시 측정 시작..."
     python3 "$EVAL_SCRIPT" \
@@ -132,6 +156,12 @@ for entry in "${MODELS[@]}"; do
         --output "$RESULTS_DIR/latency_${name}.json" \
         $eval_extra \
         2>&1 | tee "$LOG_DIR/${name}_latency.log"
+
+    if [ ! -f "$RESULTS_DIR/latency_${name}.json" ]; then
+        echo "  WARNING: 레이턴시 파일 미생성 - $name"
+    else
+        echo "  레이턴시 측정 성공"
+    fi
 
     echo "  [$name] 완료!"
 

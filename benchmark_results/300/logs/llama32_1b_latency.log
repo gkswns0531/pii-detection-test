@@ -1,0 +1,41 @@
+모델: meta-llama/Llama-3.2-1B-Instruct
+레이턴시 측정 모드 (batch_size=1, ~2K token document input)
+워밍업: 3회, 측정: 10회
+생성된 입력: 13개 (각 ~1000자, 모두 서로 다른 입력)
+
+워밍업 (3회)...
+  워밍업 1: 0.647s (prompt: 5299 tok, completion: 134 tok)
+  워밍업 2: 0.470s (prompt: 5177 tok, completion: 137 tok)
+  워밍업 3: 0.461s (prompt: 5149 tok, completion: 135 tok)
+
+레이턴시 측정 (10회)...
+  측정  1: 0.803s (prompt: 5133 tok, completion: 245 tok)
+  측정  2: 0.462s (prompt: 5117 tok, completion: 135 tok)
+  측정  3: 0.427s (prompt: 5645 tok, completion: 121 tok)
+  측정  4: 0.462s (prompt: 5219 tok, completion: 135 tok)
+  측정  5: 0.463s (prompt: 5260 tok, completion: 135 tok)
+  측정  6: 0.647s (prompt: 5249 tok, completion: 194 tok)
+  측정  7: 0.462s (prompt: 5178 tok, completion: 135 tok)
+  측정  8: 0.947s (prompt: 4951 tok, completion: 294 tok)
+  측정  9: 0.494s (prompt: 5204 tok, completion: 147 tok)
+  측정 10: 0.463s (prompt: 5165 tok, completion: 135 tok)
+
+============================================================
+레이턴시 통계 (batch_size=1, ~2K token document input)
+============================================================
+  모델:       meta-llama/Llama-3.2-1B-Instruct
+  측정 횟수:  10
+  평균 입력:  5212 tokens (system+user+document)
+  평균 출력:  168 tokens
+────────────────────────────────────────────────────────────
+  Mean:   0.5631s
+  Median: 0.4631s
+  StdDev: 0.1782s
+  Min:    0.4268s
+  Max:    0.9468s
+  P90:    0.8175s
+  P95:    0.8821s
+  P99:    0.9339s
+============================================================
+
+결과 저장: /root/pii-detection-test/benchmark_results/300/latency_llama32_1b.json

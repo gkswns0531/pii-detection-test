@@ -1,0 +1,41 @@
+모델: Qwen/Qwen3-1.7B
+레이턴시 측정 모드 (batch_size=1, ~2K token document input)
+워밍업: 3회, 측정: 10회
+생성된 입력: 13개 (각 ~1000자, 모두 서로 다른 입력)
+
+워밍업 (3회)...
+  워밍업 1: 0.932s (prompt: 5958 tok, completion: 144 tok)
+  워밍업 2: 1.219s (prompt: 5821 tok, completion: 234 tok)
+  워밍업 3: 1.199s (prompt: 5762 tok, completion: 230 tok)
+
+레이턴시 측정 (10회)...
+  측정  1: 1.352s (prompt: 5747 tok, completion: 261 tok)
+  측정  2: 0.547s (prompt: 5721 tok, completion: 100 tok)
+  측정  3: 1.010s (prompt: 6363 tok, completion: 187 tok)
+  측정  4: 0.820s (prompt: 5846 tok, completion: 154 tok)
+  측정  5: 0.656s (prompt: 5910 tok, completion: 121 tok)
+  측정  6: 1.023s (prompt: 5901 tok, completion: 195 tok)
+  측정  7: 0.628s (prompt: 5800 tok, completion: 116 tok)
+  측정  8: 1.662s (prompt: 5612 tok, completion: 327 tok)
+  측정  9: 0.763s (prompt: 5815 tok, completion: 143 tok)
+  측정 10: 0.938s (prompt: 5802 tok, completion: 178 tok)
+
+============================================================
+레이턴시 통계 (batch_size=1, ~2K token document input)
+============================================================
+  모델:       Qwen/Qwen3-1.7B
+  측정 횟수:  10
+  평균 입력:  5852 tokens (system+user+document)
+  평균 출력:  178 tokens
+────────────────────────────────────────────────────────────
+  Mean:   0.9400s
+  Median: 0.8788s
+  StdDev: 0.3463s
+  Min:    0.5475s
+  Max:    1.6617s
+  P90:    1.3829s
+  P95:    1.5223s
+  P99:    1.6338s
+============================================================
+
+결과 저장: /root/pii-detection-test/benchmark_results/300/latency_qwen3_1.7b.json
