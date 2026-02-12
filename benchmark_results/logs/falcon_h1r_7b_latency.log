@@ -1,0 +1,41 @@
+모델: tiiuae/Falcon-H1R-7B
+레이턴시 측정 모드 (batch_size=1, ~2K token document input)
+워밍업: 3회, 측정: 10회
+생성된 입력: 13개 (각 ~1000자, 모두 서로 다른 입력)
+
+워밍업 (3회)...
+  워밍업 1: 4.569s (prompt: 3977 tok, completion: 201 tok)
+  워밍업 2: 5.009s (prompt: 4096 tok, completion: 232 tok)
+  워밍업 3: 4.654s (prompt: 4184 tok, completion: 196 tok)
+
+레이턴시 측정 (10회)...
+  측정  1: 7.039s (prompt: 3954 tok, completion: 333 tok)
+  측정  2: 2.528s (prompt: 3986 tok, completion: 109 tok)
+  측정  3: 2.456s (prompt: 4129 tok, completion: 103 tok)
+  측정  4: 3.197s (prompt: 4003 tok, completion: 142 tok)
+  측정  5: 3.549s (prompt: 4117 tok, completion: 157 tok)
+  측정  6: 4.429s (prompt: 4134 tok, completion: 201 tok)
+  측정  7: 3.727s (prompt: 3915 tok, completion: 169 tok)
+  측정  8: 2.402s (prompt: 3899 tok, completion: 103 tok)
+  측정  9: 3.539s (prompt: 4089 tok, completion: 159 tok)
+  측정 10: 4.995s (prompt: 3965 tok, completion: 232 tok)
+
+============================================================
+레이턴시 통계 (batch_size=1, ~2K token document input)
+============================================================
+  모델:       tiiuae/Falcon-H1R-7B
+  측정 횟수:  10
+  평균 입력:  4019 tokens (system+user+document)
+  평균 출력:  171 tokens
+────────────────────────────────────────────────────────────
+  Mean:   3.7861s
+  Median: 3.5438s
+  StdDev: 1.4217s
+  Min:    2.4017s
+  Max:    7.0388s
+  P90:    5.1996s
+  P95:    6.1192s
+  P99:    6.8549s
+============================================================
+
+결과 저장: /root/pii-detection-test/benchmark_results/latency_falcon_h1r_7b.json

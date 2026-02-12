@@ -1,0 +1,41 @@
+모델: google/gemma-3-4b-it
+레이턴시 측정 모드 (batch_size=1, ~2K token document input)
+워밍업: 3회, 측정: 10회
+생성된 입력: 13개 (각 ~1000자, 모두 서로 다른 입력)
+
+워밍업 (3회)...
+  워밍업 1: 1.950s (prompt: 3834 tok, completion: 196 tok)
+  워밍업 2: 2.343s (prompt: 3928 tok, completion: 257 tok)
+  워밍업 3: 2.916s (prompt: 4019 tok, completion: 320 tok)
+
+레이턴시 측정 (10회)...
+  측정  1: 2.178s (prompt: 3762 tok, completion: 240 tok)
+  측정  2: 1.841s (prompt: 3813 tok, completion: 201 tok)
+  측정  3: 2.153s (prompt: 3985 tok, completion: 236 tok)
+  측정  4: 2.019s (prompt: 3862 tok, completion: 221 tok)
+  측정  5: 2.284s (prompt: 3944 tok, completion: 250 tok)
+  측정  6: 2.396s (prompt: 3931 tok, completion: 263 tok)
+  측정  7: 1.492s (prompt: 3746 tok, completion: 162 tok)
+  측정  8: 1.142s (prompt: 3763 tok, completion: 123 tok)
+  측정  9: 1.652s (prompt: 3898 tok, completion: 180 tok)
+  측정 10: 2.244s (prompt: 3791 tok, completion: 247 tok)
+
+============================================================
+레이턴시 통계 (batch_size=1, ~2K token document input)
+============================================================
+  모델:       google/gemma-3-4b-it
+  측정 횟수:  10
+  평균 입력:  3850 tokens (system+user+document)
+  평균 출력:  212 tokens
+────────────────────────────────────────────────────────────
+  Mean:   1.9401s
+  Median: 2.0859s
+  StdDev: 0.4024s
+  Min:    1.1417s
+  Max:    2.3960s
+  P90:    2.2951s
+  P95:    2.3456s
+  P99:    2.3859s
+============================================================
+
+결과 저장: /root/pii-detection-test/benchmark_results/latency_gemma3_4b.json

@@ -208,6 +208,15 @@ USER_PROMPT_TEMPLATE = """아래 문서에서 개인정보(PII)를 검출하여 
 ---"""
 
 
+# ── Vanilla 프롬프트 (최소한의 지시) ──
+
+VANILLA_SYSTEM_PROMPT = """주어진 문서에서 개인정보(PII)를 검출하세요."""
+
+VANILLA_USER_PROMPT_TEMPLATE = """아래 문서에서 개인정보를 찾아 JSON으로 응답하세요.
+
+{document_text}"""
+
+
 # ============================================================================
 # 4. expected_pii → 카테고리별 dict 변환
 # ============================================================================
@@ -494,11 +503,14 @@ def call_api(
     max_tokens: int,
     no_think: bool = False,
     eval_categories: list[str] | None = None,
+    vanilla: bool = False,
 ) -> dict:
     """단일 테스트 케이스에 대해 API 요청을 보내고 결과를 반환"""
+    sys_prompt = VANILLA_SYSTEM_PROMPT if vanilla else SYSTEM_PROMPT
+    usr_template = VANILLA_USER_PROMPT_TEMPLATE if vanilla else USER_PROMPT_TEMPLATE
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": USER_PROMPT_TEMPLATE.format(document_text=tc["document_text"])},
+        {"role": "system", "content": sys_prompt},
+        {"role": "user", "content": usr_template.format(document_text=tc["document_text"])},
     ]
 
     extra_body: dict[str, Any] = {}
@@ -747,6 +759,8 @@ def main():
                         help="평가 대상 카테고리만 지정 (예: --eval-categories 이름 주소). 나머지 카테고리의 예측은 무시")
     parser.add_argument("--latency", action="store_true",
                         help="레이턴시 측정 모드 (3회 워밍업 + 10회 측정, batch_size=1, ~2K token input)")
+    parser.add_argument("--vanilla", action="store_true",
+                        help="바닐라 프롬프트 모드 (최소한의 지시만 사용)")
     args = parser.parse_args()
 
     # ── 레이턴시 모드 ──
@@ -778,6 +792,8 @@ def main():
     print(f"모델: {args.model}")
     print(f"API URL: {args.api_url}")
     print(f"동시 요청 수: {args.concurrency}")
+    if args.vanilla:
+        print(f"프롬프트 모드: VANILLA (최소 지시)")
     if args.eval_categories:
         print(f"평가 카테고리: {', '.join(args.eval_categories)} (나머지 무시)")
 
@@ -798,6 +814,7 @@ def main():
             executor.submit(
                 call_api, client, args.model, tc, json_schema,
                 args.temperature, args.max_tokens, args.no_think, eval_cats,
+                args.vanilla,
             ): tc["id"]
             for tc in test_cases
         }
