@@ -1,7 +1,7 @@
 {
   "model": "openai/gpt-oss-20b",
   "mode": "latency",
-  "timestamp": "2026-02-12 19:11:02",
+  "timestamp": "2026-02-12 19:27:25",
   "config": {
     "batch_size": 1,
     "target_doc_tokens": 2000,
@@ -13,87 +13,87 @@
     "no_think": false
   },
   "statistics": {
-    "mean_sec": 12.3534,
-    "median_sec": 13.6837,
-    "stdev_sec": 2.5658,
-    "min_sec": 6.0411,
-    "max_sec": 13.7848,
-    "p90_sec": 13.7408,
-    "p95_sec": 13.7628,
-    "p99_sec": 13.7804,
-    "avg_prompt_tokens": 5137.7,
-    "avg_completion_tokens": 1844.1
+    "mean_sec": 12.3389,
+    "median_sec": 13.7066,
+    "stdev_sec": 2.4326,
+    "min_sec": 7.0136,
+    "max_sec": 13.7879,
+    "p90_sec": 13.7355,
+    "p95_sec": 13.7617,
+    "p99_sec": 13.7827,
+    "avg_prompt_tokens": 5300.7,
+    "avg_completion_tokens": 1842
   },
   "measurements": [
     {
       "run": 1,
-      "latency_sec": 6.0411,
-      "prompt_tokens": 5054,
-      "completion_tokens": 901,
-      "total_tokens": 5955
+      "latency_sec": 13.7041,
+      "prompt_tokens": 5217,
+      "completion_tokens": 2048,
+      "total_tokens": 7265
     },
     {
       "run": 2,
-      "latency_sec": 13.3573,
-      "prompt_tokens": 5030,
-      "completion_tokens": 1997,
-      "total_tokens": 7027
+      "latency_sec": 11.1909,
+      "prompt_tokens": 5193,
+      "completion_tokens": 1673,
+      "total_tokens": 6866
     },
     {
       "run": 3,
-      "latency_sec": 13.7848,
-      "prompt_tokens": 5542,
+      "latency_sec": 13.7879,
+      "prompt_tokens": 5705,
       "completion_tokens": 2048,
-      "total_tokens": 7590
+      "total_tokens": 7753
     },
     {
       "run": 4,
-      "latency_sec": 13.7281,
-      "prompt_tokens": 5157,
+      "latency_sec": 13.7296,
+      "prompt_tokens": 5320,
       "completion_tokens": 2048,
-      "total_tokens": 7205
+      "total_tokens": 7368
     },
     {
       "run": 5,
-      "latency_sec": 13.7359,
-      "prompt_tokens": 5209,
+      "latency_sec": 13.7297,
+      "prompt_tokens": 5372,
       "completion_tokens": 2048,
-      "total_tokens": 7257
+      "total_tokens": 7420
     },
     {
       "run": 6,
-      "latency_sec": 12.1265,
-      "prompt_tokens": 5187,
-      "completion_tokens": 1808,
-      "total_tokens": 6995
+      "latency_sec": 7.0136,
+      "prompt_tokens": 5350,
+      "completion_tokens": 1045,
+      "total_tokens": 6395
     },
     {
       "run": 7,
-      "latency_sec": 9.685,
-      "prompt_tokens": 5084,
-      "completion_tokens": 1447,
-      "total_tokens": 6531
+      "latency_sec": 9.1424,
+      "prompt_tokens": 5247,
+      "completion_tokens": 1366,
+      "total_tokens": 6613
     },
     {
       "run": 8,
-      "latency_sec": 13.6635,
-      "prompt_tokens": 4886,
+      "latency_sec": 13.6674,
+      "prompt_tokens": 5049,
       "completion_tokens": 2048,
-      "total_tokens": 6934
+      "total_tokens": 7097
     },
     {
       "run": 9,
-      "latency_sec": 13.7073,
-      "prompt_tokens": 5136,
+      "latency_sec": 13.7139,
+      "prompt_tokens": 5299,
       "completion_tokens": 2048,
-      "total_tokens": 7184
+      "total_tokens": 7347
     },
     {
       "run": 10,
-      "latency_sec": 13.704,
-      "prompt_tokens": 5092,
+      "latency_sec": 13.7092,
+      "prompt_tokens": 5255,
       "completion_tokens": 2048,
-      "total_tokens": 7140
+      "total_tokens": 7303
     }
   ]
 }

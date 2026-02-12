@@ -4,38 +4,38 @@
 생성된 입력: 13개 (각 ~1000자, 모두 서로 다른 입력)
 
 워밍업 (3회)...
-  워밍업 1: 6.883s (prompt: 5226 tok, completion: 997 tok)
-  워밍업 2: 13.710s (prompt: 5110 tok, completion: 2048 tok)
-  워밍업 3: 10.488s (prompt: 5063 tok, completion: 1567 tok)
+  워밍업 1: 4.106s (prompt: 5389 tok, completion: 584 tok)
+  워밍업 2: 13.712s (prompt: 5273 tok, completion: 2048 tok)
+  워밍업 3: 13.707s (prompt: 5226 tok, completion: 2048 tok)
 
 레이턴시 측정 (10회)...
-  측정  1: 6.041s (prompt: 5054 tok, completion: 901 tok)
-  측정  2: 13.357s (prompt: 5030 tok, completion: 1997 tok)
-  측정  3: 13.785s (prompt: 5542 tok, completion: 2048 tok)
-  측정  4: 13.728s (prompt: 5157 tok, completion: 2048 tok)
-  측정  5: 13.736s (prompt: 5209 tok, completion: 2048 tok)
-  측정  6: 12.127s (prompt: 5187 tok, completion: 1808 tok)
-  측정  7: 9.685s (prompt: 5084 tok, completion: 1447 tok)
-  측정  8: 13.664s (prompt: 4886 tok, completion: 2048 tok)
-  측정  9: 13.707s (prompt: 5136 tok, completion: 2048 tok)
-  측정 10: 13.704s (prompt: 5092 tok, completion: 2048 tok)
+  측정  1: 13.704s (prompt: 5217 tok, completion: 2048 tok)
+  측정  2: 11.191s (prompt: 5193 tok, completion: 1673 tok)
+  측정  3: 13.788s (prompt: 5705 tok, completion: 2048 tok)
+  측정  4: 13.730s (prompt: 5320 tok, completion: 2048 tok)
+  측정  5: 13.730s (prompt: 5372 tok, completion: 2048 tok)
+  측정  6: 7.014s (prompt: 5350 tok, completion: 1045 tok)
+  측정  7: 9.142s (prompt: 5247 tok, completion: 1366 tok)
+  측정  8: 13.667s (prompt: 5049 tok, completion: 2048 tok)
+  측정  9: 13.714s (prompt: 5299 tok, completion: 2048 tok)
+  측정 10: 13.709s (prompt: 5255 tok, completion: 2048 tok)
 
 ============================================================
 레이턴시 통계 (batch_size=1, ~2K token document input)
 ============================================================
   모델:       openai/gpt-oss-20b
   측정 횟수:  10
-  평균 입력:  5138 tokens (system+user+document)
-  평균 출력:  1844 tokens
+  평균 입력:  5301 tokens (system+user+document)
+  평균 출력:  1842 tokens
 ────────────────────────────────────────────────────────────
-  Mean:   12.3534s
-  Median: 13.6837s
-  StdDev: 2.5658s
-  Min:    6.0411s
-  Max:    13.7848s
-  P90:    13.7408s
-  P95:    13.7628s
-  P99:    13.7804s
+  Mean:   12.3389s
+  Median: 13.7066s
+  StdDev: 2.4326s
+  Min:    7.0136s
+  Max:    13.7879s
+  P90:    13.7355s
+  P95:    13.7617s
+  P99:    13.7827s
 ============================================================
 
 결과 저장: /root/pii-detection-test/benchmark_results/300/latency_gpt_oss_20b.json
