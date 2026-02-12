@@ -28,8 +28,13 @@ TYPES = ["all", "success", "fail"]
 PROMPT_LABELS = {"full": "After Optimization", "vanilla": "Before Optimization"}
 
 
+def normalize_difficulty(diff: str) -> str:
+    """Map EASY→base, MEDIUM/HARD→advanced."""
+    return "base" if diff == "EASY" else "advanced"
+
+
 def load_splits() -> dict:
-    """Load all 18 split JSON files."""
+    """Load all 18 split JSON files, normalizing difficulty labels."""
     data = {}
     for p in PROMPTS:
         for d in DATASETS:
@@ -38,7 +43,10 @@ def load_splits() -> dict:
                 fpath = SPLITS_DIR / fname
                 if fpath.exists():
                     with open(fpath, encoding="utf-8") as f:
-                        data[f"{p}_{d}_{t}"] = json.load(f)
+                        split = json.load(f)
+                    for r in split["results"]:
+                        r["difficulty"] = normalize_difficulty(r["difficulty"])
+                    data[f"{p}_{d}_{t}"] = split
     return data
 
 
@@ -627,7 +635,7 @@ function renderCases() {{
       <div class="case-top">
         <div class="case-meta">
           <span class="case-id">${{r.id}}</span>
-          <span class="badge ${{r.difficulty === 'EASY' ? 'base' : r.difficulty === 'HARD' ? 'advanced' : 'combined'}}">${{r.difficulty}}</span>
+          <span class="badge ${{r.difficulty === 'base' ? 'base' : 'advanced'}}">${{r.difficulty}}</span>
           <span class="badge vanilla">${{r.category}}</span>
         </div>
         <span class="case-f1 ${{f1class}}">F1: ${{f1pct}}%</span>
